@@ -1,5 +1,6 @@
-# TES Android App
+# TES Turnierplaner
 
-Teamprojekt Software Entwicklung im WS21/22 mit dem Thema eine Android App zu programmieren.
-Erstellt von: Fatih Ünal, Johanna Nagel und Vito Völker.
+TES Turnierplaner ist eine Android App zur Erstellung von Turnieren. Die App wurde im Rahmen eines 
+Teamprojekts der Software Entwicklung im WS21/22 am Karlsruher Institut für Technologie entwickelt.
 
+Autoren: Fatih Ünal, Johanna Nagel und Vito Völker.
