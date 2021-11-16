@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Register">
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="163dp"
+        android:layout_height="67dp"
+        android:text="Sign-Up"
+        tools:layout_editor_absoluteX="26dp"
+        tools:layout_editor_absoluteY="623dp"
+        tools:ignore="OnClick" />
+
+    <Button
+        android:id="@+id/registerBtn"
+        android:layout_width="147dp"
+        android:layout_height="66dp"
+        android:text="Registrieren"
+        tools:layout_editor_absoluteX="217dp"
+        tools:layout_editor_absoluteY="624dp" />
+
+    <EditText
+        android:id="@+id/Password"
+        android:layout_width="262dp"
+        android:layout_height="71dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="238dp" />
+
+    <EditText
+        android:id="@+id/Email"
+        android:layout_width="268dp"
+        android:layout_height="66dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="151dp" />
+
+    <EditText
+        android:id="@+id/Name"
+        android:layout_width="270dp"
+        android:layout_height="53dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Name"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="73dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
