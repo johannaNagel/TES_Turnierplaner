@@ -10,11 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Turnierplaner">
         <activity
-            android:name=".Homescreen"
-            android:exported="false"
-            android:label="@string/title_activity_homescreen"
-            android:theme="@style/Theme.Turnierplaner.NoActionBar" />
-        <activity
             android:name=".RegisterActivity"
             android:exported="false"
             android:label="@string/title_activity_register"
@@ -30,6 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Homescreen"
+            android:exported="false"
+            android:label="@string/title_activity_homescreen"
+            android:theme="@style/Theme.Turnierplaner.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
