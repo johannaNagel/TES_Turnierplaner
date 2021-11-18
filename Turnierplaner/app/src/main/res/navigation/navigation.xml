@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/test">
+
+    <activity
+        android:id="@+id/test"
+        android:name="com.example.turnierplaner.test"
+        android:label="test" />
+    <activity
+        android:id="@+id/homescreen"
+        android:name="com.example.turnierplaner.Homescreen"
+        android:label="Homescreen" />
+</navigation>

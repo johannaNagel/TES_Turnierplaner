@@ -3,5 +3,4 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_homescreen">Homescreen</string>
-    <string name="title_activity_main2">MainActivity2</string>
 </resources>
