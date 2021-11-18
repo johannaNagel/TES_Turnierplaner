@@ -32,6 +32,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.turnierplaner.ui.theme.Aquamarine
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
 //import com.example.jetpack.widget.CheckBoxDemo
 
@@ -101,7 +102,7 @@ fun LoginScreen(navController: NavController) {
             isError = emailErrorState.value,
             modifier = Modifier.fillMaxWidth(),
             label = {
-                Text(text = "Enter Email*")
+                Text(text = "Email*")
             },
         )
         if (emailErrorState.value) {
@@ -164,7 +165,7 @@ fun LoginScreen(navController: NavController) {
                 Text(text = "Login", color = Color.White)
             },
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
+            colors = ButtonDefaults.buttonColors(backgroundColor = Aquamarine)
         )
         Spacer(Modifier.size(16.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
