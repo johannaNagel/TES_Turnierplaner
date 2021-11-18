@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "322292157514",
+    "project_id": "turnierplaner-86dfe",
+    "storage_bucket": "turnierplaner-86dfe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322292157514:android:7c4eca6c9bf5c66734eab3",
+        "android_client_info": {
+          "package_name": "com.example.turnierplaner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "322292157514-69lo8nq7u25sak0mic18db19ogjp0a7e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_K3TXQRM2RC5F7TI4qBAuGjp1AdNvuCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "322292157514-69lo8nq7u25sak0mic18db19ogjp0a7e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

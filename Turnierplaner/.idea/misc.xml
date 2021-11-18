@@ -3,12 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/TES_Turnierplaner/Turnierplaner/app/src/main/res/layout/activity_test2.xml" value="0.19895833333333332" />
-        <entry key="..\:/TES_Turnierplaner/Turnierplaner/app/src/main/res/layout/activity_tse_test.xml" value="0.3120471014492754" />
+        <entry key="../../../../../layout/compose-model-1637081673097.xml" value="1.4693140794223827" />
+        <entry key="../../../../../layout/compose-model-1637237467406.xml" value="2.0" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_14_PREVIEW" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
