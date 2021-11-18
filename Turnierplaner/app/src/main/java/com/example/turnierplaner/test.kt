@@ -32,6 +32,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.turnierplaner.ui.theme.Aquamarine
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
 //import com.example.jetpack.widget.CheckBoxDemo
 
@@ -75,14 +76,14 @@ fun LoginScreen(navController: NavController) {
         verticalArrangement = Arrangement.Center,
     ) {
         Text(text = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Color.Red)) {
+            withStyle(style = SpanStyle(color = Aquamarine)) {
                 append("S")
             }
             withStyle(style = SpanStyle(color = Color.Black)) {
                 append("ign")
             }
 
-            withStyle(style = SpanStyle(color = Color.Red)) {
+            withStyle(style = SpanStyle(color = Aquamarine)) {
                 append(" I")
             }
             withStyle(style = SpanStyle(color = Color.Black)) {
@@ -101,11 +102,11 @@ fun LoginScreen(navController: NavController) {
             isError = emailErrorState.value,
             modifier = Modifier.fillMaxWidth(),
             label = {
-                Text(text = "Enter Email*")
+                Text(text = "Email*")
             },
         )
         if (emailErrorState.value) {
-            Text(text = "Required", color = Color.Red)
+            Text(text = "Required", color = Aquamarine)
         }
         Spacer(Modifier.size(16.dp))
         val passwordVisibility = remember { mutableStateOf(true) }
@@ -129,14 +130,14 @@ fun LoginScreen(navController: NavController) {
                     Icon(
                         imageVector = if (passwordVisibility.value) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                         contentDescription = "visibility",
-                        tint = Color.Red
+                        tint = Aquamarine
                     )
                 }
             },
             visualTransformation = if (passwordVisibility.value) PasswordVisualTransformation() else VisualTransformation.None
         )
         if (passwordErrorState.value) {
-            Text(text = "Required", color = Color.Red)
+            Text(text = "Required", color = Aquamarine)
         }
         Spacer(Modifier.size(16.dp))
         Button(
@@ -164,7 +165,7 @@ fun LoginScreen(navController: NavController) {
                 Text(text = "Login", color = Color.White)
             },
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
+            colors = ButtonDefaults.buttonColors(backgroundColor = Aquamarine)
         )
         Spacer(Modifier.size(16.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -174,7 +175,7 @@ fun LoginScreen(navController: NavController) {
                     launchSingleTop = true
                 }
             }) {
-                Text(text = "Register ?", color = Color.Red)
+                Text(text = "Register ?", color = Aquamarine)
             }
         }
     }
@@ -207,7 +208,7 @@ fun RegistrationScreen(navController: NavController) {
     ) {
 
         Text(text = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Color.Red)) {
+            withStyle(style = SpanStyle(color = Aquamarine)) {
                 append("R")
             }
             withStyle(style = SpanStyle(color = Color.Black)) {
@@ -231,7 +232,7 @@ fun RegistrationScreen(navController: NavController) {
             },
         )
         if (nameErrorState.value) {
-            Text(text = "Required", color = Color.Red)
+            Text(text = "Required", color = Aquamarine)
         }
         Spacer(Modifier.size(16.dp))
 
@@ -251,7 +252,7 @@ fun RegistrationScreen(navController: NavController) {
             },
         )
         if (emailErrorState.value) {
-            Text(text = "Required", color = Color.Red)
+            Text(text = "Required", color = Aquamarine)
         }
         Spacer(modifier = Modifier.size(16.dp))
         Row() {
@@ -309,14 +310,14 @@ fun RegistrationScreen(navController: NavController) {
                     Icon(
                         imageVector = if (passwordVisibility.value) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                         contentDescription = "visibility",
-                        tint = Color.Red
+                        tint = Aquamarine
                     )
                 }
             },
             visualTransformation = if (passwordVisibility.value) PasswordVisualTransformation() else VisualTransformation.None
         )
         if (passwordErrorState.value) {
-            Text(text = "Required", color = Color.Red)
+            Text(text = "Required", color = Aquamarine)
         }
 
         Spacer(Modifier.size(16.dp))
@@ -341,7 +342,7 @@ fun RegistrationScreen(navController: NavController) {
                     Icon(
                         imageVector = if (cPasswordVisibility.value) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                         contentDescription = "visibility",
-                        tint = Color.Red
+                        tint = Aquamarine
                     )
                 }
             },
@@ -355,7 +356,7 @@ fun RegistrationScreen(navController: NavController) {
             } else {
                 ""
             }
-            Text(text = msg, color = Color.Red)
+            Text(text = msg, color = Aquamarine)
         }
         Spacer(Modifier.size(16.dp))
         Button(
@@ -393,7 +394,7 @@ fun RegistrationScreen(navController: NavController) {
                 Text(text = "Register", color = Color.White)
             },
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
+            colors = ButtonDefaults.buttonColors(backgroundColor = Aquamarine)
         )
         Spacer(Modifier.size(16.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -403,7 +404,7 @@ fun RegistrationScreen(navController: NavController) {
                     launchSingleTop = true
                 }
             }) {
-                Text(text = "Login", color = Color.Red)
+                Text(text = "Login", color = Aquamarine)
             }
         }
     }
