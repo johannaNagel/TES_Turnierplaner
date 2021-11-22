@@ -1,0 +1,12 @@
+name: CI
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:      
+      - uses: actions/checkout@v2
+      - uses: fwilhe2/setup-kotlin@main
+      - name: Run the script
+        run: kotlin TES_Turnierplaner/Turnierplaner/app/src/main/java/com/example/turnierplaner/LogInActivity.kt
