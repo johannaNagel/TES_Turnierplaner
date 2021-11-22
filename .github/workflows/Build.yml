@@ -13,6 +13,9 @@ on:
 
 jobs:
     build:
+        defaults:
+          run:
+            working-directory: Tunierplaner
         runs-on: ubuntu-latest
 
         steps:
@@ -22,8 +25,7 @@ jobs:
               with:
                   java-version: 11
             - name: Grant execute permission for gradlew
-              run: chmod +x Turnierplaner/gradlew
-              working-directory: Turnierplaner
+              run: chmod +x ./gradlew
             - name: Build with Gradle
-              run: Turnierplaner/gradlew build
-              working-directory: Turnierplaner
+              run: ./gradlew build
+
