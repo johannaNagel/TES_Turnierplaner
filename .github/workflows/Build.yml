@@ -1,32 +1,12 @@
-- name: Gradle Build Action
-  # You may pin to the exact commit or the version.
-  # uses: gradle/gradle-build-action@996094e8e808208e5738e8413b3f55d24d1c1eb7
-  uses: gradle/gradle-build-action@v2.0.1
-  with:
-    # Path to the Gradle executable
-    gradle-executable: # optional
-    # Gradle version to use
-    gradle-version: # optional
-    # Path to the root directory of the build
-    build-root-directory: # optional
-    # Gradle command line arguments (supports multi-line input)
-    arguments: # optional
-    # When 'true', all caching is disabled. No entries will be written to or read from the cache.
-    cache-disabled: # optional
-    # When 'true', existing entries will be read from the cache but no entries will be written.
-    cache-read-only: # optional
-    # Paths within Gradle User Home to cache.
-    gradle-home-cache-includes: # optional, default is caches notifications
-
-    # Paths within Gradle User Home to exclude from cache.
-    gradle-home-cache-excludes: # optional
-    # Used to uniquely identify the current job invocation. Defaults to the matrix values for this job; this should not be overridden by users (INTERNAL).
-    workflow-job-context: # optional, default is ${{ toJSON(matrix) }}
-    # Names and patterns of artifact bundles to cache separately. (EXPERIMENTAL - may be changed/removed without notice)
-    gradle-home-cache-artifact-bundles: # optional, default is [
-  ["generated-gradle-jars", "caches/*/generated-gradle-jars/*.jar"],
-  ["wrapper-zips", "wrapper/dists/*/*/*.zip"],
-  ["dependencies", "caches/modules-*/files-*/*/*/*/*/"],
-  ["instrumented-jars", "caches/jars-*/*/"],
-  ["kotlin-dsl", "caches/*/kotlin-dsl/*/*/"]
-]
+name: CI
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: fwilhe2/setup-kotlin@main
+      - run: kotlinc myProgram.kt -include-runtime -d /tmp/hello.jar; java -jar /tmp/hello.jar
+      - run: kotlin myScript.main.kts
