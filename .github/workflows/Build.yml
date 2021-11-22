@@ -23,5 +23,7 @@ jobs:
                   java-version: 11
             - name: Grant execute permission for gradlew
               run: chmod +x Turnierplaner/gradlew
+              working-directory: Turnierplaner
             - name: Build with Gradle
               run: Turnierplaner/gradlew build
+              working-directory: Turnierplaner
