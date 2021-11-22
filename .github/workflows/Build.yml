@@ -16,6 +16,6 @@ jobs:
               with:
                   java-version: 11
             - name: Grant execute permission for gradlew
-              run: chmod +x Turnierplaner/gradle/wrapper/gradle-wrapper.jar
+              run: chmod +x Turnierplaner/gradle/wrapper
             - name: Build with Gradle
-              run: Turnierplaner/gradle/wrapper/gradle-wrapper.jar build
+              run: Turnierplaner/gradle/wrapper
