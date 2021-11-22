@@ -24,4 +24,4 @@ jobs:
             - name: Grant execute permission for gradlew
               run: chmod +x Turnierplaner/gradle/wrapper
             - name: Build with Gradle
-              run: ./gradle/wrapper build
+              run: Turnierplaner/build.gradle build
