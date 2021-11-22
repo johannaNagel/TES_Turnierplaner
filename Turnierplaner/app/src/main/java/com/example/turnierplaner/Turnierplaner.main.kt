@@ -36,7 +36,7 @@ import com.example.turnierplaner.ui.theme.Aquamarine
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
 //import com.example.jetpack.widget.CheckBoxDemo
 
-class test : ComponentActivity() {
+class Turnierplaner : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
