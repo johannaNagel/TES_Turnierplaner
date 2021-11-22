@@ -32,6 +32,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.turnierplaner.GoogleSignIn.ui.SignInButton
 import com.example.turnierplaner.ui.theme.Aquamarine
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
 //import com.example.jetpack.widget.CheckBoxDemo
@@ -59,7 +60,7 @@ fun LoginAndRegistration() {
     NavHost(navController = navController, startDestination = "login_screen", builder = {
         composable("login_screen", content = { LoginScreen(navController = navController) })
         composable("register_screen", content = { RegistrationScreen(navController = navController) })
-    })
+        })
 }
 
 @Composable
