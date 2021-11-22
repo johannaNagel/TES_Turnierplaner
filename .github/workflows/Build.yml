@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Run the script
       - uses: actions/checkout@v2
       - uses: fwilhe2/setup-kotlin@main
-      - run: kotlinc TES_Turnierplaner/Turnierplaner/app/src/main/java/com/example/turnierplaner/LogInActivity.kt -include-runtime -d /tmp/hello.jar; java -jar /tmp/hello.jar
       - run: kotlin TES_Turnierplaner/Turnierplaner/app/src/main/java/com/example/turnierplaner/LogInActivity.kt
