@@ -15,7 +15,7 @@ jobs:
     build:
         defaults:
           run:
-            working-directory: Tunierplaner
+            working-directory: Turnierplaner
         runs-on: ubuntu-latest
 
         steps:
