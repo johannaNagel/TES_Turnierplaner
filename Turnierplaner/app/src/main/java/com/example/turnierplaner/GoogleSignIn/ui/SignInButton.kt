@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.ContentAlpha.medium
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,8 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.turnierplaner.R
 import com.example.turnierplaner.ui.theme.Shapes
+import androidx.compose.runtime.*
 
-@ExperimentalMaterialApi
+
 @Composable
 fun SignInButton(
     text: String,
@@ -65,7 +67,6 @@ fun SignInButton(
                 tint = Color.Unspecified
             )
             Spacer(modifier = Modifier.width(8.dp))
-
             Text(text = if (isLoading) loadingText else text)
             if (isLoading) {
                 Spacer(modifier = Modifier.width(16.dp))
@@ -81,7 +82,6 @@ fun SignInButton(
     }
 }
 
-@ExperimentalMaterialApi
 @Composable
 @Preview
 fun SignInButtonPreview() {
