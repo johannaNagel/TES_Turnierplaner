@@ -31,6 +31,12 @@
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.Turnierplaner.NoActionBar" />
 
+        <activity
+            android:name=".LogInActivity"
+            android:exported="false"
+            android:label="@string/title_activity_register"
+            android:theme="@style/Theme.Turnierplaner.NoActionBar" />
+
 
         <activity
             android:name=".Homescreen"
