@@ -1,4 +1,4 @@
-package com.example.turnierplaner.GoogleSignIn.ui.theme
+package com.example.turnierplaner.googlesignin.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

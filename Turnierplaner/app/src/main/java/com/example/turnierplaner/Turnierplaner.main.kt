@@ -1,9 +1,13 @@
 package com.example.turnierplaner
+
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -34,11 +38,25 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.turnierplaner.GoogleSignIn.ui.SignInButton
+import com.example.turnierplaner.googlesignin.ui.theme.FirebaseAuthComposeTheme
 import com.example.turnierplaner.ui.theme.Aquamarine
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
 //import com.example.jetpack.widget.CheckBoxDemo
 
+class Turnierplaner : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            FirebaseAuthComposeTheme {
+                LoginScreen()
+            }
+        }
+    }
+}
+
+
+
+/*
 class Turnierplaner : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +72,8 @@ class Turnierplaner : ComponentActivity() {
         }
     }
 }
+ */
+
 
 @Composable
 fun LoginAndRegistration() {
@@ -180,19 +200,6 @@ fun LoginScreen(navController: NavController) {
             }) {
                 Text(text = "Register ?", color = Aquamarine)
             }
-        }
-        Column(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            SignInButton(
-                text = "Login with Google",
-                loadingText = "Signing in...",
-                isLoading = false,
-                icon = painterResource(id = R.drawable.ic_google_logo),
-                onClick = { }
-            )
         }
     }
 }
