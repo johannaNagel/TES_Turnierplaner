@@ -1,4 +1,4 @@
-package com.example.turnierplaner.googlesignin
+package com.example.turnierplaner.GoogleSignIn
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
