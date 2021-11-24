@@ -27,20 +27,24 @@
 
         <activity
             android:name=".RegisterActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.Turnierplaner.NoActionBar" />
 
         <activity
             android:name=".LogInActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.Turnierplaner.NoActionBar" />
 
-
+        <activity
+            android:name=".MainActivityHome"
+            android:exported="true"
+            android:label="Turnierplaner"
+            android:theme="@style/Theme.Turnierplaner.NoActionBar" />
         <activity
             android:name=".Homescreen"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_homescreen"
             android:theme="@style/Theme.Turnierplaner.NoActionBar" />
 
