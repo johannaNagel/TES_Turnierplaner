@@ -4,124 +4,50 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8a2792a6-4bbf-4b2e-b9ef-3a219c9adf83" name="Default Changelist" comment="TEST">
-      <change beforePath="$PROJECT_DIR$/Turnierplaner/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Turnierplaner/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Turnierplaner/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Turnierplaner/app/src/main/res/values/strings.xml" afterDir="false" />
+    <list default="true" id="dad43421-fcdd-4f69-b574-c758d1d850a3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Turnierplaner/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Turnierplaner/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Turnierplaner/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Turnierplaner/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Turnierplaner/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Turnierplaner/.idea/misc.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Kotlin Script" />
-        <option value="Concept" />
-        <option value="Specification" />
-      </list>
-    </option>
-    <option name="SCHEME" value="Project" />
-  </component>
   <component name="Git.Settings">
-    <option name="PREVIOUS_COMMIT_AUTHORS">
-      <list>
-        <option value="Vito Völker" />
-      </list>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="20dosvbue0fov9qo3CrSTRR5bWt" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="20mRYYRhHsWQfpza0RcIwZSogQY" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="android.sdk.path" value="$PROJECT_DIR$/../../../../Android/Android-sdk" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Turnierplaner" />
-    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="8a2792a6-4bbf-4b2e-b9ef-3a219c9adf83" name="Default Changelist" comment="" />
-      <created>1636384036160</created>
+      <changelist id="dad43421-fcdd-4f69-b574-c758d1d850a3" name="Default Changelist" comment="" />
+      <created>1636647825482</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1636384036160</updated>
+      <updated>1636647825482</updated>
     </task>
-    <task id="LOCAL-00001" summary="&lt;docs&gt;: Created README.md">
-      <created>1636384961723</created>
+    <task id="LOCAL-00001" summary="Test Commit">
+      <created>1636648392053</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1636384961723</updated>
+      <updated>1636648392053</updated>
     </task>
-    <task id="LOCAL-00002" summary="&lt;docs&gt;: Created README.md">
-      <created>1636385131126</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1636385131126</updated>
-    </task>
-    <task id="LOCAL-00003" summary="docs: Edited README.md">
-      <created>1636386959219</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1636386959219</updated>
-    </task>
-    <task id="LOCAL-00004" summary="docs: Edited README.md">
-      <created>1636387545596</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1636387545596</updated>
-    </task>
-    <task id="LOCAL-00005" summary="docs: Edited README.md">
-      <created>1636387607153</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1636387607153</updated>
-    </task>
-    <task id="LOCAL-00006" summary="TEST">
-      <created>1636648199094</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1636648199094</updated>
-    </task>
-    <task id="LOCAL-00007" summary="refactor: Deleted test files">
-      <created>1636968378119</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1636968378119</updated>
-    </task>
-    <task id="LOCAL-00008" summary="refactor: Changed the project to a Comosable project">
-      <created>1637059017673</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1637059017673</updated>
-    </task>
-    <task id="LOCAL-00009" summary="refactor: Created Composable Project">
-      <created>1637059493296</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1637059493296</updated>
-    </task>
-    <option name="localTasksCounter" value="10" />
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -129,19 +55,7 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="HEAD" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -149,13 +63,7 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="&lt;docs&gt;: Created README.md" />
-    <MESSAGE value="docs: Edited README.md" />
-    <MESSAGE value="TEST" />
-    <MESSAGE value="refactor: Deleted test files" />
-    <MESSAGE value="refactor: Changed the project to a Comosable project" />
-    <MESSAGE value="refactor: Created Composable Project" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: Created Composable Project" />
+    <MESSAGE value="Test Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Test Commit" />
   </component>
 </project>
