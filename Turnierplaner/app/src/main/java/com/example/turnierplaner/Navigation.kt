@@ -47,17 +47,18 @@ fun BottomNavHost(navHostController: NavHostController){
         composable(route = Screens.Home.route){
             Home()
         }
+        composable(route = Screens.Tournament.route){
+            Tournament()
+        }
         composable(route = Screens.Add.route){
             Add()
         }
-        composable(route = Screens.Setting.route){
-            Setting()
-        }
+
         composable(route = Screens.Profile.route){
             Profile()
         }
-        composable(route = Screens.Tournament.route){
-            Tournament()
+        composable(route = Screens.Setting.route){
+            Setting()
         }
     }
 }
