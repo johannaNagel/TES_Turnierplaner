@@ -8,8 +8,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-
-
+import kotlinx.coroutines.tasks.await
 
 class LoginScreenViewModel : ViewModel() {
 
@@ -18,7 +17,7 @@ class LoginScreenViewModel : ViewModel() {
   fun signInWithEmailAndPassword(email: String, password: String) = viewModelScope.launch {
     try {
       loadingState.emit(LoadingState.LOADING)
-      Firebase.auth.signInWithEmailAndPassword(email, password)
+      Firebase.auth.signInWithEmailAndPassword(email, password).await()
       loadingState.emit(LoadingState.LOADED)
     } catch (e: Exception) {
       loadingState.emit(LoadingState.error(e.localizedMessage))
@@ -28,7 +27,7 @@ class LoginScreenViewModel : ViewModel() {
   fun signWithCredential(credential: AuthCredential) = viewModelScope.launch {
     try {
       loadingState.emit(LoadingState.LOADING)
-      Firebase.auth.signInWithCredential(credential)
+      Firebase.auth.signInWithCredential(credential).await()
       loadingState.emit(LoadingState.LOADED)
     } catch (e: Exception) {
       loadingState.emit(LoadingState.error(e.localizedMessage))

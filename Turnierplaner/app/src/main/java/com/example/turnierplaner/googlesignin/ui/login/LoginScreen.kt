@@ -2,14 +2,11 @@ package com.example.turnierplaner.googlesignin.ui.login
 
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,7 +17,6 @@ import androidx.compose.ui.res.painterResource
 import com.example.turnierplaner.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -67,16 +63,8 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
           title = {
             Text(text = "Login")
           },
-          navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
-              Icon(
-                imageVector = Icons.Rounded.ArrowBack,
-                contentDescription = null,
-              )
-            }
-          },
           actions = {
-            IconButton(onClick = { Firebase.auth.signOut() }) {
+            IconButton(onClick = { Firebase.auth.signOut() },) {
               Icon(
                 imageVector = Icons.Rounded.ExitToApp,
                 contentDescription = null,
@@ -101,7 +89,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
             modifier = Modifier.fillMaxWidth(),
             value = userEmail,
             label = {
-              Text(text = "Email")
+              Text(text = "Enter Email")
             },
             onValueChange = {
               userEmail = it
@@ -113,7 +101,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
             visualTransformation = PasswordVisualTransformation(),
             value = userPassword,
             label = {
-              Text(text = "Password")
+              Text(text = "Enter Password")
             },
             onValueChange = {
               userPassword = it
@@ -129,13 +117,6 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
             onClick = {
               viewModel.signInWithEmailAndPassword(userEmail.trim(), userPassword.trim())
             }
-          )
-
-          Text(
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.caption,
-            text = "Login with"
           )
 
           Spacer(modifier = Modifier.height(18.dp))
@@ -169,7 +150,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
                   Text(
                     style = MaterialTheme.typography.button,
                     color = MaterialTheme.colors.onSurface,
-                    text = "Google"
+                    text = "Login with Google"
                   )
                   Icon(
                     tint = Color.Transparent,
