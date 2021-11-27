@@ -122,7 +122,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
           Spacer(modifier = Modifier.height(18.dp))
 
           val context = LocalContext.current
-          val token = "322292157514-dog1tmvoigvb1kt96bk5mqa6r86b2u2r.apps.googleusercontent.com"
+          val token = "322292157514-69lo8nq7u25sak0mic18db19ogjp0a7e.apps.googleusercontent.com"
 
           OutlinedButton(
             border = ButtonDefaults.outlinedBorder.copy(width = 1.dp),
