@@ -198,8 +198,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
           when(state.status) {
             LoadingState.Status.SUCCESS -> {
               val user = FirebaseAuth.getInstance().currentUser
-              Text(text = "Success")
-              Text(text = "Loged in as " + user?.displayName)
+              showMessage(context, message = "Loged in as " + user?.displayName)
             }
             LoadingState.Status.FAILED -> {
               Text(text = state.msg ?: "Error")
