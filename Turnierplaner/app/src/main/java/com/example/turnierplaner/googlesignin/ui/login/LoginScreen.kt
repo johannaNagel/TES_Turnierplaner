@@ -76,6 +76,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
               onClick = {
                 if (FirebaseAuth.getInstance().currentUser != null) {
                   Firebase.auth.signOut()
+                  showMessage(context, message = "Loged out succesfully")
                   /*
                   TODO: Implement, that succesfully message is shown
                   val user = FirebaseAuth.getInstance().currentUser
