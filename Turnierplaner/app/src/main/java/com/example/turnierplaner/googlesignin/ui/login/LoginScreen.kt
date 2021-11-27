@@ -1,6 +1,8 @@
 package com.example.turnierplaner.googlesignin.ui.login
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
@@ -26,6 +28,7 @@ import com.example.turnierplaner.googlesignin.util.LoadingState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -39,7 +42,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
   val snackbarHostState = remember { SnackbarHostState() }
   val state by viewModel.loadingState.collectAsState()
 
-  // Equivalent of onActivityResult
+
   val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
     val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
     try {
@@ -128,13 +131,20 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
             border = ButtonDefaults.outlinedBorder.copy(width = 1.dp),
             modifier = Modifier.fillMaxWidth().height(50.dp),
             onClick = {
+
               val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(token)
                 .requestEmail()
                 .build()
 
-              val googleSignInClient = GoogleSignIn.getClient(context, gso)
-              launcher.launch(googleSignInClient.signInIntent)
+              if(FirebaseAuth.getInstance().currentUser == null){
+                val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                launcher.launch(googleSignInClient.signInIntent)
+              } else {
+                showMessage(context, message="Loged in already")
+              }
+
+
             },
             content = {
               Row(
@@ -175,6 +185,10 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
       )
     }
   )
+}
+
+fun showMessage(context: Context, message:String) {
+  Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
 @Preview(showBackground = true)
