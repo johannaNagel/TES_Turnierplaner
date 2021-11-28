@@ -32,7 +32,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.auth.FirebaseUser
 
 
 
@@ -143,6 +142,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
             }
           )
 
+          //Test Button
           Button(
             modifier = Modifier.fillMaxWidth().height(50.dp),
             enabled = userEmail.isNotEmpty() && userPassword.isNotEmpty(),
@@ -174,8 +174,13 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
               if(FirebaseAuth.getInstance().currentUser == null){
                 val googleSignInClient = GoogleSignIn.getClient(context, gso)
                 launcher.launch(googleSignInClient.signInIntent)
+                //Naviagtion
+                navController.navigate(LoginScreens.HomeScreen.route)
+
               } else {
                 showMessage(context, message="Loged in already")
+                //Naviagtion
+                navController.navigate(LoginScreens.HomeScreen.route)
               }
 
 
