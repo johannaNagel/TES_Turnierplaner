@@ -16,13 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import com.example.turnierplaner.R
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.example.turnierplaner.LoginScreens
+import com.example.turnierplaner.R
 import com.example.turnierplaner.googlesignin.ui.theme.FirebaseAuthComposeTheme
 import com.example.turnierplaner.googlesignin.util.LoadingState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -34,7 +34,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
+fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: NavHostController) {
 
   var userEmail by remember { mutableStateOf("") }
   var userPassword by remember { mutableStateOf("") }
@@ -122,6 +122,17 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel()) {
             }
           )
 
+          Button(
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+            enabled = userEmail.isNotEmpty() && userPassword.isNotEmpty(),
+            content = {
+              Text(text = "test")
+            },
+            onClick = {
+              navController.navigate(LoginScreens.HomeScreen.route)
+            }
+          )
+
           Spacer(modifier = Modifier.height(18.dp))
 
           val context = LocalContext.current
@@ -195,6 +206,6 @@ fun showMessage(context: Context, message:String) {
 @Composable
 fun LoginScreenPreview() {
   FirebaseAuthComposeTheme(false) {
-    LoginScreen()
+    //LoginScreen()
   }
 }

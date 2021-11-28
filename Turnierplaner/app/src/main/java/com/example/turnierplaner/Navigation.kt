@@ -1,6 +1,8 @@
 package com.example.turnierplaner
-import androidx.annotation.DrawableRes
-import androidx.compose.material.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
@@ -10,35 +12,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.turnierplaner.R
-
-sealed class Screens(val title:String, val route:String,@DrawableRes val icons:Int) {
-    object Home : Screens(
-        title = "home",
-        route = "home_route",
-        icons = R.drawable.ic_baseline_home
-    )
-    object Add : Screens(
-        title = "add",
-        route = "add_route",
-        icons = R.drawable.ic_baseline_add
-    )
-    object Profile: Screens(
-        title = "profile",
-        route = "profile_route",
-        icons = R.drawable.ic_baseline_profile
-    )
-    object Setting: Screens(
-        title = "setting",
-        route = "setting_route",
-        icons = R.drawable.ic_baseline_settings_24
-    )
-    object Tournament : Screens(
-        title = "tournament",
-        route = "tournament_route",
-        icons = R.drawable.ic_baseline_account_tree
-    )
-}
+import androidx.navigation.compose.rememberNavController
+import com.example.turnierplaner.googlesignin.ui.login.LoginScreen
 
 
 @Composable
@@ -88,6 +63,24 @@ fun BottomNavigationScreen(navController: NavController, items: List<Screens>){
 
         }
     }
+}
+
+
+@Composable
+fun LoginNaviagtion(){
+
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = LoginScreens.Login.route){
+        composable(route = LoginScreens.Login.route){
+            LoginScreen(navController = navController)
+        }
+        composable(route = LoginScreens.HomeScreen.route){
+            HomeScreen()
+        }
+
+    }
+
 }
 
 
