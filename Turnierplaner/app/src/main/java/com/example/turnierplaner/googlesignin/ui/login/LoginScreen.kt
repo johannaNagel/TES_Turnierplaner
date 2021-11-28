@@ -32,6 +32,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.FirebaseUser
+
+
+
 
 @Composable
 fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: NavHostController) {
@@ -67,7 +71,22 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
             Text(text = "Login")
           },
           actions = {
-            IconButton(onClick = { Firebase.auth.signOut() },) {
+            val context = LocalContext.current
+            IconButton(
+              onClick = {
+                if (FirebaseAuth.getInstance().currentUser != null) {
+                  Firebase.auth.signOut()
+                  showMessage(context, message = "Loged out succesfully")
+                  /*
+                  TODO: Implement, that succesfully message is shown
+                  val user = FirebaseAuth.getInstance().currentUser
+                  showMessage(context, message = user?.displayName + "loged out succesfully")
+                   */
+                } else {
+                  showMessage(context, message = "No User to Logout")
+                }
+              },
+            ) {
               Icon(
                 imageVector = Icons.Rounded.ExitToApp,
                 contentDescription = null,
@@ -112,7 +131,9 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
           )
 
           Button(
-            modifier = Modifier.fillMaxWidth().height(50.dp),
+            modifier = Modifier
+              .fillMaxWidth()
+              .height(50.dp),
             enabled = userEmail.isNotEmpty() && userPassword.isNotEmpty(),
             content = {
               Text(text = "Login")
@@ -140,7 +161,9 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
 
           OutlinedButton(
             border = ButtonDefaults.outlinedBorder.copy(width = 1.dp),
-            modifier = Modifier.fillMaxWidth().height(50.dp),
+            modifier = Modifier
+              .fillMaxWidth()
+              .height(50.dp),
             onClick = {
 
               val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -185,7 +208,8 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
 
           when(state.status) {
             LoadingState.Status.SUCCESS -> {
-              Text(text = "Success")
+              val user = FirebaseAuth.getInstance().currentUser
+              showMessage(context, message = "Loged in as " + user?.displayName)
             }
             LoadingState.Status.FAILED -> {
               Text(text = state.msg ?: "Error")
