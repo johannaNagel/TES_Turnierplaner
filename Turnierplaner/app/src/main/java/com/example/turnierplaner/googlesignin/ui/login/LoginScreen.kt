@@ -174,12 +174,13 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
               if(FirebaseAuth.getInstance().currentUser == null){
                 val googleSignInClient = GoogleSignIn.getClient(context, gso)
                 launcher.launch(googleSignInClient.signInIntent)
-                //Naviagtion
-                navController.navigate(LoginScreens.HomeScreen.route)
-
+                //Navigation
+                if(FirebaseAuth.getInstance().currentUser != null) {
+                  navController.navigate(LoginScreens.HomeScreen.route)
+                }
               } else {
                 showMessage(context, message="Loged in already")
-                //Naviagtion
+                //Navigation
                 navController.navigate(LoginScreens.HomeScreen.route)
               }
 
