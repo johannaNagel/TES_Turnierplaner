@@ -28,6 +28,6 @@ jobs:
               run: chmod +x ./gradlew
             - name: Build with Gradle
               run: ./gradlew build
-            - name: Test with gradle
+            - name: Apply Spotless
               run: gradlew spotlessApply
 
