@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
 
+import com.example.turnierplaner.GoogleSignIn.MainActivity
+
 class Homescreen : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
