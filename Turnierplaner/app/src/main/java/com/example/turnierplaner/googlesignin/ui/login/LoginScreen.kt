@@ -32,7 +32,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-
+import android.os.Handler
+import android.os.Looper
 
 
 
@@ -57,8 +58,6 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
     }
   }
 
-
-
   Scaffold(
     scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
     topBar = {
@@ -75,12 +74,12 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
               onClick = {
                 if (FirebaseAuth.getInstance().currentUser != null) {
                   Firebase.auth.signOut()
+                  //If user terminate app without log out, he will stay loged in. If he log out before terminating the app, he have to log in again
+                  val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .build()
+                  val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                  googleSignInClient.signOut()
                   showMessage(context, message = "Loged out succesfully")
-                  /*
-                  TODO: Implement, that succesfully message is shown
-                  val user = FirebaseAuth.getInstance().currentUser
-                  showMessage(context, message = user?.displayName + "loged out succesfully")
-                   */
                 } else {
                   showMessage(context, message = "No User to Logout")
                 }
@@ -174,13 +173,9 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
               if(FirebaseAuth.getInstance().currentUser == null){
                 val googleSignInClient = GoogleSignIn.getClient(context, gso)
                 launcher.launch(googleSignInClient.signInIntent)
-                //Navigation
-                if(FirebaseAuth.getInstance().currentUser != null) {
-                  navController.navigate(LoginScreens.HomeScreen.route)
-                }
               } else {
-                showMessage(context, message="Loged in already")
-                //Navigation
+                //TODO: if user did not loged out previously, he should move to homescreen automatically
+                showMessage(context, message= "Loged in already")
                 navController.navigate(LoginScreens.HomeScreen.route)
               }
 
@@ -211,11 +206,14 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
               )
             }
           )
-
           when(state.status) {
             LoadingState.Status.SUCCESS -> {
               val user = FirebaseAuth.getInstance().currentUser
               showMessage(context, message = "Loged in as " + user?.displayName)
+              val handler = Handler(Looper.getMainLooper())
+              handler.postDelayed({
+                navController.navigate(LoginScreens.HomeScreen.route)
+              }, 1000)
             }
             LoadingState.Status.FAILED -> {
               Text(text = state.msg ?: "Error")
