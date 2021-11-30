@@ -29,5 +29,5 @@ jobs:
             - name: Build with Gradle
               run: ./gradlew build
             - name: Test with gradle
-              run: gradlew spotlessApply
+              run: ./gradlew build -x spotlessCheck
 
