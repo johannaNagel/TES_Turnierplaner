@@ -141,18 +141,6 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
             }
           )
 
-          //Test Button
-          Button(
-            modifier = Modifier.fillMaxWidth().height(50.dp),
-            enabled = userEmail.isNotEmpty() && userPassword.isNotEmpty(),
-            content = {
-              Text(text = "test")
-            },
-            onClick = {
-              navController.navigate(LoginScreens.HomeScreen.route)
-            }
-          )
-
           Spacer(modifier = Modifier.height(18.dp))
 
           val context = LocalContext.current
