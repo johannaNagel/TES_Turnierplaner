@@ -19,7 +19,11 @@ class Turnierplaner : ComponentActivity() {
 
                 LoginNaviagtion()
             }
+
         }
     }
+
+
+
 }
 
