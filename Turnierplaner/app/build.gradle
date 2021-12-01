@@ -55,29 +55,29 @@ dependencies {
     // Navigation Dependency
     implementation("androidx.navigation:navigation-compose:2.4.0-beta02")
 
-    //Compose Dependencies
+    // Compose Dependencies
     implementation("androidx.compose.ui:ui-tooling:$compose_version")
-    implementation ("androidx.compose.material:material:$compose_version")
-    implementation ("androidx.compose.ui:ui-tooling-preview:$compose_version")
-    implementation ("androidx.compose.ui:ui:$compose_version")
-    implementation ('androidx.core:core-ktx:1.7.0')
-    implementation ('androidx.appcompat:appcompat:1.3.1')
-    implementation ('com.google.android.material:material:1.4.0')
+    implementation("androidx.compose.material:material:$compose_version")
+    implementation("androidx.compose.ui:ui-tooling-preview:$compose_version")
+    implementation("androidx.compose.ui:ui:$compose_version")
+    implementation('androidx.core:core-ktx:1.7.0')
+    implementation('androidx.appcompat:appcompat:1.3.1')
+    implementation('com.google.android.material:material:1.4.0')
     implementation("androidx.compose.foundation:foundation:1.0.0-beta09")
-    implementation ("androidx.compose.material:material-icons-extended:$compose_version")
-    implementation ('androidx.activity:activity-compose:1.4.0')
-    androidTestImplementation ("androidx.compose.ui:ui-test-junit4:$compose_version")
-    debugImplementation ("androidx.compose.ui:ui-tooling:$compose_version")
+    implementation("androidx.compose.material:material-icons-extended:$compose_version")
+    implementation('androidx.activity:activity-compose:1.4.0')
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
+    debugImplementation("androidx.compose.ui:ui-tooling:$compose_version")
 
-    //Firebase Dependencies
+    // Firebase Dependencies
     implementation(platform("com.google.firebase:firebase-bom:28.2.0"))
-    implementation ('com.google.firebase:firebase-auth:21.0.1')
-    implementation ('com.google.firebase:firebase-auth-ktx:21.0.1')
+    implementation('com.google.firebase:firebase-auth:21.0.1')
+    implementation('com.google.firebase:firebase-auth-ktx:21.0.1')
 
     // errorprone Dependency
     errorprone("com.google.errorprone:error_prone_core:2.9.0")
 
-    //Coroutines Dependencies
+    // Coroutines Dependencies
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.0")
@@ -98,7 +98,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-script-runtime:1.5.31")
 }
 
-
 spotless {
     kotlin {
         // by default the target is every '.kt' and '.kts` file in the java sourcesets
@@ -114,6 +113,3 @@ spotless {
         ktlint()
     }
 }
-
-
-
