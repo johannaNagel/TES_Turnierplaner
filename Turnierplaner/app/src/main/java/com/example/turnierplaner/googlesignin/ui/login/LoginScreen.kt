@@ -34,7 +34,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import android.os.Handler
 import android.os.Looper
-
+import androidx.compose.ui.res.stringResource
 
 
 @Composable
@@ -79,15 +79,15 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
                     .build()
                   val googleSignInClient = GoogleSignIn.getClient(context, gso)
                   googleSignInClient.signOut()
-                  showMessage(context, message = "Loged out succesfully")
+                  showMessage(context, message = "User Loged out succesfully")
                 } else {
-                  showMessage(context, message = "No User to Logout")
+                  showMessage(context, message = "No User to Log out")
                 }
               },
             ) {
               Icon(
                 imageVector = Icons.Rounded.ExitToApp,
-                contentDescription = null,
+                contentDescription = "Button for Logout",
               )
             }
           }
