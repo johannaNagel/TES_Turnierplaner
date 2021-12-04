@@ -4,6 +4,7 @@ plugins {
     id('com.google.gms.google-services')
     id('com.diffplug.spotless') version '6.0.0'
     id("net.ltgt.errorprone") version "2.0.2"
+    id("com.dorongold.task-tree") version "2.1.0"
 }
 
 android {
@@ -17,15 +18,14 @@ android {
         versionName("1.0")
 
         testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
-        vectorDrawables {
-            useSupportLibrary(true)
-        }
+        vectorDrawables { useSupportLibrary(true) }
     }
 
     buildTypes {
         release {
             minifyEnabled(false)
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'); ('proguard-rules.pro')
+            proguardFiles getDefaultProguardFile ('proguard-android-optimize.txt')
+            ('proguard-rules.pro')
         }
     }
     compileOptions {
@@ -36,18 +36,12 @@ android {
         jvmTarget = ('1.8')
         useIR = (true)
     }
-    buildFeatures {
-        compose(true)
-    }
+    buildFeatures { compose(true) }
     composeOptions {
         kotlinCompilerExtensionVersion(compose_version)
         kotlinCompilerVersion('1.5.21')
     }
-    packagingOptions {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
-    }
+    packagingOptions { resources { excludes += '/META-INF/{AL2.0,LGPL2.1}' } }
 }
 
 dependencies {
@@ -104,11 +98,11 @@ dependencies {
 spotless {
     kotlin {
         // by default the target is every '.kt' and '.kts` file in the java sourcesets
+        target('**/*.kt', '**/*.kts')
         ktlint()
-        trimTrailingWhitespace()
-        indentWithSpaces()
-        endWithNewline()
-
+        ktfmt()
+        // diktat()
+        // prettier()
         licenseHeader('/* (C)$YEAR */') // or licenseHeaderFile
     }
     kotlinGradle {
@@ -117,9 +111,4 @@ spotless {
     }
 }
 
-tasks.withType(JavaCompile) {
-
-    options.errorprone.disableWarningsInGeneratedCode.set(true)
-
-}
-
+tasks.withType(JavaCompile) { options.errorprone.disableWarningsInGeneratedCode.set(true) }

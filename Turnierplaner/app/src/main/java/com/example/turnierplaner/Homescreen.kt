@@ -1,3 +1,4 @@
+/* (C)2021 */
 package com.example.turnierplaner
 
 import android.os.Bundle
@@ -11,28 +12,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
 
 class Homescreen : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            TurnierplanerTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting4("Homescreen")
-                }
-            }
-        }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContent {
+      TurnierplanerTheme {
+        // A surface container using the 'background' color from the theme
+        Surface(color = MaterialTheme.colors.background) { Greeting4("Homescreen") }
+      }
     }
+  }
 }
 
 @Composable
 fun Greeting4(name: String) {
-    Text(text = "$name")
+  Text(text = "$name")
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview4() {
-    TurnierplanerTheme {
-        Greeting4("Homescreen")
-    }
+  TurnierplanerTheme { Greeting4("Homescreen") }
 }

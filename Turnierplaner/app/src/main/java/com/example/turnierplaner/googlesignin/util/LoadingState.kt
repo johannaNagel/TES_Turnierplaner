@@ -1,3 +1,4 @@
+/* (C)2021 */
 package com.example.turnierplaner.googlesignin.util
 
 data class LoadingState private constructor(val status: Status, val msg: String? = null) {

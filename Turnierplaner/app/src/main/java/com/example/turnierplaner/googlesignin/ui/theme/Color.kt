@@ -1,3 +1,4 @@
+/* (C)2021 */
 package com.example.turnierplaner.googlesignin.ui.theme
 
 import androidx.compose.ui.graphics.Color
