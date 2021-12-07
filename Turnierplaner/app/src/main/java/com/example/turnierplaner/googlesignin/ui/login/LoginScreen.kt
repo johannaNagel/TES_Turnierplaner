@@ -185,7 +185,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
                           Text(
                               style = MaterialTheme.typography.button,
                               color = MaterialTheme.colors.onSurface,
-                              text = "Login with Google")
+                              text = "Register and Login with Google")
                           Icon(
                               tint = Color.Transparent,
                               imageVector = Icons.Default.MailOutline,

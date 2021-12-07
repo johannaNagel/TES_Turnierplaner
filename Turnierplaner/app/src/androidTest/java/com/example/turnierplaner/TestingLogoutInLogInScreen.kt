@@ -12,28 +12,28 @@ import org.junit.Test
 
 class TestingLogoutInLogInScreen {
 
-  @get:Rule
-  val composeTestRule = createAndroidComposeRule<com.example.turnierplaner.Turnierplaner>()
+    @get:Rule
+    val composeTestRule = createAndroidComposeRule<com.example.turnierplaner.Turnierplaner>()
 
-  @Test
-  fun testEnabledLogoutButton() {
-    composeTestRule.onNodeWithContentDescription("Button for Logout").assertIsEnabled()
-  }
-
-  @Test
-  fun testSuccessfulLogout() {
-    composeTestRule.onNodeWithContentDescription("Button for Logout").performClick()
-    assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
-  }
-
-  @Test
-  fun clickLogout10Times() {
-    var counter = 1
-    while (counter < 10) {
-      composeTestRule.onNodeWithContentDescription("Button for Logout").performClick()
-      counter += 1
+    @Test
+    fun testEnabledLogoutButton() {
+        composeTestRule.onNodeWithContentDescription("Button for Logout").assertIsEnabled()
     }
-    composeTestRule.onNodeWithContentDescription("Button for Logout").assertIsEnabled()
-    assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
-  }
+
+    @Test
+    fun testSuccessfulLogout() {
+        composeTestRule.onNodeWithContentDescription("Button for Logout").performClick()
+        assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
+    }
+
+    @Test
+    fun clickLogout10Times() {
+        var counter = 1
+        while (counter < 10) {
+            composeTestRule.onNodeWithContentDescription("Button for Logout").performClick()
+            counter += 1
+        }
+        composeTestRule.onNodeWithContentDescription("Button for Logout").assertIsEnabled()
+        assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
+    }
 }
