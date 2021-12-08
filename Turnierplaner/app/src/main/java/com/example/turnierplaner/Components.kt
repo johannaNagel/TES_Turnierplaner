@@ -60,79 +60,70 @@ fun Add(navController: NavHostController) {
   var numberOfPlayers by remember { mutableStateOf("") }
 
   Scaffold(
-    topBar = {
-      Column(modifier = Modifier.fillMaxWidth()) {
-        TopAppBar(
-          backgroundColor = Color.White,
-          elevation = 1.dp,
-          title = { Text(text = "Adding New Tournament") },
+      topBar = {
+        Column(modifier = Modifier.fillMaxWidth()) {
+          TopAppBar(
+              backgroundColor = Color.White,
+              elevation = 1.dp,
+              title = { Text(text = "Adding New Tournament") },
           )
-      }
-    },
-    content = {
-      Column (
-        modifier = Modifier
-          .fillMaxSize()
-          .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(18.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        content = {
-          OutlinedTextField(value = teamname, onValueChange = { newTeamname ->
-              teamname = newTeamname
-            },
-            label = {
-              Text(text = "Teamname")
-            },
-            leadingIcon = {
-              IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Filled.SportsSoccer,
-                     contentDescription = "FootballIcon")
-              }
-            })
-
-          OutlinedTextField(value = email, onValueChange = { newEmail ->
-            email = newEmail
-            },
-            label = {
-              Text(text = "Email")
-            },
-            leadingIcon = {
-              IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Filled.Email,
-                  contentDescription = "Mail")
-              }
-            })
-
-          OutlinedTextField(value = phoneNumber, onValueChange = { newPhonenumber ->
-            phoneNumber = newPhonenumber
-          },
-            label = {
-              Text(text = "Phonenumber")
-            },
-            leadingIcon = {
-              IconButton(onClick = { /*TODO*/ }) {
-                Icon(imageVector = Icons.Filled.Phone,
-                  contentDescription = "Phone")
-              }
-            })
-          OutlinedTextField(value = numberOfPlayers, onValueChange = {newNumberOfPlayers ->
-            numberOfPlayers = newNumberOfPlayers
-          },
-            label = {
-              Text(text = "NumberOfPlayers")
-            })
-          Button(
-            modifier = Modifier.fillMaxWidth().height(50.dp),
-            enabled = teamname.isNotEmpty() && email.isNotEmpty() && phoneNumber.isNotEmpty() && numberOfPlayers.isNotEmpty(),
-            content = { Text(text = "Add") },
-            onClick = {
-              navController.navigate(LoginScreens.HomeScreen.route)
-              //Navigiere zum Tournament Tab
-            })
         }
-      )
-    }
-  )
+      },
+      content = {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            content = {
+              OutlinedTextField(
+                  value = teamname,
+                  onValueChange = { newTeamname -> teamname = newTeamname },
+                  label = { Text(text = "Teamname") },
+                  leadingIcon = {
+                    IconButton(onClick = { /*TODO*/}) {
+                      Icon(
+                          imageVector = Icons.Filled.SportsSoccer,
+                          contentDescription = "FootballIcon")
+                    }
+                  })
+
+              OutlinedTextField(
+                  value = email,
+                  onValueChange = { newEmail -> email = newEmail },
+                  label = { Text(text = "Email") },
+                  leadingIcon = {
+                    IconButton(onClick = { /*TODO*/}) {
+                      Icon(imageVector = Icons.Filled.Email, contentDescription = "Mail")
+                    }
+                  })
+
+              OutlinedTextField(
+                  value = phoneNumber,
+                  onValueChange = { newPhonenumber -> phoneNumber = newPhonenumber },
+                  label = { Text(text = "Phonenumber") },
+                  leadingIcon = {
+                    IconButton(onClick = { /*TODO*/}) {
+                      Icon(imageVector = Icons.Filled.Phone, contentDescription = "Phone")
+                    }
+                  })
+              OutlinedTextField(
+                  value = numberOfPlayers,
+                  onValueChange = { newNumberOfPlayers -> numberOfPlayers = newNumberOfPlayers },
+                  label = { Text(text = "NumberOfPlayers") })
+              Button(
+                  modifier = Modifier.fillMaxWidth().height(50.dp),
+                  enabled =
+                      teamname.isNotEmpty() &&
+                          email.isNotEmpty() &&
+                          phoneNumber.isNotEmpty() &&
+                          numberOfPlayers.isNotEmpty(),
+                  content = { Text(text = "Add") },
+                  onClick = {
+                    navController.navigate(LoginScreens.HomeScreen.route)
+                    // Navigiere zum Tournament Tab
+                  })
+            })
+      })
 }
 
 @Composable
@@ -148,43 +139,45 @@ fun Setting(navController: NavHostController) {
     Text(text = "Setting")
   }
   Scaffold(
-    topBar = {
-      Column(modifier = Modifier.fillMaxWidth()) {
-        TopAppBar(
-          backgroundColor = Color.White,
-          elevation = 1.dp,
-          title = { Text(text = "Settings") },
-          actions = {
-            val context = LocalContext.current
-            IconButton(
-              onClick = {
-                if (FirebaseAuth.getInstance().currentUser != null) {
-                  Firebase.auth.signOut()
-                  val gso =
-                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
-                  val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                  googleSignInClient.signOut()
-                  showMessage(context, message = "User Loged out successfully")
-                  //ArgumentException: Navigation destination that matches request NavDeepLinkRequest{ uri=android-app://androidx.navigation/login_route } cannot be found
-                  // in the navigation graph NavGraph(0x0) startDestination={Destination(0xf1a63a36) route=home_route}
-                  val handler = Handler(Looper.getMainLooper())
-                  handler.postDelayed(
-                    { navController.navigate(LoginScreens.Login.route) }, 1000)
-                } else {
-                  showMessage(context, message = "No User to Log out")
+      topBar = {
+        Column(modifier = Modifier.fillMaxWidth()) {
+          TopAppBar(
+              backgroundColor = Color.White,
+              elevation = 1.dp,
+              title = { Text(text = "Settings") },
+              actions = {
+                val context = LocalContext.current
+                IconButton(
+                    onClick = {
+                      if (FirebaseAuth.getInstance().currentUser != null) {
+                        Firebase.auth.signOut()
+                        val gso =
+                            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+                        val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                        googleSignInClient.signOut()
+                        showMessage(context, message = "User Loged out successfully")
+                        // ArgumentException: Navigation destination that matches request
+                        // NavDeepLinkRequest{ uri=android-app://androidx.navigation/login_route }
+                        // cannot be found
+                        // in the navigation graph NavGraph(0x0)
+                        // startDestination={Destination(0xf1a63a36) route=home_route}
+                        val handler = Handler(Looper.getMainLooper())
+                        handler.postDelayed(
+                            { navController.navigate(LoginScreens.Login.route) }, 1000)
+                      } else {
+                        showMessage(context, message = "No User to Log out")
+                      }
+                    },
+                ) {
+                  Icon(
+                      imageVector = Icons.Rounded.ExitToApp,
+                      contentDescription = "Button for Logout",
+                  )
                 }
-              },
-            ) {
-              Icon(
-                imageVector = Icons.Rounded.ExitToApp,
-                contentDescription = "Button for Logout",
-              )
-            }
-          })
-      }
-    },
-  content = {Text("Settings need to implement")}
-  )
+              })
+        }
+      },
+      content = { Text("Settings need to implement") })
 }
 
 @Composable
