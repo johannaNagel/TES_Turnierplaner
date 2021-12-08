@@ -48,8 +48,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.turnierplaner.HOME_GRAPH_ROUTE
 import com.example.turnierplaner.LoginScreens
 import com.example.turnierplaner.R
+import com.example.turnierplaner.Screens
 import com.example.turnierplaner.googlesignin.ui.theme.FirebaseAuthComposeTheme
 import com.example.turnierplaner.googlesignin.util.LoadingState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -166,7 +168,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
                       // TODO: if user did not loged out previously, he should move to homescreen
                       // automatically
                       showMessage(context, message = "Loged in already")
-                      navController.navigate(LoginScreens.HomeScreen.route)
+                      navController.navigate(HOME_GRAPH_ROUTE)
                     }
                   },
                   content = {
@@ -197,7 +199,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
                   showMessage(context, message = "Loged in as " + user?.displayName)
                   val handler = Handler(Looper.getMainLooper())
                   handler.postDelayed(
-                      { navController.navigate(LoginScreens.HomeScreen.route) }, 1000)
+                      { navController.navigate(HOME_GRAPH_ROUTE) }, 1000)
                 }
                 LoadingState.Status.FAILED -> {
                   Text(text = state.msg ?: "Error")

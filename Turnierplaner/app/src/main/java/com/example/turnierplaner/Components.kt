@@ -35,8 +35,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
+import com.example.turnierplaner.navigation.BottomNavigationScreen
+import com.example.turnierplaner.navigation.SetupNavGraph
+import com.example.turnierplaner.navigation.homeNavGraph
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -45,7 +50,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun Home() {
+fun Home(navController: NavHostController) {
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
     Text(text = "Home")
   }
@@ -71,7 +76,9 @@ fun Add(navController: NavHostController) {
       },
       content = {
         Column(
-            modifier = Modifier.fillMaxSize().padding(24.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
@@ -111,7 +118,9 @@ fun Add(navController: NavHostController) {
                   onValueChange = { newNumberOfPlayers -> numberOfPlayers = newNumberOfPlayers },
                   label = { Text(text = "NumberOfPlayers") })
               Button(
-                  modifier = Modifier.fillMaxWidth().height(50.dp),
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .height(50.dp),
                   enabled =
                       teamname.isNotEmpty() &&
                           email.isNotEmpty() &&
@@ -119,7 +128,7 @@ fun Add(navController: NavHostController) {
                           numberOfPlayers.isNotEmpty(),
                   content = { Text(text = "Add") },
                   onClick = {
-                    navController.navigate(LoginScreens.HomeScreen.route)
+                    navController.navigate(Screens.Tournament.route)
                     // Navigiere zum Tournament Tab
                   })
             })
@@ -127,10 +136,12 @@ fun Add(navController: NavHostController) {
 }
 
 @Composable
-fun Profile() {
+fun Profile(navController: NavHostController) {
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
     Text(text = "Profile")
   }
+
+    //Firebase USEr viewmodel
 }
 
 @Composable
@@ -138,6 +149,8 @@ fun Setting(navController: NavHostController) {
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
     Text(text = "Setting")
   }
+
+
   Scaffold(
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -181,19 +194,30 @@ fun Setting(navController: NavHostController) {
 }
 
 @Composable
-fun Tournament() {
+fun Tournament(navController: NavHostController) {
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
     Text(text = "Tournament")
   }
+  //Text feld namen Trunier -> Variable
+
+  //Turnierform auswählen drop down -> Liga
+
+      //LATER: Punkte einstellen, Hinrunde
+
+
+  //Textfeld #Spieler/Teams
+
+  //Bestätigen Button -> Turnier
+
+
 }
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavHostController) {
 
   val listItems =
       listOf(Screens.Home, Screens.Tournament, Screens.Add, Screens.Profile, Screens.Setting)
 
-  val navController = rememberNavController()
 
   TurnierplanerTheme {
     // A surface container using the 'background' color from the theme
@@ -201,7 +225,12 @@ fun HomeScreen() {
       Scaffold(
           bottomBar = {
             BottomNavigationScreen(navController = navController, items = listItems)
-          }) { BottomNavHost(navHostController = navController) }
+          }) {
+
+
+      }
     }
   }
 }
+
+
