@@ -96,8 +96,6 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
                     onClick = {
                       if (FirebaseAuth.getInstance().currentUser != null) {
                         Firebase.auth.signOut()
-                        // If user terminate app without log out, he will stay loged in. If he log
-                        // out before terminating the app, he have to log in again
                         val gso =
                             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
                         val googleSignInClient = GoogleSignIn.getClient(context, gso)
