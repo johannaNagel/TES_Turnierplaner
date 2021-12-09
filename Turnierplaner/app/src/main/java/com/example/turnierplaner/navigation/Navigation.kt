@@ -1,23 +1,15 @@
 /* (C)2021 */
 package com.example.turnierplaner
 
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.res.painterResource
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.navigation
-import androidx.navigation.compose.rememberNavController
-import com.example.turnierplaner.googlesignin.ui.login.LoginScreen
+import com.example.turnierplaner.homescreen.Add
+import com.example.turnierplaner.homescreen.Home
+import com.example.turnierplaner.homescreen.Profile
+import com.example.turnierplaner.homescreen.Setting
+import com.example.turnierplaner.homescreen.Tournament
 
 @Composable
 fun BottomNavHost(navController: NavHostController) {
