@@ -4,6 +4,7 @@ package com.example.turnierplaner.homescreen
 import android.os.Handler
 import android.os.Looper
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,10 +12,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
@@ -251,10 +255,8 @@ fun Tournament(navController: NavHostController) {
 fun Add(navController: NavHostController) {
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text(text = "Add") }
   var teamname by remember { mutableStateOf("") }
-  var email by remember { mutableStateOf("") }
-  var phoneNumber by remember { mutableStateOf("") }
+  var kindOfSport by remember { mutableStateOf("") }
   var numberOfPlayers by remember { mutableStateOf("") }
-
     val result = remember { mutableStateOf("") }
     val selectedItem = remember { mutableStateOf("home")}
 
@@ -286,27 +288,20 @@ fun Add(navController: NavHostController) {
                           imageVector = Icons.Filled.SportsSoccer,
                           contentDescription = "FootballIcon")
                     }
-                  })
+                  }
+              )
 
               OutlinedTextField(
-                  value = email,
-                  onValueChange = { newEmail -> email = newEmail },
-                  label = { Text(text = "Email") },
+                  value = kindOfSport,
+                  onValueChange = { newEmail -> kindOfSport = newEmail },
+                  label = { Text(text = "Kind of Sport") },
                   leadingIcon = {
                     IconButton(onClick = { /*TODO*/}) {
-                      Icon(imageVector = Icons.Filled.Email, contentDescription = "Mail")
+                      Icon(imageVector = Icons.Filled.SportsSoccer, contentDescription = "Soccer")
                     }
-                  })
+                  }
+              )
 
-              OutlinedTextField(
-                  value = phoneNumber,
-                  onValueChange = { newPhonenumber -> phoneNumber = newPhonenumber },
-                  label = { Text(text = "Phonenumber") },
-                  leadingIcon = {
-                    IconButton(onClick = { /*TODO*/}) {
-                      Icon(imageVector = Icons.Filled.Phone, contentDescription = "Phone")
-                    }
-                  })
               OutlinedTextField(
                   value = numberOfPlayers,
                   onValueChange = { newNumberOfPlayers -> numberOfPlayers = newNumberOfPlayers },
@@ -317,8 +312,7 @@ fun Add(navController: NavHostController) {
                       .height(50.dp),
                   enabled =
                       teamname.isNotEmpty() &&
-                          email.isNotEmpty() &&
-                          phoneNumber.isNotEmpty() &&
+                          kindOfSport.isNotEmpty() &&
                           numberOfPlayers.isNotEmpty(),
                   content = { Text(text = "Add") },
 
@@ -326,7 +320,47 @@ fun Add(navController: NavHostController) {
                     navController.navigate(Screens.Tournament.route)
                     // Navigiere zum Tournament Tab
                   })
-            })
+            }
+            // DropDownMenu
+          /**  var expanded by remember { mutableStateOf(false) }
+          val items = listOf("League", "Elimanation", "Double-Elimnation", "Group Tournament")
+          val disabledValue = "B"
+          var selectedIndex by remember { mutableStateOf(0) }
+          Box(modifier = Modifier
+              .fillMaxSize()
+              .wrapContentSize(Alignment.TopStart)) {
+              Text(items[selectedIndex],modifier = Modifier
+                  .fillMaxWidth()
+                  .clickable(onClick = { expanded = true })
+                  .background(
+                      Color.Gray
+                  ))
+              DropdownMenu(
+                  expanded = expanded,
+                  onDismissRequest = { expanded = false },
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .background(
+                          Color.Blue
+                      )
+              ) {
+                  items.forEachIndexed { index, s ->
+                      DropdownMenuItem(onClick = {
+                          selectedIndex = index
+                          expanded = false
+                      }) {
+                          val disabledText = if (s == disabledValue) {
+                              " (Disabled)"
+                          } else {
+                              ""
+                          }
+                          Text(text = s + disabledText)
+                      }
+                  }
+              }
+          } **/
+        )
+
       },
       bottomBar = {
           BottomAppBar(
