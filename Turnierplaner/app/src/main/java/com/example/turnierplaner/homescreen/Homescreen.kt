@@ -8,6 +8,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,16 +23,20 @@ import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.SportsFootball
 import androidx.compose.material.icons.filled.SportsSoccer
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.ExitToApp
@@ -257,8 +263,9 @@ fun Add(navController: NavHostController) {
   var teamname by remember { mutableStateOf("") }
   var kindOfSport by remember { mutableStateOf("") }
   var numberOfPlayers by remember { mutableStateOf("") }
-    val result = remember { mutableStateOf("") }
-    val selectedItem = remember { mutableStateOf("home")}
+  var tournamentForm by remember {mutableStateOf("")}
+  val result = remember { mutableStateOf("") }
+  val selectedItem = remember { mutableStateOf("home")}
 
   Scaffold(
       topBar = {
@@ -285,13 +292,14 @@ fun Add(navController: NavHostController) {
                   leadingIcon = {
                     IconButton(onClick = { /*TODO*/}) {
                       Icon(
-                          imageVector = Icons.Filled.SportsSoccer,
+                          imageVector = Icons.Filled.SportsFootball,
                           contentDescription = "FootballIcon")
                     }
                   }
               )
-
-              OutlinedTextField(
+                
+            
+                OutlinedTextField(
                   value = kindOfSport,
                   onValueChange = { newEmail -> kindOfSport = newEmail },
                   label = { Text(text = "Kind of Sport") },
@@ -303,9 +311,56 @@ fun Add(navController: NavHostController) {
               )
 
               OutlinedTextField(
+
                   value = numberOfPlayers,
                   onValueChange = { newNumberOfPlayers -> numberOfPlayers = newNumberOfPlayers },
-                  label = { Text(text = "NumberOfPlayers") })
+                  label = { Text(text = "NumberOfPlayers") },
+                  leadingIcon = {
+                      IconButton(onClick = { /*TODO*/ }) {
+                          Icon(imageVector = Icons.Filled.Groups, contentDescription = "Groups")
+                      }
+                  }
+              )
+
+
+
+
+
+
+
+                 var expanded by remember{mutableStateOf(false)}
+                var items = listOf ("League System", "Knock-Out System", "double Knock-out system")
+                val disabledValue = "Knock-Out System"
+                var selectedIndex by remember {mutableStateOf(0)}
+                Box(){
+                    Text(items[selectedIndex],
+                        modifier = Modifier
+                            .clickable(onClick = {expanded = true} )
+                            .background(Color.White))
+                    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false },
+                        modifier = Modifier
+                            .background(Color.White)) {
+                        items.forEachIndexed { index, s ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    selectedIndex = index
+                                    expanded = false
+                                }) {
+                                val disabledText = if (s == disabledValue) {
+
+                                } else {
+                                    ""
+                                }
+                                Text(text = s + disabledText)
+                            }
+                        }
+                    }
+
+
+
+                }
+
+
               Button(
                   modifier = Modifier
                       .fillMaxWidth()
@@ -320,45 +375,11 @@ fun Add(navController: NavHostController) {
                     navController.navigate(Screens.Tournament.route)
                     // Navigiere zum Tournament Tab
                   })
+
             }
-            // DropDownMenu
-          /**  var expanded by remember { mutableStateOf(false) }
-          val items = listOf("League", "Elimanation", "Double-Elimnation", "Group Tournament")
-          val disabledValue = "B"
-          var selectedIndex by remember { mutableStateOf(0) }
-          Box(modifier = Modifier
-              .fillMaxSize()
-              .wrapContentSize(Alignment.TopStart)) {
-              Text(items[selectedIndex],modifier = Modifier
-                  .fillMaxWidth()
-                  .clickable(onClick = { expanded = true })
-                  .background(
-                      Color.Gray
-                  ))
-              DropdownMenu(
-                  expanded = expanded,
-                  onDismissRequest = { expanded = false },
-                  modifier = Modifier
-                      .fillMaxWidth()
-                      .background(
-                          Color.Blue
-                      )
-              ) {
-                  items.forEachIndexed { index, s ->
-                      DropdownMenuItem(onClick = {
-                          selectedIndex = index
-                          expanded = false
-                      }) {
-                          val disabledText = if (s == disabledValue) {
-                              " (Disabled)"
-                          } else {
-                              ""
-                          }
-                          Text(text = s + disabledText)
-                      }
-                  }
-              }
-          } **/
+
+
+
         )
 
       },
@@ -545,6 +566,7 @@ fun Setting(navController: NavHostController) {
 
 
 }
+
 
 @Composable
 fun Profile(navController: NavHostController) {
