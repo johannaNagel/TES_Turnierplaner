@@ -326,11 +326,6 @@ fun Setting(navController: NavHostController) {
                         val googleSignInClient = GoogleSignIn.getClient(context, gso)
                         googleSignInClient.signOut()
                         showMessage(context, message = "User Loged out successfully")
-                        // ArgumentException: Navigation destination that matches request
-                        // NavDeepLinkRequest{ uri=android-app://androidx.navigation/login_route }
-                        // cannot be found
-                        // in the navigation graph NavGraph(0x0)
-                        // startDestination={Destination(0xf1a63a36) route=home_route}
                         val handler = Handler(Looper.getMainLooper())
                         handler.postDelayed(
                             { navController.navigate(LoginScreens.Login.route) }, 1000)
@@ -364,12 +359,12 @@ fun Setting(navController: NavHostController) {
 
                 BottomNavigationItem(
                     icon = { Icon(Icons.Filled.Star, "") },
-                    label = { Text(text = "com.example.turnierplaner.tournament.Tournament") },
+                    label = { Text(text = "Tournament") },
                     selected =
-                        selectedItem.value == "com.example.turnierplaner.tournament.Tournament",
+                        selectedItem.value == "Tournament",
                     onClick = {
                       navController.navigate(Screens.Tournament.route)
-                      selectedItem.value = "com.example.turnierplaner.tournament.Tournament"
+                      selectedItem.value = "Tournament"
                     },
                     alwaysShowLabel = false)
 

@@ -19,20 +19,25 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -42,7 +47,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.example.turnierplaner.LoginScreens
 import com.example.turnierplaner.Screens
+import com.example.turnierplaner.googlesignin.ui.login.LoginScreen
+import com.example.turnierplaner.googlesignin.ui.login.showMessage
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import java.util.UUID
 
 // List with all Tournaments
@@ -117,7 +127,33 @@ fun DemoScrollableTable_RowAndColumn(navController: NavController, name: String?
       Log.d("myTag", s.name)
   }
   */
+
+
   lateinit var tourney: TournamentClass
+
+    Scaffold(
+        topBar = {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                TopAppBar(
+                    backgroundColor = Color.White,
+                    elevation = 1.dp,
+                    title = { Text(text = "All Tournaments") },
+                    actions = {
+                        IconButton(
+                            onClick = {
+                                navController.navigate(Screens.Add.route)
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Add,
+                                contentDescription = "Button to add new Tournment",
+                            )
+                        }
+                    }
+                )
+            }
+        },
+        content = {})
 
   for (s in allTournament) {
 
@@ -190,23 +226,47 @@ fun DemoScrollableTable_RowAndColumn(navController: NavController, name: String?
 @Composable
 fun Tournament(navController: NavHostController) {
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-    Text(text = "com.example.turnierplaner.tournament.Tournament")
+    Text(text = "Tournament")
   }
 
   val result = remember { mutableStateOf("") }
   val selectedItem = remember { mutableStateOf("tournament") }
 
   Scaffold(
+      topBar = {
+          Column(modifier = Modifier.fillMaxWidth()) {
+              TopAppBar(
+                  backgroundColor = Color.White,
+                  elevation = 1.dp,
+                  title = { Text(text = "All Tournaments") },
+                  actions = {
+                      IconButton(
+                          onClick = {
+                              navController.navigate(Screens.Add.route)
+                          },
+                      ) {
+                          Icon(
+                              imageVector = Icons.Rounded.Add,
+                              contentDescription = "Button to add new Tournment",
+                          )
+                      }
+                  }
+              )
+          }
+      },
       content = {
         Column(
-            modifier = Modifier.fillMaxSize().padding(24.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
               for (s in allTournament) {
-
                 Button(
-                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
                     content = { Text(text = "${s.name}") },
                     onClick = { navController.navigate("single_tournament_route/${s.name}") })
               }
@@ -228,11 +288,11 @@ fun Tournament(navController: NavHostController) {
 
                 BottomNavigationItem(
                     icon = { Icon(Icons.Filled.Star, "") },
-                    label = { Text(text = "com.example.turnierplaner.tournament.Tournament") },
+                    label = { Text(text = "Tournament") },
                     selected =
-                        selectedItem.value == "com.example.turnierplaner.tournament.Tournament",
+                        selectedItem.value == "Tournament",
                     onClick = {
-                      selectedItem.value = "com.example.turnierplaner.tournament.Tournament"
+                      selectedItem.value = "Tournament"
                     },
                     alwaysShowLabel = false)
 

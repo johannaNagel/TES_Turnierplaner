@@ -4,7 +4,10 @@ package com.example.turnierplaner
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.firebase.auth.FirebaseAuth
+import junit.framework.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,7 +22,7 @@ class TestingLogoutInLogInScreen {
     composeTestRule.onNodeWithContentDescription("Button for Logout").assertIsEnabled()
   }
 
-  /*@Test
+  @Test
   fun testSuccessfulLogout() {
       composeTestRule.onNodeWithContentDescription("Button for Logout").performClick()
       assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
@@ -34,5 +37,5 @@ class TestingLogoutInLogInScreen {
       }
       composeTestRule.onNodeWithContentDescription("Button for Logout").assertIsEnabled()
       assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
-  }*/
+  }
 }
