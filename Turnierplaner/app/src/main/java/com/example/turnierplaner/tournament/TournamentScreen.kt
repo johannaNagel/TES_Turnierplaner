@@ -1,22 +1,52 @@
+/* (C)2021 */
+package com.example.turnierplaner.tournament
+
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.example.turnierplaner.Screens
+import java.util.UUID
 
+// List with all Tournaments
+val allTournament = mutableListOf<TournamentClass>()
 
 /**
  * The horizontally scrollable table with header and content.
@@ -36,107 +66,224 @@ fun <T> Table(
     headerCellContent: @Composable (index: Int) -> Unit,
     cellContent: @Composable (index: Int, item: T) -> Unit,
 ) {
-    Surface(
-        modifier = modifier
-    ) {
-        LazyRow(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            items((0 until columnCount).toList()) { columnIndex ->
-                Column {
-                    (0..data.size).forEach { index ->
-                        Surface(
-                            border = BorderStroke(1.dp, Color.LightGray),
-                            contentColor = Color.Transparent,
-                            modifier = Modifier.width(cellWidth(columnIndex))
-                        ) {
-                            if (index == 0) {
-                                headerCellContent(columnIndex)
-                            } else {
-                                cellContent(columnIndex, data[index - 1])
-                            }
-                        }
-                    }
-                }
+  Surface(modifier = modifier) {
+    LazyRow(modifier = Modifier.padding(16.dp)) {
+      items((0 until columnCount).toList()) { columnIndex ->
+        Column {
+          (0..data.size).forEach { index ->
+            Surface(
+                border = BorderStroke(1.dp, Color.LightGray),
+                contentColor = Color.Transparent,
+                modifier = Modifier.width(cellWidth(columnIndex))) {
+              if (index == 0) {
+                headerCellContent(columnIndex)
+              } else {
+                cellContent(columnIndex, data[index - 1])
+              }
             }
+          }
         }
+      }
     }
+  }
 }
 
 /**
- * Jetpack Compose: Scrollable Table use Row and Column.
+ * Jetpack Compose: Scrollable com.example.turnierplaner.tournament.Table use Row and Column.
  *
- * Read more and check samples: https://alexzh.com/jetpack-compose-building-grids/#dynamic-grids-using-row-and-columns-example-table
+ * Read more and check samples:
+ * https://alexzh.com/jetpack-compose-building-grids/#dynamic-grids-using-row-and-columns-example-table
  */
-@Preview(name = "LazyVerticalGrid use GridCells.Fixed")
+
+/*
+TODO Scaffold with Add Button and Name of com.example.turnierplaner.tournament.Tournament in Top
+Delete Button
+Nicht die gleichen name exeption
+back button to tornament screen
+plus button teams hinzufügen
+Extra Eisntellungen Punkten
+Maximum turniere
+Git hub cards
+Symbol für Tourney Screen
+Ranking Im Turnier
+ */
+
 @Composable
-fun DemoScrollableTable_RowAndColumn() {
-    val people = listOf(
-        Player("Alex", 0, 0),
-        Player("Adam", 0, 0),
-        Player("Iris", 0, 0),
-        Player("Maria", 0, 0),
-        Player("Fatih", 0, 0),
-        Player("Vito", 0, 0),
-        Player("Johanna", 0, 0),
-    )
+fun DemoScrollableTable_RowAndColumn(navController: NavController, name: String?) {
 
+  /*
+  for (s in com.example.turnierplaner.tournament.getAllTournament) {
 
-    val cellWidth: (Int) -> Dp = { index ->
+      Log.d("myTag", s.name)
+  }
+  */
+  lateinit var tourney: TournamentClass
+
+  for (s in allTournament) {
+
+    if (s.name == name) {
+
+      tourney = s
+    }
+  }
+
+  val player = mutableListOf<Player>()
+
+  for (idx in 1..tourney.numberOfTeams) {
+
+    player.add(Player("", 0, 0))
+  }
+
+  val cellWidth: (Int) -> Dp = { index ->
+    when (index) {
+      2 -> 125.dp
+      else -> 125.dp
+    }
+  }
+  val headerCellTitle: @Composable (Int) -> Unit = { index ->
+    val value =
         when (index) {
-            2 -> 250.dp
-            else -> 150.dp
-        }
-    }
-    val headerCellTitle: @Composable (Int) -> Unit = { index ->
-        val value = when (index) {
-            0 -> "Name"
-            1 -> "Games"
-            2 -> "Points"
-            else -> ""
+          0 -> "Name"
+          1 -> "Games"
+          2 -> "Points"
+          else -> ""
         }
 
-        Text(
-            text = value,
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(16.dp),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            fontWeight = FontWeight.Black,
-            textDecoration = TextDecoration.Underline
-        )
-    }
-    val cellText: @Composable (Int, Player) -> Unit = { index, item ->
-        val value = when (index) {
-            0 -> item.name
-            1 -> item.games.toString()
-            2 -> item.points.toString()
-            else -> ""
+    Text(
+        text = value,
+        fontSize = 20.sp,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.padding(16.dp),
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        fontWeight = FontWeight.Black,
+        textDecoration = TextDecoration.Underline)
+  }
+  val cellText: @Composable (Int, Player) -> Unit = { index, item ->
+    val value =
+        when (index) {
+          0 -> item.name
+          1 -> item.games.toString()
+          2 -> item.points.toString()
+          else -> ""
         }
 
-        Text(
-            text = value,
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(16.dp),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
-
-    Table(
-        columnCount = 3,
-        cellWidth = cellWidth,
-        data = people,
-        modifier = Modifier.verticalScroll(rememberScrollState()),
-        headerCellContent = headerCellTitle,
-        cellContent = cellText
+    Text(
+        text = value,
+        fontSize = 20.sp,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.padding(16.dp),
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
     )
+  }
+
+  Table(
+      columnCount = 3,
+      cellWidth = cellWidth,
+      data = player,
+      modifier = Modifier.verticalScroll(rememberScrollState()),
+      headerCellContent = headerCellTitle,
+      cellContent = cellText)
 }
+
+@Composable
+fun Tournament(navController: NavHostController) {
+  Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Text(text = "com.example.turnierplaner.tournament.Tournament")
+  }
+
+  val result = remember { mutableStateOf("") }
+  val selectedItem = remember { mutableStateOf("tournament") }
+
+  Scaffold(
+      content = {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            content = {
+              for (s in allTournament) {
+
+                Button(
+                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                    content = { Text(text = "${s.name}") },
+                    onClick = { navController.navigate("single_tournament_route/${s.name}") })
+              }
+            })
+      },
+      bottomBar = {
+        BottomAppBar(
+            content = {
+              BottomNavigation() {
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Home, "") },
+                    label = { Text(text = "Home") },
+                    selected = selectedItem.value == "Home",
+                    onClick = {
+                      navController.navigate(Screens.Home.route)
+                      selectedItem.value = "Home"
+                    },
+                    alwaysShowLabel = false)
+
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Star, "") },
+                    label = { Text(text = "com.example.turnierplaner.tournament.Tournament") },
+                    selected =
+                        selectedItem.value == "com.example.turnierplaner.tournament.Tournament",
+                    onClick = {
+                      selectedItem.value = "com.example.turnierplaner.tournament.Tournament"
+                    },
+                    alwaysShowLabel = false)
+
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Add, "") },
+                    label = { Text(text = "Add") },
+                    selected = selectedItem.value == "Add",
+                    onClick = {
+                      navController.navigate(Screens.Add.route)
+                      selectedItem.value = "Add"
+                    },
+                    alwaysShowLabel = false)
+
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Settings, "") },
+                    label = { Text(text = "Settings") },
+                    selected = selectedItem.value == "Settings",
+                    onClick = {
+                      navController.navigate(Screens.Setting.route)
+                      selectedItem.value = "Settings"
+                    },
+                    alwaysShowLabel = false)
+              }
+            })
+      })
+  // Text feld namen Trunier -> Variable
+
+  // Turnierform auswählen drop down -> Liga
+
+  // LATER: Punkte einstellen, Hinrunde
+
+  // Textfeld #Spieler/Teams
+
+  // Bestätigen Button -> Turnier
+}
+
+fun createaddToAllTournaments(name: String, numberOfTeams: Int) {
+
+  val id = UUID.randomUUID()
+
+  val tourney = TournamentClass(name, id, numberOfTeams)
+
+  allTournament.add(tourney)
+}
+
+fun deleteTournament() {}
 
 data class Player(
     val name: String,
     val games: Int,
     val points: Int,
-    )
+)
+
+data class TournamentClass(val name: String, val id: UUID, val numberOfTeams: Int)

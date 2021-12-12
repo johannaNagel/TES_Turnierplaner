@@ -1,17 +1,16 @@
+/* (C)2021 */
 package com.example.turnierplaner.tournament
 
-import DemoScrollableTable_RowAndColumn
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 
 class Tournament : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-
-        setContent {
-            DemoScrollableTable_RowAndColumn()
-        }
+    setContent {
+      // com.example.turnierplaner.tournament.DemoScrollableTable_RowAndColumn()
     }
+  }
 }

@@ -9,19 +9,17 @@ import androidx.navigation.compose.rememberNavController
 import com.example.turnierplaner.navigation.SetupNavGraph
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
 
-
 class Turnierplaner : ComponentActivity() {
 
   lateinit var navController: NavHostController
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-      setContent { TurnierplanerTheme {
-
+    setContent {
+      TurnierplanerTheme {
         navController = rememberNavController()
-        SetupNavGraph(navController = navController) }
+        SetupNavGraph(navController = navController)
       }
+    }
   }
-
-
 }

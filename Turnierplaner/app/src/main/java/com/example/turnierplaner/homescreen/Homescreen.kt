@@ -23,9 +23,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SportsSoccer
 import androidx.compose.material.icons.filled.Star
@@ -45,6 +43,7 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.LoginScreens
 import com.example.turnierplaner.Screens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
+import com.example.turnierplaner.tournament.createaddToAllTournaments
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -52,199 +51,68 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun Home(navController: NavHostController){
-    val result = remember { mutableStateOf("") }
-    val selectedItem = remember { mutableStateOf("home")}
+fun Home(navController: NavHostController) {
+  val result = remember { mutableStateOf("") }
+  val selectedItem = remember { mutableStateOf("home") }
 
-    Scaffold(
-        content = {
-            Box(
-                Modifier
-                    .background(Color.White)
-                    .padding(16.dp)
-                    .fillMaxSize(),
-            ) {
-                Text(
-                    text = result.value,
-                    fontSize = 22.sp,
-                    //fontFamily = FontFamily.Serif,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-        },
-
-        bottomBar = {
-            BottomAppBar(
-                content = {
-                    BottomNavigation() {
-
-                        BottomNavigationItem(
-                            icon = {
-                                Icon(Icons.Filled.Home , "")
-                            },
-                            label = { Text(text = "Home")},
-                            selected = selectedItem.value == "Home",
-                            onClick = {
-
-
-                                selectedItem.value = "Home"
-                            },
-                            alwaysShowLabel = false
-                        )
-
-                        BottomNavigationItem(
-                            icon = {
-                                Icon(Icons.Filled.Star , "")
-                            },
-                            label = { Text(text = "Tournament")},
-                            selected = selectedItem.value == "Tournament",
-                            onClick = {
-                                navController.navigate(Screens.Tournament.route)
-
-                                selectedItem.value = "Tournament"
-                            },
-                            alwaysShowLabel = false
-                        )
-
-                        BottomNavigationItem(
-                            icon = {
-                                Icon(Icons.Filled.Add , "")
-                            },
-                            label = { Text(text = "Add")},
-                            selected = selectedItem.value == "Add",
-                            onClick = {
-                                navController.navigate(Screens.Add.route)
-
-                                selectedItem.value = "Add"
-                            },
-                            alwaysShowLabel = false
-                        )
-
-                        BottomNavigationItem(
-
-                            icon = {
-                                Icon(Icons.Filled.Settings ,  "")
-                            },
-
-                            label = { Text(text = "Settings")},
-                            selected = selectedItem.value == "Settings",
-                            onClick = {
-                                selectedItem.value = "Settings"
-                                navController.navigate(Screens.Setting.route)
-
-                            },
-                            alwaysShowLabel = false
-                        )
-
-                    }
-                }
-            )
+  Scaffold(
+      content = {
+        Box(
+            Modifier.background(Color.White).padding(16.dp).fillMaxSize(),
+        ) {
+          Text(
+              text = result.value,
+              fontSize = 22.sp,
+              // fontFamily = FontFamily.Serif,
+              modifier = Modifier.align(Alignment.Center))
         }
-    )
-}
+      },
+      bottomBar = {
+        BottomAppBar(
+            content = {
+              BottomNavigation() {
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Home, "") },
+                    label = { Text(text = "Home") },
+                    selected = selectedItem.value == "Home",
+                    onClick = { selectedItem.value = "Home" },
+                    alwaysShowLabel = false)
 
-@Composable
-fun Tournament(navController: NavHostController) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Tournament")
-    }
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Star, "") },
+                    label = { Text(text = "com.example.turnierplaner.tournament.Tournament") },
+                    selected =
+                        selectedItem.value == "com.example.turnierplaner.tournament.Tournament",
+                    onClick = {
+                      navController.navigate(Screens.Tournament.route)
 
-    val result = remember { mutableStateOf("") }
-    val selectedItem = remember { mutableStateOf("home")}
+                      selectedItem.value = "com.example.turnierplaner.tournament.Tournament"
+                    },
+                    alwaysShowLabel = false)
 
-    Scaffold(
-        content = {
-            Box(
-                Modifier
-                    .background(Color.White)
-                    .padding(16.dp)
-                    .fillMaxSize(),
-            ) {
-                Text(
-                    text = result.value,
-                    fontSize = 22.sp,
-                    //fontFamily = FontFamily.Serif,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-        },
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Add, "") },
+                    label = { Text(text = "Add") },
+                    selected = selectedItem.value == "Add",
+                    onClick = {
+                      navController.navigate(Screens.Add.route)
 
-        bottomBar = {
-            BottomAppBar(
-                content = {
-                    BottomNavigation() {
+                      selectedItem.value = "Add"
+                    },
+                    alwaysShowLabel = false)
 
-                        BottomNavigationItem(
-                            icon = {
-                                Icon(Icons.Filled.Home , "")
-                            },
-                            label = { Text(text = "Home")},
-                            selected = selectedItem.value == "Home",
-                            onClick = {
-                                navController.navigate(Screens.Home.route)
-                                selectedItem.value = "Home"
-                            },
-                            alwaysShowLabel = false
-                        )
-
-                        BottomNavigationItem(
-                            icon = {
-                                Icon(Icons.Filled.Star , "")
-                            },
-                            label = { Text(text = "Tournament")},
-                            selected = selectedItem.value == "Tournament",
-                            onClick = {
-
-                                selectedItem.value = "Tournament"
-                            },
-                            alwaysShowLabel = false
-                        )
-
-                        BottomNavigationItem(
-                            icon = {
-                                Icon(Icons.Filled.Add , "")
-                            },
-                            label = { Text(text = "Add")},
-                            selected = selectedItem.value == "Add",
-                            onClick = {
-                                navController.navigate(Screens.Add.route)
-                                selectedItem.value = "Add"
-                            },
-                            alwaysShowLabel = false
-                        )
-
-                        BottomNavigationItem(
-
-                            icon = {
-                                Icon(Icons.Filled.Settings ,  "")
-                            },
-
-                            label = { Text(text = "Settings")},
-                            selected = selectedItem.value == "Settings",
-                            onClick = {
-                                navController.navigate(Screens.Setting.route)
-                                selectedItem.value = "Settings"
-                            },
-                            alwaysShowLabel = false
-                        )
-
-                    }
-                }
-            )
-        }
-    )
-    //Text feld namen Trunier -> Variable
-
-    //Turnierform auswählen drop down -> Liga
-
-    //LATER: Punkte einstellen, Hinrunde
-
-
-    //Textfeld #Spieler/Teams
-
-    //Bestätigen Button -> Turnier
-
-
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Settings, "") },
+                    label = { Text(text = "Settings") },
+                    selected = selectedItem.value == "Settings",
+                    onClick = {
+                      selectedItem.value = "Settings"
+                      navController.navigate(Screens.Setting.route)
+                    },
+                    alwaysShowLabel = false)
+              }
+            })
+      })
 }
 
 @Composable
@@ -255,8 +123,8 @@ fun Add(navController: NavHostController) {
   var phoneNumber by remember { mutableStateOf("") }
   var numberOfPlayers by remember { mutableStateOf("") }
 
-    val result = remember { mutableStateOf("") }
-    val selectedItem = remember { mutableStateOf("home")}
+  val result = remember { mutableStateOf("") }
+  val selectedItem = remember { mutableStateOf("home") }
 
   Scaffold(
       topBar = {
@@ -264,15 +132,13 @@ fun Add(navController: NavHostController) {
           TopAppBar(
               backgroundColor = Color.White,
               elevation = 1.dp,
-              title = { Text(text = "Adding New Tournament") },
+              title = { Text(text = "Adding New com.example.turnierplaner.tournament.Tournament") },
           )
         }
       },
       content = {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
+            modifier = Modifier.fillMaxSize().padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
@@ -287,8 +153,8 @@ fun Add(navController: NavHostController) {
                           contentDescription = "FootballIcon")
                     }
                   })
-
-              OutlinedTextField(
+              /*
+                OutlinedTextField(
                   value = email,
                   onValueChange = { newEmail -> email = newEmail },
                   label = { Text(text = "Email") },
@@ -307,103 +173,84 @@ fun Add(navController: NavHostController) {
                       Icon(imageVector = Icons.Filled.Phone, contentDescription = "Phone")
                     }
                   })
+                 */
+
               OutlinedTextField(
                   value = numberOfPlayers,
                   onValueChange = { newNumberOfPlayers -> numberOfPlayers = newNumberOfPlayers },
                   label = { Text(text = "NumberOfPlayers") })
               Button(
-                  modifier = Modifier
-                      .fillMaxWidth()
-                      .height(50.dp),
+                  modifier = Modifier.fillMaxWidth().height(50.dp),
                   enabled =
                       teamname.isNotEmpty() &&
+                          /*
                           email.isNotEmpty() &&
-                          phoneNumber.isNotEmpty() &&
+                          phoneNumber.isNotEmpty() &&*/
                           numberOfPlayers.isNotEmpty(),
                   content = { Text(text = "Add") },
-
                   onClick = {
-                    navController.navigate(Screens.Tournament.route)
-                    // Navigiere zum Tournament Tab
+                    createaddToAllTournaments(teamname, numberOfPlayers.toInt())
+                    navController.navigate("single_tournament_route/$teamname")
+
+                    // Navigiere zum com.example.turnierplaner.tournament.Tournament Tab
                   })
             })
       },
       bottomBar = {
-          BottomAppBar(
-              content = {
-                  BottomNavigation() {
+        BottomAppBar(
+            content = {
+              BottomNavigation() {
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Home, "") },
+                    label = { Text(text = "Home") },
+                    selected = selectedItem.value == "Home",
+                    onClick = {
+                      navController.navigate(Screens.Home.route)
+                      selectedItem.value = "Home"
+                    },
+                    alwaysShowLabel = false)
 
-                      BottomNavigationItem(
-                          icon = {
-                              Icon(Icons.Filled.Home , "")
-                          },
-                          label = { Text(text = "Home")},
-                          selected = selectedItem.value == "Home",
-                          onClick = {
-                              navController.navigate(Screens.Home.route)
-                              selectedItem.value = "Home"
-                          },
-                          alwaysShowLabel = false
-                      )
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Star, "") },
+                    label = { Text(text = "com.example.turnierplaner.tournament.Tournament") },
+                    selected =
+                        selectedItem.value == "com.example.turnierplaner.tournament.Tournament",
+                    onClick = {
+                      navController.navigate(Screens.Tournament.route)
+                      selectedItem.value = "com.example.turnierplaner.tournament.Tournament"
+                    },
+                    alwaysShowLabel = false)
 
-                      BottomNavigationItem(
-                          icon = {
-                              Icon(Icons.Filled.Star , "")
-                          },
-                          label = { Text(text = "Tournament")},
-                          selected = selectedItem.value == "Tournament",
-                          onClick = {
-                              navController.navigate(Screens.Tournament.route)
-                              selectedItem.value = "Tournament"
-                          },
-                          alwaysShowLabel = false
-                      )
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Add, "") },
+                    label = { Text(text = "Add") },
+                    selected = selectedItem.value == "Add",
+                    onClick = { selectedItem.value = "Add" },
+                    alwaysShowLabel = false)
 
-                      BottomNavigationItem(
-                          icon = {
-                              Icon(Icons.Filled.Add , "")
-                          },
-                          label = { Text(text = "Add")},
-                          selected = selectedItem.value == "Add",
-                          onClick = {
-
-                              selectedItem.value = "Add"
-                          },
-                          alwaysShowLabel = false
-                      )
-
-                      BottomNavigationItem(
-
-                          icon = {
-                              Icon(Icons.Filled.Settings ,  "")
-                          },
-
-                          label = { Text(text = "Settings")},
-                          selected = selectedItem.value == "Settings",
-                          onClick = {
-                              navController.navigate(Screens.Setting.route)
-                              selectedItem.value = "Settings"
-                          },
-                          alwaysShowLabel = false
-                      )
-
-                  }
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Settings, "") },
+                    label = { Text(text = "Settings") },
+                    selected = selectedItem.value == "Settings",
+                    onClick = {
+                      navController.navigate(Screens.Setting.route)
+                      selectedItem.value = "Settings"
+                    },
+                    alwaysShowLabel = false)
               }
-          )
+            })
       })
-
 }
 
 @Composable
 fun Setting(navController: NavHostController) {
 
-    val result = remember { mutableStateOf("") }
-    val selectedItem = remember { mutableStateOf("home")}
+  val result = remember { mutableStateOf("") }
+  val selectedItem = remember { mutableStateOf("home") }
 
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
     Text(text = "Setting")
   }
-
 
   Scaffold(
       topBar = {
@@ -446,79 +293,58 @@ fun Setting(navController: NavHostController) {
       },
       content = { Text("Settings need to implement") },
       bottomBar = {
-          BottomAppBar(
-              content = {
-                  BottomNavigation() {
+        BottomAppBar(
+            content = {
+              BottomNavigation() {
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Home, "") },
+                    label = { Text(text = "Home") },
+                    selected = selectedItem.value == "Home",
+                    onClick = {
+                      navController.navigate(Screens.Home.route)
+                      selectedItem.value = "Home"
+                    },
+                    alwaysShowLabel = false)
 
-                      BottomNavigationItem(
-                          icon = {
-                              Icon(Icons.Filled.Home , "")
-                          },
-                          label = { Text(text = "Home")},
-                          selected = selectedItem.value == "Home",
-                          onClick = {
-                              navController.navigate(Screens.Home.route)
-                              selectedItem.value = "Home"
-                          },
-                          alwaysShowLabel = false
-                      )
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Star, "") },
+                    label = { Text(text = "com.example.turnierplaner.tournament.Tournament") },
+                    selected =
+                        selectedItem.value == "com.example.turnierplaner.tournament.Tournament",
+                    onClick = {
+                      navController.navigate(Screens.Tournament.route)
+                      selectedItem.value = "com.example.turnierplaner.tournament.Tournament"
+                    },
+                    alwaysShowLabel = false)
 
-                      BottomNavigationItem(
-                          icon = {
-                              Icon(Icons.Filled.Star , "")
-                          },
-                          label = { Text(text = "Tournament")},
-                          selected = selectedItem.value == "Tournament",
-                          onClick = {
-                              navController.navigate(Screens.Tournament.route)
-                              selectedItem.value = "Tournament"
-                          },
-                          alwaysShowLabel = false
-                      )
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Add, "") },
+                    label = { Text(text = "Add") },
+                    selected = selectedItem.value == "Add",
+                    onClick = {
+                      navController.navigate(Screens.Add.route)
+                      selectedItem.value = "Add"
+                    },
+                    alwaysShowLabel = false)
 
-                      BottomNavigationItem(
-                          icon = {
-                              Icon(Icons.Filled.Add , "")
-                          },
-                          label = { Text(text = "Add")},
-                          selected = selectedItem.value == "Add",
-                          onClick = {
-                              navController.navigate(Screens.Add.route)
-                              selectedItem.value = "Add"
-                          },
-                          alwaysShowLabel = false
-                      )
-
-                      BottomNavigationItem(
-
-                          icon = {
-                              Icon(Icons.Filled.Settings ,  "")
-                          },
-
-                          label = { Text(text = "Settings")},
-                          selected = selectedItem.value == "Settings",
-                          onClick = {
-
-                              selectedItem.value = "Settings"
-                          },
-                          alwaysShowLabel = false
-                      )
-
-                  }
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Settings, "") },
+                    label = { Text(text = "Settings") },
+                    selected = selectedItem.value == "Settings",
+                    onClick = { selectedItem.value = "Settings" },
+                    alwaysShowLabel = false)
               }
-          )
+            })
       })
-
-
 }
 
 @Composable
 fun Profile(navController: NavHostController) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Profile")
-    }
+  Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Text(text = "Profile")
+  }
 
-    //Firebase USEr viewmodel
+  // Firebase USEr viewmodel
 }
 
 /*
@@ -526,7 +352,7 @@ fun Profile(navController: NavHostController) {
 fun HomeScreen(navController: NavHostController) {
 
   val listItems =
-      listOf(Screens.Home, Screens.Tournament, Screens.Add, Screens.Profile, Screens.Setting)
+      listOf(Screens.Home, Screens.com.example.turnierplaner.tournament.Tournament, Screens.Add, Screens.Profile, Screens.Setting)
 
 
   TurnierplanerTheme {
@@ -535,10 +361,10 @@ fun HomeScreen(navController: NavHostController) {
       Scaffold(
           bottomBar = {
             BottomNavigationScreen(navController = navController, items = listItems)
-          }) {
+          }) { BottomNavHost(navController = )
       }
     }
   }
 }
- */
 
+*/

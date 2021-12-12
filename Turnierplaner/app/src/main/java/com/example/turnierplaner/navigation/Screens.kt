@@ -3,11 +3,9 @@ package com.example.turnierplaner
 
 import androidx.annotation.DrawableRes
 
-
 const val ROOT_GRAPH_ROUTE = "root"
 const val AUTH_GRAPH_ROUTE = "auth"
 const val HOME_GRAPH_ROUTE = "home"
-
 
 sealed class Screens(val title: String, val route: String, @DrawableRes val icons: Int) {
   object Home : Screens(title = "home", route = "home_route", icons = R.drawable.ic_baseline_home)
@@ -36,4 +34,6 @@ sealed class LoginScreens(val title: String, val route: String) {
           title = "homescreen",
           route = "homescreen_route",
       )
+  object singleTournament :
+      LoginScreens(title = "single_tournament", route = "single_tournament_route/{tournamentName}")
 }

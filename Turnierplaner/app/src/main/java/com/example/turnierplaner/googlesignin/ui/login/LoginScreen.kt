@@ -49,9 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.HOME_GRAPH_ROUTE
-import com.example.turnierplaner.LoginScreens
 import com.example.turnierplaner.R
-import com.example.turnierplaner.Screens
 import com.example.turnierplaner.googlesignin.ui.theme.FirebaseAuthComposeTheme
 import com.example.turnierplaner.googlesignin.util.LoadingState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -198,8 +196,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
                   val user = FirebaseAuth.getInstance().currentUser
                   showMessage(context, message = "Loged in as " + user?.displayName)
                   val handler = Handler(Looper.getMainLooper())
-                  handler.postDelayed(
-                      { navController.navigate(HOME_GRAPH_ROUTE) }, 1000)
+                  handler.postDelayed({ navController.navigate(HOME_GRAPH_ROUTE) }, 1000)
                 }
                 LoadingState.Status.FAILED -> {
                   Text(text = state.msg ?: "Error")

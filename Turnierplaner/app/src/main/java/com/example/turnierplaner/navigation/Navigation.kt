@@ -9,7 +9,7 @@ import com.example.turnierplaner.homescreen.Add
 import com.example.turnierplaner.homescreen.Home
 import com.example.turnierplaner.homescreen.Profile
 import com.example.turnierplaner.homescreen.Setting
-import com.example.turnierplaner.homescreen.Tournament
+import com.example.turnierplaner.tournament.Tournament
 
 @Composable
 fun BottomNavHost(navController: NavHostController) {
@@ -20,10 +20,8 @@ fun BottomNavHost(navController: NavHostController) {
     composable(route = Screens.Add.route) { Add(navController = navController) }
     composable(route = Screens.Profile.route) { Profile(navController = navController) }
     composable(route = Screens.Setting.route) { Setting(navController = navController) }
-
   }
 }
-
 
 /*
 @Composable
