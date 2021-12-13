@@ -335,7 +335,7 @@ fun Tournament(navController: NavHostController) {
   // Bestätigen Button -> Turnier
 }
 
-fun createaddToAllTournaments(name: String, numberOfTeams: Int) {
+fun createAddToAllTournaments(name: String, numberOfTeams: Int) {
 
   val id = UUID.randomUUID()
 
@@ -373,6 +373,12 @@ fun findTournament(name: String?): TournamentClass{
     }
 
     return tourney
+}
+
+fun getAllTournaments(): List<TournamentClass>{
+
+    return allTournament
+
 }
 
 data class Player(

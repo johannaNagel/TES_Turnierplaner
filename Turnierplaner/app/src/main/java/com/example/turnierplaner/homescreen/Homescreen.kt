@@ -56,7 +56,7 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.LoginScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
-import com.example.turnierplaner.tournament.createaddToAllTournaments
+import com.example.turnierplaner.tournament.createAddToAllTournaments
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -248,7 +248,7 @@ fun Add(navController: NavHostController) {
                   content = { Text(text = "Add") },
 
                   onClick = {
-                    createaddToAllTournaments(teamname, numberOfPlayers.toInt())
+                      createAddToAllTournaments(teamname, numberOfPlayers.toInt())
                     navController.navigate("single_tournament_route/$teamname")
 
                     // Navigiere zum com.example.turnierplaner.tournament.Tournament Tab

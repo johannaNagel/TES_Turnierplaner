@@ -12,33 +12,39 @@ import androidx.compose.ui.test.performClick
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.turnierplaner.googlesignin.ui.login.LoginScreen
 import com.example.turnierplaner.navigation.SetupNavGraph
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
+import junit.framework.TestCase
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class TestingLogoutInSettingsScreen{
 
-    @get:Rule
-    val composeTestRule = createComposeRule()
-    //val composeTest1Rule = createAndroidComposeRule<Turnierplaner>()
     lateinit var navController: NavHostController
+
+
+    @get:Rule val composeTestRule = createAndroidComposeRule<Turnierplaner>()
 
     @Before
     fun Login(){
-        //val navHostController = rememberNavController()
         composeTestRule.setContent {
-                navController = rememberNavController()
-                SetupNavGraph(navController = navController)
-                navController.navigate(Screens.Setting.route)
+            navController = rememberNavController()
+            SetupNavGraph(navController = navController)
+            navController.navigate(BottomBarScreens.Setting.route)
         }
     }
 
+
     @Test
     fun testEnabledLogoutButton() {
+
         composeTestRule.onNodeWithContentDescription("Button for Logout").assertIsEnabled()
     }
+
 }
