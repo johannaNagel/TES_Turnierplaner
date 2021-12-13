@@ -14,12 +14,12 @@ import com.example.turnierplaner.tournament.Tournament
 @Composable
 fun BottomNavHost(navController: NavHostController) {
 
-  NavHost(navController = navController, startDestination = Screens.Home.route) {
-    composable(route = Screens.Home.route) { Home(navController = navController) }
-    composable(route = Screens.Tournament.route) { Tournament(navController = navController) }
-    composable(route = Screens.Add.route) { Add(navController = navController) }
-    composable(route = Screens.Profile.route) { Profile(navController = navController) }
-    composable(route = Screens.Setting.route) { Setting(navController = navController) }
+  NavHost(navController = navController, startDestination = BottomBarScreens.Home.route) {
+    composable(route = BottomBarScreens.Home.route) { Home(navController = navController) }
+    composable(route = BottomBarScreens.Tournament.route) { Tournament(navController = navController) }
+    composable(route = BottomBarScreens.Add.route) { Add(navController = navController) }
+    composable(route = BottomBarScreens.Profile.route) { Profile(navController = navController) }
+    composable(route = BottomBarScreens.Setting.route) { Setting(navController = navController) }
   }
 }
 

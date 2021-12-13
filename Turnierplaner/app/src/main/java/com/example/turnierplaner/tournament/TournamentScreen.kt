@@ -1,6 +1,7 @@
 /* (C)2021 */
 package com.example.turnierplaner.tournament
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -48,7 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.LoginScreens
-import com.example.turnierplaner.Screens
+import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.googlesignin.ui.login.LoginScreen
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -119,7 +121,7 @@ Ranking Im Turnier
  */
 
 @Composable
-fun DemoScrollableTable_RowAndColumn(navController: NavController, name: String?) {
+fun singleTournamentScreen(navController: NavController, name: String?) {
 
   /*
   for (s in com.example.turnierplaner.tournament.getAllTournament) {
@@ -128,8 +130,8 @@ fun DemoScrollableTable_RowAndColumn(navController: NavController, name: String?
   }
   */
 
+  var tourney = findTournament(name)
 
-  lateinit var tourney: TournamentClass
 
     Scaffold(
         topBar = {
@@ -137,90 +139,94 @@ fun DemoScrollableTable_RowAndColumn(navController: NavController, name: String?
                 TopAppBar(
                     backgroundColor = Color.White,
                     elevation = 1.dp,
-                    title = { Text(text = "All Tournaments") },
+                    title = { Text(text = "Tournament") },
                     actions = {
                         IconButton(
                             onClick = {
-                                navController.navigate(Screens.Add.route)
+                                //navController.navigate(BottomBarScreens.Add.route)
                             },
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Add,
                                 contentDescription = "Button to add new Tournment",
                             )
+
+                        }
+                        IconButton(
+                            onClick = {
+                                deleteTournament(tourney.name)
+                                navController.navigate(BottomBarScreens.Tournament.route)
+
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Delete,
+                                contentDescription = "Delete Tournament",
+                            )
+
                         }
                     }
                 )
             }
         },
-        content = {})
+        content = {
 
-  for (s in allTournament) {
+            //set cell Width of the table
+            val cellWidth: (Int) -> Dp = { index ->
+                when (index) {
+                    2 -> 125.dp
+                    else -> 125.dp
+                }
+            }
+            //set title of the columns
+            val headerCellTitle: @Composable (Int) -> Unit = { index ->
+                val value =
+                    when (index) {
+                        0 -> "Name"
+                        1 -> "Games"
+                        2 -> "Points"
+                        else -> ""
+                    }
+                //define text specs
+                Text(
+                    text = value,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(16.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Black,
+                    textDecoration = TextDecoration.Underline)
+            }
+            val cellText: @Composable (Int, Player) -> Unit = { index, item ->
+                val value =
+                    when (index) {
+                        0 -> item.name
+                        1 -> item.games.toString()
+                        2 -> item.points.toString()
+                        else -> ""
+                    }
 
-    if (s.name == name) {
+                Text(
+                    text = value,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(16.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
 
-      tourney = s
-    }
-  }
+            Table(
+                columnCount = 3,
+                cellWidth = cellWidth,
+                data = tourney.players,
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                headerCellContent = headerCellTitle,
+                cellContent = cellText)
+        })
 
-  val player = mutableListOf<Player>()
 
-  for (idx in 1..tourney.numberOfTeams) {
-
-    player.add(Player("", 0, 0))
-  }
-
-  val cellWidth: (Int) -> Dp = { index ->
-    when (index) {
-      2 -> 125.dp
-      else -> 125.dp
-    }
-  }
-  val headerCellTitle: @Composable (Int) -> Unit = { index ->
-    val value =
-        when (index) {
-          0 -> "Name"
-          1 -> "Games"
-          2 -> "Points"
-          else -> ""
-        }
-
-    Text(
-        text = value,
-        fontSize = 20.sp,
-        textAlign = TextAlign.Center,
-        modifier = Modifier.padding(16.dp),
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        fontWeight = FontWeight.Black,
-        textDecoration = TextDecoration.Underline)
-  }
-  val cellText: @Composable (Int, Player) -> Unit = { index, item ->
-    val value =
-        when (index) {
-          0 -> item.name
-          1 -> item.games.toString()
-          2 -> item.points.toString()
-          else -> ""
-        }
-
-    Text(
-        text = value,
-        fontSize = 20.sp,
-        textAlign = TextAlign.Center,
-        modifier = Modifier.padding(16.dp),
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-    )
-  }
-
-  Table(
-      columnCount = 3,
-      cellWidth = cellWidth,
-      data = player,
-      modifier = Modifier.verticalScroll(rememberScrollState()),
-      headerCellContent = headerCellTitle,
-      cellContent = cellText)
 }
 
 @Composable
@@ -242,7 +248,7 @@ fun Tournament(navController: NavHostController) {
                   actions = {
                       IconButton(
                           onClick = {
-                              navController.navigate(Screens.Add.route)
+                              navController.navigate(BottomBarScreens.Add.route)
                           },
                       ) {
                           Icon(
@@ -278,17 +284,17 @@ fun Tournament(navController: NavHostController) {
               BottomNavigation() {
                 BottomNavigationItem(
                     icon = { Icon(Icons.Filled.Home, "") },
-                    label = { Text(text = "Home") },
+                    label = { Text(text = "") },
                     selected = selectedItem.value == "Home",
                     onClick = {
-                      navController.navigate(Screens.Home.route)
+                      navController.navigate(BottomBarScreens.Home.route)
                       selectedItem.value = "Home"
                     },
                     alwaysShowLabel = false)
 
                 BottomNavigationItem(
                     icon = { Icon(Icons.Filled.Star, "") },
-                    label = { Text(text = "Tournament") },
+                    label = { Text(text = "") },
                     selected =
                         selectedItem.value == "Tournament",
                     onClick = {
@@ -298,20 +304,20 @@ fun Tournament(navController: NavHostController) {
 
                 BottomNavigationItem(
                     icon = { Icon(Icons.Filled.Add, "") },
-                    label = { Text(text = "Add") },
+                    label = { Text(text = "") },
                     selected = selectedItem.value == "Add",
                     onClick = {
-                      navController.navigate(Screens.Add.route)
+                      navController.navigate(BottomBarScreens.Add.route)
                       selectedItem.value = "Add"
                     },
                     alwaysShowLabel = false)
 
                 BottomNavigationItem(
                     icon = { Icon(Icons.Filled.Settings, "") },
-                    label = { Text(text = "Settings") },
+                    label = { Text(text = "") },
                     selected = selectedItem.value == "Settings",
                     onClick = {
-                      navController.navigate(Screens.Setting.route)
+                      navController.navigate(BottomBarScreens.Setting.route)
                       selectedItem.value = "Settings"
                     },
                     alwaysShowLabel = false)
@@ -333,12 +339,41 @@ fun createaddToAllTournaments(name: String, numberOfTeams: Int) {
 
   val id = UUID.randomUUID()
 
-  val tourney = TournamentClass(name, id, numberOfTeams)
+    //create a list of players
+    val players = mutableListOf<Player>()
+
+    //fill the tourney with empty rows depending on how many player were set
+    for (idx in 1..numberOfTeams) {
+
+        players.add(Player("", 0, 0))
+    }
+
+  val tourney = TournamentClass(name, id, numberOfTeams, players)
 
   allTournament.add(tourney)
 }
 
-fun deleteTournament() {}
+fun deleteTournament(name: String) {
+
+    val tourney = findTournament(name)
+
+    allTournament.remove(tourney)
+}
+
+fun findTournament(name: String?): TournamentClass{
+
+    var tourney = TournamentClass("", UUID.randomUUID(), 0, listOf())
+
+    for (s in allTournament) {
+
+        if (s.name == name) {
+
+            tourney = s
+        }
+    }
+
+    return tourney
+}
 
 data class Player(
     val name: String,
@@ -346,4 +381,4 @@ data class Player(
     val points: Int,
 )
 
-data class TournamentClass(val name: String, val id: UUID, val numberOfTeams: Int)
+data class TournamentClass(val name: String, val id: UUID, val numberOfTeams: Int, val players: List<Player>)

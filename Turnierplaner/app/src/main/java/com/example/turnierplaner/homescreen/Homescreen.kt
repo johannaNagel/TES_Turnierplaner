@@ -39,6 +39,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SportsFootball
 import androidx.compose.material.icons.filled.SportsSoccer
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,8 +53,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.LoginScreens
-import com.example.turnierplaner.Screens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.createaddToAllTournaments
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -68,6 +69,15 @@ fun Home(navController: NavHostController) {
   val selectedItem = remember { mutableStateOf("home") }
 
   Scaffold(
+      topBar = {
+          Column(modifier = Modifier.fillMaxWidth()) {
+              TopAppBar(
+                  backgroundColor = Color.White,
+                  elevation = 1.dp,
+                  title = { Text(text = "Home") },
+              )
+          }
+      },
       content = {
         Box(
             Modifier.background(Color.White).padding(16.dp).fillMaxSize(),
@@ -96,7 +106,7 @@ fun Home(navController: NavHostController) {
                     selected =
                         selectedItem.value == "com.example.turnierplaner.tournament.Tournament",
                     onClick = {
-                      navController.navigate(Screens.Tournament.route)
+                      navController.navigate(BottomBarScreens.Tournament.route)
 
                       selectedItem.value = "com.example.turnierplaner.tournament.Tournament"
                     },
@@ -107,7 +117,7 @@ fun Home(navController: NavHostController) {
                     label = { Text(text = "Add") },
                     selected = selectedItem.value == "Add",
                     onClick = {
-                      navController.navigate(Screens.Add.route)
+                      navController.navigate(BottomBarScreens.Add.route)
 
                       selectedItem.value = "Add"
                     },
@@ -119,7 +129,7 @@ fun Home(navController: NavHostController) {
                     selected = selectedItem.value == "Settings",
                     onClick = {
                       selectedItem.value = "Settings"
-                      navController.navigate(Screens.Setting.route)
+                      navController.navigate(BottomBarScreens.Setting.route)
                     },
                     alwaysShowLabel = false)
               }
@@ -260,7 +270,7 @@ fun Add(navController: NavHostController) {
                     label = { Text(text = "Home") },
                     selected = selectedItem.value == "Home",
                     onClick = {
-                      navController.navigate(Screens.Home.route)
+                      navController.navigate(BottomBarScreens.Home.route)
                       selectedItem.value = "Home"
                     },
                     alwaysShowLabel = false)
@@ -271,7 +281,7 @@ fun Add(navController: NavHostController) {
                     selected =
                         selectedItem.value == "com.example.turnierplaner.tournament.Tournament",
                     onClick = {
-                      navController.navigate(Screens.Tournament.route)
+                      navController.navigate(BottomBarScreens.Tournament.route)
                       selectedItem.value = "com.example.turnierplaner.tournament.Tournament"
                     },
                     alwaysShowLabel = false)
@@ -288,7 +298,7 @@ fun Add(navController: NavHostController) {
                     label = { Text(text = "Settings") },
                     selected = selectedItem.value == "Settings",
                     onClick = {
-                      navController.navigate(Screens.Setting.route)
+                      navController.navigate(BottomBarScreens.Setting.route)
                       selectedItem.value = "Settings"
                     },
                     alwaysShowLabel = false)
@@ -352,7 +362,7 @@ fun Setting(navController: NavHostController) {
                     label = { Text(text = "Home") },
                     selected = selectedItem.value == "Home",
                     onClick = {
-                      navController.navigate(Screens.Home.route)
+                      navController.navigate(BottomBarScreens.Home.route)
                       selectedItem.value = "Home"
                     },
                     alwaysShowLabel = false)
@@ -363,7 +373,7 @@ fun Setting(navController: NavHostController) {
                     selected =
                         selectedItem.value == "Tournament",
                     onClick = {
-                      navController.navigate(Screens.Tournament.route)
+                      navController.navigate(BottomBarScreens.Tournament.route)
                       selectedItem.value = "Tournament"
                     },
                     alwaysShowLabel = false)
@@ -373,7 +383,7 @@ fun Setting(navController: NavHostController) {
                     label = { Text(text = "Add") },
                     selected = selectedItem.value == "Add",
                     onClick = {
-                      navController.navigate(Screens.Add.route)
+                      navController.navigate(BottomBarScreens.Add.route)
                       selectedItem.value = "Add"
                     },
                     alwaysShowLabel = false)

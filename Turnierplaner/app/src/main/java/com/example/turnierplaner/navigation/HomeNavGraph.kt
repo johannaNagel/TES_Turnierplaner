@@ -6,30 +6,30 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.turnierplaner.HOME_GRAPH_ROUTE
-import com.example.turnierplaner.LoginScreens
-import com.example.turnierplaner.Screens
+import com.example.turnierplaner.BottomBarScreens
+import com.example.turnierplaner.TournamentScreens
 import com.example.turnierplaner.homescreen.Add
 import com.example.turnierplaner.homescreen.Home
 import com.example.turnierplaner.homescreen.Profile
 import com.example.turnierplaner.homescreen.Setting
-import com.example.turnierplaner.tournament.DemoScrollableTable_RowAndColumn
+import com.example.turnierplaner.tournament.singleTournamentScreen
 import com.example.turnierplaner.tournament.Tournament
 
 fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
 
-  navigation(startDestination = Screens.Home.route, route = HOME_GRAPH_ROUTE) {
-    composable(route = Screens.Home.route) { Home(navController = navController) }
+  navigation(startDestination = BottomBarScreens.Home.route, route = HOME_GRAPH_ROUTE) {
+    composable(route = BottomBarScreens.Home.route) { Home(navController = navController) }
 
-    composable(route = Screens.Tournament.route) { Tournament(navController = navController) }
+    composable(route = BottomBarScreens.Tournament.route) { Tournament(navController = navController) }
 
-    composable(route = Screens.Add.route) { Add(navController = navController) }
+    composable(route = BottomBarScreens.Add.route) { Add(navController = navController) }
 
-    composable(route = Screens.Profile.route) { Profile(navController = navController) }
+    composable(route = BottomBarScreens.Profile.route) { Profile(navController = navController) }
 
-    composable(route = Screens.Setting.route) { Setting(navController = navController) }
+    composable(route = BottomBarScreens.Setting.route) { Setting(navController = navController) }
 
-    composable(route = LoginScreens.singleTournament.route) { backStackEntry ->
-      DemoScrollableTable_RowAndColumn(
+    composable(route = TournamentScreens.SingleTournament.route) { backStackEntry ->
+      singleTournamentScreen(
           navController, backStackEntry.arguments?.getString("tournamentName"))
     }
   }
