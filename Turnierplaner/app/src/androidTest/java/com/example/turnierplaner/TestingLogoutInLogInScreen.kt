@@ -24,18 +24,18 @@ class TestingLogoutInLogInScreen {
 
   @Test
   fun testSuccessfulLogout() {
-      composeTestRule.onNodeWithContentDescription("Button for Logout").performClick()
-      assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
+    composeTestRule.onNodeWithContentDescription("Button for Logout").performClick()
+    assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
   }
 
   @Test
   fun clickLogout10Times() {
-      var counter = 1
-      while (counter < 10) {
-          composeTestRule.onNodeWithContentDescription("Button for Logout").performClick()
-          counter += 1
-      }
-      composeTestRule.onNodeWithContentDescription("Button for Logout").assertIsEnabled()
-      assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
+    var counter = 1
+    while (counter < 10) {
+      composeTestRule.onNodeWithContentDescription("Button for Logout").performClick()
+      counter += 1
+    }
+    composeTestRule.onNodeWithContentDescription("Button for Logout").assertIsEnabled()
+    assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
   }
 }

@@ -1,3 +1,4 @@
+/* (C)2021 */
 package com.example.turnierplaner.tournament
 
 import junit.framework.TestCase
@@ -5,44 +6,39 @@ import org.junit.Test
 
 class TournamentScreenKtTest : TestCase() {
 
+  public override fun setUp() {
+    super.setUp()
+  }
 
-    public override fun setUp() {
-        super.setUp()
-    }
+  @Test
+  fun testAddToTournaments() {
 
-    @Test
-    fun testAddToTournaments() {
+    createAddToAllTournaments("Test", 10)
 
-        createAddToAllTournaments("Test", 10)
+    var tourney: List<TournamentClass> = getAllTournaments()
 
-        var tourney:List<TournamentClass> = getAllTournaments()
+    assertFalse(tourney.isEmpty())
+  }
 
-        assertFalse(tourney.isEmpty())
+  @Test
+  fun testCreateTournament() {
 
-    }
+    createAddToAllTournaments("Test", 10)
 
-    @Test
-    fun testCreateTournament() {
+    assertEquals("Test", findTournament("Test").name)
+  }
 
-        createAddToAllTournaments("Test", 10)
+  @Test
+  fun testDeleteTournament() {
 
-        assertEquals("Test", findTournament("Test").name)
+    createAddToAllTournaments("Test", 10)
 
-    }
+    var tourney: List<TournamentClass> = getAllTournaments()
 
-    @Test
-    fun testDeleteTournament(){
+    deleteTournament("Test")
 
-        createAddToAllTournaments("Test", 10)
+    assertFalse(tourney.isEmpty())
+  }
 
-        var tourney:List<TournamentClass> = getAllTournaments()
-
-        deleteTournament("Test")
-
-        assertFalse(tourney.isEmpty())
-
-    }
-
-
-    public override fun tearDown() {}
+  public override fun tearDown() {}
 }
