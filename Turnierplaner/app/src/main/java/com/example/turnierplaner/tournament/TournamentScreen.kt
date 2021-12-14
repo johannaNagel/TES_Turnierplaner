@@ -24,6 +24,7 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -119,6 +120,52 @@ Symbol für Tourney Screen
 Ranking Im Turnier
  */
 
+/*
+It is not possible to open PopUpMenu from onclick Method
+Therefore a separate function has to be created
+ */
+
+private val showDialog = mutableStateOf(false)
+
+@Composable
+fun alert() {
+  var teamname by remember { mutableStateOf("") }
+
+  AlertDialog(
+      modifier = Modifier.size(250.dp, 275.dp),
+      text = {
+        Column {
+          Text(modifier = Modifier.padding(horizontal = 10.dp), text = "Add new Team to Tournament")
+
+          // Rest of the dialog content
+        }
+      },
+      onDismissRequest = { showDialog.value = false },
+      buttons = {
+        OutlinedTextField(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+            value = teamname,
+            onValueChange = { newTeamname -> teamname = newTeamname },
+            label = { Text(text = "Teamname") },
+        )
+        Button(
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+            enabled = teamname.isNotEmpty(),
+            content = { Text(text = "Add") },
+            onClick = {
+              showDialog.value = false
+              allTournament[1].name = teamname
+            })
+        Button(
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+            content = { Text(text = "Cancel") },
+            onClick = { showDialog.value = false })
+      },
+      // modifier = Modifier.size(250.dp, 250.dp),
+      // shape = MaterialTheme.shapes.large,
+      )
+}
+
 @Composable
 fun singleTournamentScreen(navController: NavController, name: String?) {
 
@@ -132,26 +179,35 @@ fun singleTournamentScreen(navController: NavController, name: String?) {
   var tourney = findTournament(name)
   val openDialog = remember { mutableStateOf(false) }
 
+  if (showDialog.value) {
+    alert()
+  }
+
   Scaffold(
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
               backgroundColor = Color.White,
               elevation = 1.dp,
-              title = { Text(text = "Tournament") },
+              title = { Text(text = tourney.name) },
               actions = {
                 IconButton(
                     onClick = {
+                      showDialog.value = true
                       // navController.navigate(BottomBarScreens.Add.route)
                     },
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.Add,
-                      contentDescription = "Button to add new Tournment",
+                      contentDescription = "Button to add new Team",
                   )
                 }
                 IconButton(
-                    onClick = { openDialog.value = true },
+                    onClick = {
+                        openDialog.value = true
+                      //deleteTournament(tourney.name)
+                      //navController.navigate(BottomBarScreens.Tournament.route)
+                    },
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.Delete,
@@ -401,7 +457,7 @@ data class Player(
 )
 
 data class TournamentClass(
-    val name: String,
+    var name: String,
     val id: UUID,
     val numberOfTeams: Int,
     val players: List<Player>
