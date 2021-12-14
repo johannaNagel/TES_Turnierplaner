@@ -55,6 +55,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.LoginScreens
@@ -263,6 +264,7 @@ fun Add(navController: NavHostController) {
                           victoryPoints.isNotEmpty() &&
                           tiePoints.isNotEmpty() &&
                           selectedTournamentType.isNotEmpty(),
+
                   content = { Text(text = "Add") },
                   onClick = {
                     createAddToAllTournaments(teamname, numberOfPlayers.toInt())
