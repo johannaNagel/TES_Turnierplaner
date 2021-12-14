@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.BottomAppBar
@@ -53,11 +54,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.LoginScreens
@@ -155,6 +160,7 @@ fun Add(navController: NavHostController) {
   val suggestions = listOf("Leauge", "KnockOut-System", "Double KnockOut-System")
   var selectedTournamentType by remember { mutableStateOf("") }
   val selectedItem = remember { mutableStateOf("home")}
+  var textfieldSize by remember { mutableStateOf(Size.Zero)}
 
   Scaffold(
       topBar = {
@@ -200,40 +206,47 @@ fun Add(navController: NavHostController) {
               )
 
                 //Tournament type
-
-
-
                 val icon = if (expanded)
                     Icons.Filled.KeyboardArrowUp
                 else
                     Icons.Filled.KeyboardArrowDown
 
-
-                OutlinedTextField(
-                    value = selectedTournamentType,
-                    readOnly = true,
-                    onValueChange = { selectedTournamentType = it },
-                    label = {Text("Tournament Type")},
-                    leadingIcon = {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(imageVector = Icons.Filled.FormatListNumbered, contentDescription = "TournamentList")}
-                    },
-                    trailingIcon = {
-                        Icon(icon,"contentDescription",
-                            Modifier.clickable { expanded = !expanded })
-                    }
-                )
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier.padding(25.dp),
-                ) {
-                    suggestions.forEach { label ->
-                        DropdownMenuItem(onClick = {
-                            selectedTournamentType = label
-                            expanded = false
-                        }) {
-                            Text(text = label)
+                Column() {
+                    OutlinedTextField(
+                        value = selectedTournamentType,
+                        readOnly = true,
+                        modifier = Modifier.onGloballyPositioned { coordinates ->
+                            //This value is used to assign to the DropDown the same width
+                            textfieldSize = coordinates.size.toSize()
+                        },
+                        onValueChange = { selectedTournamentType = it },
+                        label = { Text("Tournament Type") },
+                        leadingIcon = {
+                            IconButton(onClick = { /*TODO*/ }) {
+                                Icon(
+                                    imageVector = Icons.Filled.FormatListNumbered,
+                                    contentDescription = "TournamentList"
+                                )
+                            }
+                        },
+                        trailingIcon = {
+                            Icon(icon, "contentDescription",
+                                Modifier.clickable { expanded = !expanded })
+                        }
+                    )
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier
+                            .width(with(LocalDensity.current) { textfieldSize.width.toDp() }),
+                    ) {
+                        suggestions.forEach { label ->
+                            DropdownMenuItem(onClick = {
+                                selectedTournamentType = label
+                                expanded = false
+                            }) {
+                                Text(text = label)
+                            }
                         }
                     }
                 }
@@ -261,7 +274,6 @@ fun Add(navController: NavHostController) {
                         }
                     }
                 )
-
 
               Button(
                   modifier = Modifier.fillMaxWidth().height(50.dp),
