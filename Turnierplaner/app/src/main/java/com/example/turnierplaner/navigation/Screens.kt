@@ -8,10 +8,13 @@ const val AUTH_GRAPH_ROUTE = "auth"
 const val HOME_GRAPH_ROUTE = "home"
 
 sealed class BottomBarScreens(val title: String, val route: String, @DrawableRes val icons: Int) {
-  object Home : BottomBarScreens(title = "home", route = "home_route", icons = R.drawable.ic_baseline_home)
-  object Add : BottomBarScreens(title = "add", route = "add_route", icons = R.drawable.ic_baseline_add)
+  object Home :
+      BottomBarScreens(title = "home", route = "home_route", icons = R.drawable.ic_baseline_home)
+  object Add :
+      BottomBarScreens(title = "add", route = "add_route", icons = R.drawable.ic_baseline_add)
   object Profile :
-      BottomBarScreens(title = "profile", route = "profile_route", icons = R.drawable.ic_baseline_profile)
+      BottomBarScreens(
+          title = "profile", route = "profile_route", icons = R.drawable.ic_baseline_profile)
   object Setting :
       BottomBarScreens(
           title = "setting", route = "setting_route", icons = R.drawable.ic_baseline_settings_24)
@@ -34,12 +37,10 @@ sealed class LoginScreens(val title: String, val route: String) {
           title = "homescreen",
           route = "homescreen_route",
       )
-
 }
 
-sealed class TournamentScreens(val title: String, val route: String){
+sealed class TournamentScreens(val title: String, val route: String) {
 
-    object SingleTournament :
-        LoginScreens(title = "single_tournament", route = "single_tournament_route/{tournamentName}")
-
+  object SingleTournament :
+      LoginScreens(title = "single_tournament", route = "single_tournament_route/{tournamentName}")
 }
