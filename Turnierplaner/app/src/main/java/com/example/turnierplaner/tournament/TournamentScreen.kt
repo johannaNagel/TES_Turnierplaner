@@ -74,7 +74,6 @@ import java.util.UUID
 
 // List with all Tournaments
 val allTournament = mutableListOf<TournamentClass>()
-
 /**
  * The horizontally scrollable table with header and content.
  * @param columnCount the count of columns in the table
@@ -146,11 +145,11 @@ fun alert() {
     var teamname by remember { mutableStateOf("") }
 
     AlertDialog(
-        modifier = Modifier.padding(24.dp),
+        modifier = Modifier.size(250.dp, 275.dp),
         text = {
             Column {
                 Text(
-                    modifier = Modifier.padding(vertical = 16.dp),
+                    modifier = Modifier.padding(horizontal = 10.dp),
                     text = "Add new Team to Tournament"
                 )
 
@@ -162,25 +161,32 @@ fun alert() {
         },
         buttons = {
             OutlinedTextField(
-                modifier = Modifier.padding(vertical = 16.dp),
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
                 value = teamname,
                 onValueChange = { newTeamname -> teamname = newTeamname },
                 label = { Text(text = "Teamname") },
             )
             Button(
-                modifier = Modifier.fillMaxWidth().height(50.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
                 enabled = teamname.isNotEmpty(),
                 content = { Text(text = "Add") },
-                onClick = { showDialog.value = false}
+                onClick = {
+                    showDialog.value = false
+                    allTournament[1].name = teamname
+                }
             )
             Button(
-                modifier = Modifier.fillMaxWidth().height(50.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
                 content = { Text(text = "Cancel") },
                 onClick = { showDialog.value = false}
             )
         },
         //modifier = Modifier.size(250.dp, 250.dp),
-        shape = MaterialTheme.shapes.medium,
+        //shape = MaterialTheme.shapes.large,
     )
 }
 
@@ -316,7 +322,8 @@ fun Tournament(navController: NavHostController) {
                   actions = {
                       IconButton(
                           onClick = {
-                              navController.navigate(BottomBarScreens.Add.route)
+                              createAddToAllTournaments("FAtih",5)
+                              //navController.navigate(BottomBarScreens.Add.route)
                           },
                       ) {
                           Icon(
@@ -455,4 +462,4 @@ data class Player(
     val points: Int,
 )
 
-data class TournamentClass(val name: String, val id: UUID, val numberOfTeams: Int, val players: List<Player>)
+data class TournamentClass(var name: String, val id: UUID, val numberOfTeams: Int, val players: List<Player>)
