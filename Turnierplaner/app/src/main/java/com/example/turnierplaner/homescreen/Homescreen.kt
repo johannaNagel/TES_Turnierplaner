@@ -153,7 +153,7 @@ fun Add(navController: NavHostController) {
   var tiePoints by remember { mutableStateOf("")}
   var expanded by remember { mutableStateOf(false) }
   val suggestions = listOf("Leauge", "KnockOut-System", "Double KnockOut-System")
-  var selectedText by remember { mutableStateOf("") }
+  var selectedTournamentType by remember { mutableStateOf("") }
   val selectedItem = remember { mutableStateOf("home")}
 
   Scaffold(
@@ -210,9 +210,9 @@ fun Add(navController: NavHostController) {
 
 
                 OutlinedTextField(
-                    value = selectedText,
+                    value = selectedTournamentType,
                     readOnly = true,
-                    onValueChange = { selectedText = it },
+                    onValueChange = { selectedTournamentType = it },
                     label = {Text("Tournament Type")},
                     leadingIcon = {
                         IconButton(onClick = { /*TODO*/ }) {
@@ -230,7 +230,7 @@ fun Add(navController: NavHostController) {
                 ) {
                     suggestions.forEach { label ->
                         DropdownMenuItem(onClick = {
-                            selectedText = label
+                            selectedTournamentType = label
                             expanded = false
                         }) {
                             Text(text = label)
@@ -267,8 +267,11 @@ fun Add(navController: NavHostController) {
                   modifier = Modifier.fillMaxWidth().height(50.dp),
                   enabled =
                       teamname.isNotEmpty() &&
-                          kindOfSport.isNotEmpty() &&
-                          numberOfPlayers.isNotEmpty(),
+                          numberOfPlayers.isNotEmpty() &&
+                              victoryPoints.isNotEmpty() &&
+                              tiePoints.isNotEmpty() &&
+                              selectedTournamentType.isNotEmpty()
+                  ,
                   content = { Text(text = "Add") },
 
                   onClick = {
