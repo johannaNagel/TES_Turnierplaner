@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -32,13 +33,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.FormatListNumbered
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SportsFootball
 import androidx.compose.material.icons.filled.SportsSoccer
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.runtime.Composable
@@ -50,6 +55,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -143,8 +149,11 @@ fun Add(navController: NavHostController) {
   var teamname by remember { mutableStateOf("") }
   var kindOfSport by remember { mutableStateOf("") }
   var numberOfPlayers by remember { mutableStateOf("") }
-  var tournamentForm by remember {mutableStateOf("")}
-  val result = remember { mutableStateOf("") }
+  var victoryPoints by remember { mutableStateOf("")}
+  var tiePoints by remember { mutableStateOf("")}
+  var expanded by remember { mutableStateOf(false) }
+  val suggestions = listOf("Leauge", "KnockOut-System", "Double KnockOut-System")
+  var selectedText by remember { mutableStateOf("") }
   val selectedItem = remember { mutableStateOf("home")}
 
   Scaffold(
@@ -177,16 +186,6 @@ fun Add(navController: NavHostController) {
               )
 
 
-                OutlinedTextField(
-                  value = kindOfSport,
-                  onValueChange = { newEmail -> kindOfSport = newEmail },
-                  label = { Text(text = "Kind of Sport") },
-                  leadingIcon = {
-                    IconButton(onClick = { /*TODO*/}) {
-                      Icon(imageVector = Icons.Filled.SportsSoccer, contentDescription = "Soccer")
-                    }
-                  }
-              )
 
               OutlinedTextField(
 
@@ -200,43 +199,68 @@ fun Add(navController: NavHostController) {
                   }
               )
 
+                //Tournament type
 
 
 
+                val icon = if (expanded)
+                    Icons.Filled.KeyboardArrowUp
+                else
+                    Icons.Filled.KeyboardArrowDown
 
 
-
-                 var expanded by remember{mutableStateOf(false)}
-                var items = listOf ("League System", "Knock-Out System", "double Knock-out system")
-                val disabledValue = "Knock-Out System"
-                var selectedIndex by remember {mutableStateOf(0)}
-                Box(){
-                    Text(items[selectedIndex],
-                        modifier = Modifier
-                            .clickable(onClick = {expanded = true} )
-                            .background(Color.White))
-                    DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false },
-                        modifier = Modifier
-                            .background(Color.White)) {
-                        items.forEachIndexed { index, s ->
-                            DropdownMenuItem(
-                                onClick = {
-                                    selectedIndex = index
-                                    expanded = false
-                                }) {
-                                val disabledText = if (s == disabledValue) {
-
-                                } else {
-                                    ""
-                                }
-                                Text(text = s + disabledText)
-                            }
+                OutlinedTextField(
+                    value = selectedText,
+                    readOnly = true,
+                    onValueChange = { selectedText = it },
+                    label = {Text("Tournament Type")},
+                    leadingIcon = {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(imageVector = Icons.Filled.FormatListNumbered, contentDescription = "TournamentList")}
+                    },
+                    trailingIcon = {
+                        Icon(icon,"contentDescription",
+                            Modifier.clickable { expanded = !expanded })
+                    }
+                )
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.padding(25.dp),
+                ) {
+                    suggestions.forEach { label ->
+                        DropdownMenuItem(onClick = {
+                            selectedText = label
+                            expanded = false
+                        }) {
+                            Text(text = label)
                         }
                     }
-
-
-
                 }
+
+                OutlinedTextField(
+                    value = victoryPoints,
+                    onValueChange = { newVictoryPoints -> victoryPoints = newVictoryPoints},
+                    label = {Text(text = "Victory points")},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    leadingIcon = {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(imageVector = Icons.Filled.Star, contentDescription = "VictoryStar")
+                        }
+                    }
+                )
+
+                OutlinedTextField(
+                    value = tiePoints,
+                    onValueChange = { newTiePoints -> tiePoints = newTiePoints},
+                    label = {Text( text = "Tie points")},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    leadingIcon = {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(imageVector = Icons.Filled.StarHalf, contentDescription = "TieStar")
+                        }
+                    }
+                )
 
 
               Button(
