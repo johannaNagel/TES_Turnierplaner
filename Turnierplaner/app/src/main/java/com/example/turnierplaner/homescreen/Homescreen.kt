@@ -173,6 +173,7 @@ fun Add(navController: NavHostController) {
             content = {
               OutlinedTextField(
                   value = teamname,
+                  singleLine = true,
                   onValueChange = { newTeamname -> teamname = newTeamname },
                   label = { Text(text = "Teamname") },
                   leadingIcon = {
@@ -185,8 +186,19 @@ fun Add(navController: NavHostController) {
 
               OutlinedTextField(
                   value = numberOfPlayers,
-                  onValueChange = { newNumberOfPlayers -> numberOfPlayers = newNumberOfPlayers },
+                  singleLine = true,
+                  onValueChange = { newNumberOfPlayers ->
+                      if (newNumberOfPlayers.isEmpty()){
+                          numberOfPlayers = newNumberOfPlayers
+                      } else {
+                          numberOfPlayers = when (newNumberOfPlayers.toIntOrNull()) {
+                              null -> numberOfPlayers //old value
+                              else -> newNumberOfPlayers   //new value
+                          }
+                      }
+                  },
                   label = { Text(text = "NumberOfPlayers") },
+                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                   leadingIcon = {
                     IconButton(onClick = { /*TODO*/}) {
                       Icon(imageVector = Icons.Filled.Groups, contentDescription = "Groups")
@@ -236,7 +248,16 @@ fun Add(navController: NavHostController) {
 
               OutlinedTextField(
                   value = victoryPoints,
-                  onValueChange = { newVictoryPoints -> victoryPoints = newVictoryPoints },
+                  onValueChange = { newVictoryPoints ->
+                      if (newVictoryPoints.isEmpty()){
+                          victoryPoints = newVictoryPoints
+                      } else {
+                          victoryPoints = when (newVictoryPoints.toIntOrNull()) {
+                              null -> victoryPoints //old value
+                              else -> newVictoryPoints   //new value
+                          }
+                      } },
+                  singleLine = true,
                   label = { Text(text = "Victory points") },
                   keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                   leadingIcon = {
@@ -247,7 +268,17 @@ fun Add(navController: NavHostController) {
 
               OutlinedTextField(
                   value = tiePoints,
-                  onValueChange = { newTiePoints -> tiePoints = newTiePoints },
+                  onValueChange = { newTiePoints ->
+                      if (newTiePoints.isEmpty()){
+                      tiePoints = newTiePoints
+                  } else {
+                      tiePoints = when (newTiePoints.toIntOrNull()) {
+                          null -> tiePoints //old value
+                          else -> newTiePoints   //new value
+                      }
+                  }
+                  },
+                  singleLine = true,
                   label = { Text(text = "Tie points") },
                   keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                   leadingIcon = {
