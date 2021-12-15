@@ -30,8 +30,8 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Delete
@@ -60,9 +60,7 @@ TODO Scaffold with Add Button and Name of com.example.turnierplaner.tournament.T
 Nicht die gleichen name exeption
 Maximum turniere
 Git hub cards
-Symbol für Tourney Screen
 Ranking Im Turnier
-wenn voll neue Zeile beim adden von players
  */
 
 // List with all Tournaments
@@ -80,7 +78,7 @@ fun Tournament(navController: NavHostController) {
     Text(text = "Tournament")
   }
 
-  val result = remember { mutableStateOf("") }
+  // val result = remember { mutableStateOf("") }
   val selectedItem = remember { mutableStateOf("tournament") }
 
   Scaffold(
@@ -131,7 +129,7 @@ fun Tournament(navController: NavHostController) {
                     alwaysShowLabel = false)
 
                 BottomNavigationItem(
-                    icon = { Icon(Icons.Filled.Star, "") },
+                    icon = { Icon(Icons.Filled.List, "") },
                     label = { Text(text = "") },
                     selected = selectedItem.value == "Tournament",
                     onClick = { selectedItem.value = "Tournament" },
@@ -311,7 +309,6 @@ fun addTeamPopUP(tournamentName: String?) {
             content = { Text(text = "Add") },
             onClick = {
               showAddTeamDialog.value = false
-
               addPlayerToTournament(tournamentName, "$playername")
             })
         Button(
@@ -370,7 +367,7 @@ fun deleteTournament(name: String) {
 
 fun findTournament(name: String?): TournamentClass {
 
-  var tourney = TournamentClass("", UUID.randomUUID(), 0, listOf())
+  var tourney = TournamentClass("", UUID.randomUUID(), 0, mutableListOf())
 
   for (s in allTournament) {
 
@@ -397,9 +394,11 @@ fun addPlayerToTournament(name: String?, playerName: String) {
     if (tourney.players[idx - 1].name == "") {
 
       tourney.players[idx - 1].name = playerName
-      break
+      return
     }
   }
+  tourney.numberOfPlayers = tourney.numberOfPlayers + 1
+  tourney.players.add(Player(playerName, 0, 0))
 }
 
 data class Player(
@@ -411,8 +410,8 @@ data class Player(
 data class TournamentClass(
     var name: String,
     val id: UUID,
-    val numberOfPlayers: Int,
-    val players: List<Player>
+    var numberOfPlayers: Int,
+    val players: MutableList<Player>
 )
 
 /**

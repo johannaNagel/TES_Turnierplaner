@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SportsFootball
 import androidx.compose.material.icons.filled.Star
@@ -104,7 +105,7 @@ fun Home(navController: NavHostController) {
                     alwaysShowLabel = false)
 
                 BottomNavigationItem(
-                    icon = { Icon(Icons.Filled.Star, "") },
+                    icon = { Icon(Icons.Filled.List, "") },
                     label = { Text(text = "com.example.turnierplaner.tournament.Tournament") },
                     selected =
                         selectedItem.value == "com.example.turnierplaner.tournament.Tournament",
@@ -302,7 +303,6 @@ fun Add(navController: NavHostController) {
                   onClick = {
                     createAddToAllTournaments(teamname, numberOfPlayers.toInt())
                     navController.navigate("single_tournament_route/$teamname")
-
                     // Navigiere zum com.example.turnierplaner.tournament.Tournament Tab
                   })
             })
@@ -322,7 +322,7 @@ fun Add(navController: NavHostController) {
                     alwaysShowLabel = false)
 
                 BottomNavigationItem(
-                    icon = { Icon(Icons.Filled.Star, "") },
+                    icon = { Icon(Icons.Filled.List, "") },
                     label = { Text(text = "com.example.turnierplaner.tournament.Tournament") },
                     selected =
                         selectedItem.value == "com.example.turnierplaner.tournament.Tournament",
@@ -413,7 +413,7 @@ fun Setting(navController: NavHostController) {
                     alwaysShowLabel = false)
 
                 BottomNavigationItem(
-                    icon = { Icon(Icons.Filled.Star, "") },
+                    icon = { Icon(Icons.Filled.List, "") },
                     label = { Text(text = "Tournament") },
                     selected = selectedItem.value == "Tournament",
                     onClick = {
