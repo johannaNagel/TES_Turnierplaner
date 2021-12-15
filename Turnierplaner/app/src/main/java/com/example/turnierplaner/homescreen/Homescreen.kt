@@ -187,7 +187,16 @@ fun Add(navController: NavHostController) {
               OutlinedTextField(
                   value = numberOfPlayers,
                   singleLine = true,
-                  onValueChange = { newNumberOfPlayers -> numberOfPlayers = newNumberOfPlayers },
+                  onValueChange = { newNumberOfPlayers ->
+                      if (newNumberOfPlayers.isEmpty()){
+                          numberOfPlayers = newNumberOfPlayers
+                      } else {
+                          numberOfPlayers = when (newNumberOfPlayers.toIntOrNull()) {
+                              null -> numberOfPlayers //old value
+                              else -> newNumberOfPlayers   //new value
+                          }
+                      }
+                  },
                   label = { Text(text = "NumberOfPlayers") },
                   keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                   leadingIcon = {
@@ -239,7 +248,15 @@ fun Add(navController: NavHostController) {
 
               OutlinedTextField(
                   value = victoryPoints,
-                  onValueChange = { newVictoryPoints -> victoryPoints = newVictoryPoints },
+                  onValueChange = { newVictoryPoints ->
+                      if (newVictoryPoints.isEmpty()){
+                          victoryPoints = newVictoryPoints
+                      } else {
+                          victoryPoints = when (newVictoryPoints.toIntOrNull()) {
+                              null -> victoryPoints //old value
+                              else -> newVictoryPoints   //new value
+                          }
+                      } },
                   singleLine = true,
                   label = { Text(text = "Victory points") },
                   keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -251,7 +268,16 @@ fun Add(navController: NavHostController) {
 
               OutlinedTextField(
                   value = tiePoints,
-                  onValueChange = { newTiePoints -> tiePoints = newTiePoints },
+                  onValueChange = { newTiePoints ->
+                      if (newTiePoints.isEmpty()){
+                      tiePoints = newTiePoints
+                  } else {
+                      tiePoints = when (newTiePoints.toIntOrNull()) {
+                          null -> tiePoints //old value
+                          else -> newTiePoints   //new value
+                      }
+                  }
+                  },
                   singleLine = true,
                   label = { Text(text = "Tie points") },
                   keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
