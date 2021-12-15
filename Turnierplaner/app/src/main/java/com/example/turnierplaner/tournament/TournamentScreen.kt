@@ -200,19 +200,19 @@ fun singleTournamentScreen(navController: NavController, tournamentName: String?
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Add,
-                                contentDescription = "Button to add new Team",
+                                contentDescription = "Button to add new Player",
                             )
                         }
                         IconButton(
                             onClick = {
-                                showAddTeamDialog.value = true
+                                showDeleteDialog.value = true
                                 //deleteTournament(tourney.name)
                                 //navController.navigate(BottomBarScreens.Tournament.route)
                             },
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Delete,
-                                contentDescription = "Delete Tournament",
+                                contentDescription = "Button to Delete Tournament",
                             )
                         }
                     })
@@ -325,14 +325,17 @@ fun deletePopUp(navController: NavController, tourney: TournamentClass) {
         onDismissRequest = { showDeleteDialog.value = false },
         title = { Text(text = "Delete Tournament?") },
         text = { Text("Are you sure you want do delete this Tournament?") },
-        dismissButton = { Button(onClick = { showDeleteDialog.value = false }) { Text("No") } },
+        dismissButton = {
+            Button(
+                onClick = { showDeleteDialog.value = false }) { Text("No") } },
         confirmButton = {
             Button(
+                content = { Text("Yes") },
                 onClick = {
                     showDeleteDialog.value = false
                     deleteTournament(tourney.name)
-                    navController.navigate(BottomBarScreens.Tournament.route)
-                }) { Text("Yes") }
+                    navController.navigate(BottomBarScreens.Tournament.route)}
+            )
         })
 
 }
