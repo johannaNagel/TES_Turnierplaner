@@ -1,44 +1,91 @@
 /* (C)2021 */
 package com.example.turnierplaner.tournament
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.turnierplaner.BottomBarScreens
+import com.example.turnierplaner.Turnierplaner
+import com.example.turnierplaner.navigation.SetupNavGraph
 import junit.framework.TestCase
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class TournamentScreenKtTest : TestCase() {
 
-  public override fun setUp() {
-    super.setUp()
+  lateinit var navController: NavHostController
+
+  @get:Rule
+  val composeTestRule = createAndroidComposeRule<Turnierplaner>()
+
+  @Before
+  fun login(){
+    composeTestRule.setContent {
+      navController = rememberNavController()
+      SetupNavGraph(navController = navController)
+      createAddToAllTournaments("Test", 10)
+      navController.navigate("single_tournament_route/Test")
+    }
   }
 
   @Test
-  fun testAddToTournaments() {
-
-    createAddToAllTournaments("Test", 10)
-
-    var tourney: List<TournamentClass> = getAllTournaments()
-
-    assertFalse(tourney.isEmpty())
+  fun testDeleteButton(){
+    composeTestRule.onNodeWithContentDescription("Button to Delete Tournament").assertIsDisplayed()
   }
 
   @Test
-  fun testCreateTournament() {
+  fun testDeletePopUp() {
+    composeTestRule.onNodeWithContentDescription("Button to Delete Tournament").performClick()
+    composeTestRule.onNodeWithText("Are you sure you want do delete this Tournament?").assertIsDisplayed()
+  }
 
-    createAddToAllTournaments("Test", 10)
+    @Test
+  fun testDeletePopUpConfirmButton(){
+    composeTestRule.onNodeWithContentDescription("Button to Delete Tournament").performClick()
+    composeTestRule.onNodeWithText("Yes").assertIsDisplayed()
 
-    assertEquals("Test", findTournament("Test").name)
   }
 
   @Test
-  fun testDeleteTournament() {
-
-    createAddToAllTournaments("Test", 10)
-
-    var tourney: List<TournamentClass> = getAllTournaments()
-
-    deleteTournament("Test")
-
-    assertTrue(tourney.isEmpty())
+  fun testDeletePopUpDismissButton(){
+    composeTestRule.onNodeWithContentDescription("Button to Delete Tournament").performClick()
+    composeTestRule.onNodeWithText("No").assertIsDisplayed()
   }
 
-  public override fun tearDown() {}
+  @Test
+  fun testAddPlayerButton(){
+    composeTestRule.onNodeWithContentDescription("Button to add new Player").assertIsDisplayed()
+  }
+
+  @Test
+  fun testAddPlayerPopUp() {
+    composeTestRule.onNodeWithContentDescription("Button to add new Player").performClick()
+    composeTestRule.onNodeWithText("Add new Player to Tournament").assertIsDisplayed()
+  }
+
+  @Test
+  fun testAddPlayerPopUpAddButton(){
+    composeTestRule.onNodeWithContentDescription("Button to add new Player").performClick()
+    composeTestRule.onNodeWithText("Add").assertIsDisplayed()
+
+  }
+
+  @Test
+  fun testAddPlayerPopUpCancelButton(){
+    composeTestRule.onNodeWithContentDescription("Button to add new Player").performClick()
+    composeTestRule.onNodeWithText("Cancel").assertIsDisplayed()
+
+  }
+
+
+
 }
