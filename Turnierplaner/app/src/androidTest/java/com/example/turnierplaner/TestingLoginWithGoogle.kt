@@ -1,24 +1,16 @@
 /* (C)2021 */
 package com.example.turnierplaner
 
-import android.app.Instrumentation
 import android.view.KeyEvent
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performKeyPress
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.turnierplaner.navigation.SetupNavGraph
-import com.google.firebase.auth.FirebaseAuth
-import junit.framework.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -32,7 +24,7 @@ class TestingLoginWithGoogle {
   @get:Rule val composeTestRule = createAndroidComposeRule<Turnierplaner>()
 
   @Before
-  fun login(){
+  fun login() {
     composeTestRule.setContent {
       navController = rememberNavController()
       SetupNavGraph(navController = navController)

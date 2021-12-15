@@ -55,7 +55,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.LoginScreens
@@ -188,14 +187,15 @@ fun Add(navController: NavHostController) {
                   value = numberOfPlayers,
                   singleLine = true,
                   onValueChange = { newNumberOfPlayers ->
-                      if (newNumberOfPlayers.isEmpty()){
-                          numberOfPlayers = newNumberOfPlayers
-                      } else {
-                          numberOfPlayers = when (newNumberOfPlayers.toIntOrNull()) {
-                              null -> numberOfPlayers //old value
-                              else -> newNumberOfPlayers   //new value
+                    if (newNumberOfPlayers.isEmpty()) {
+                      numberOfPlayers = newNumberOfPlayers
+                    } else {
+                      numberOfPlayers =
+                          when (newNumberOfPlayers.toIntOrNull()) {
+                            null -> numberOfPlayers // old value
+                            else -> newNumberOfPlayers // new value
                           }
-                      }
+                    }
                   },
                   label = { Text(text = "NumberOfPlayers") },
                   keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -249,14 +249,16 @@ fun Add(navController: NavHostController) {
               OutlinedTextField(
                   value = victoryPoints,
                   onValueChange = { newVictoryPoints ->
-                      if (newVictoryPoints.isEmpty()){
-                          victoryPoints = newVictoryPoints
-                      } else {
-                          victoryPoints = when (newVictoryPoints.toIntOrNull()) {
-                              null -> victoryPoints //old value
-                              else -> newVictoryPoints   //new value
+                    if (newVictoryPoints.isEmpty()) {
+                      victoryPoints = newVictoryPoints
+                    } else {
+                      victoryPoints =
+                          when (newVictoryPoints.toIntOrNull()) {
+                            null -> victoryPoints // old value
+                            else -> newVictoryPoints // new value
                           }
-                      } },
+                    }
+                  },
                   singleLine = true,
                   label = { Text(text = "Victory points") },
                   keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -269,14 +271,15 @@ fun Add(navController: NavHostController) {
               OutlinedTextField(
                   value = tiePoints,
                   onValueChange = { newTiePoints ->
-                      if (newTiePoints.isEmpty()){
+                    if (newTiePoints.isEmpty()) {
                       tiePoints = newTiePoints
-                  } else {
-                      tiePoints = when (newTiePoints.toIntOrNull()) {
-                          null -> tiePoints //old value
-                          else -> newTiePoints   //new value
-                      }
-                  }
+                    } else {
+                      tiePoints =
+                          when (newTiePoints.toIntOrNull()) {
+                            null -> tiePoints // old value
+                            else -> newTiePoints // new value
+                          }
+                    }
                   },
                   singleLine = true,
                   label = { Text(text = "Tie points") },
@@ -295,7 +298,6 @@ fun Add(navController: NavHostController) {
                           victoryPoints.isNotEmpty() &&
                           tiePoints.isNotEmpty() &&
                           selectedTournamentType.isNotEmpty(),
-
                   content = { Text(text = "Add") },
                   onClick = {
                     createAddToAllTournaments(teamname, numberOfPlayers.toInt())

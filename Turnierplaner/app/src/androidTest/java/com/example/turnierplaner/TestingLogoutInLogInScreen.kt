@@ -9,7 +9,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.turnierplaner.navigation.SetupNavGraph
-import com.example.turnierplaner.tournament.createAddToAllTournaments
 import com.google.firebase.auth.FirebaseAuth
 import junit.framework.Assert.assertEquals
 import org.junit.Before
@@ -25,14 +24,13 @@ class TestingLogoutInLogInScreen {
   @get:Rule val composeTestRule = createAndroidComposeRule<Turnierplaner>()
 
   @Before
-  fun login(){
+  fun login() {
     composeTestRule.setContent {
       navController = rememberNavController()
       SetupNavGraph(navController = navController)
       navController.navigate(LoginScreens.Login.route)
     }
   }
-
 
   @Test
   fun testEnabledLogoutButton() {

@@ -11,7 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.turnierplaner.navigation.SetupNavGraph
 import com.google.firebase.auth.FirebaseAuth
-import junit.framework.Assert
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -40,10 +39,11 @@ class TestingLogoutInSettingsScreen {
   }
 
   @Test
-  fun pressLogoutButton(){
+  fun pressLogoutButton() {
     composeTestRule.onNodeWithContentDescription("Button for Logout").performClick()
     assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
     composeTestRule.waitForIdle()
-    //composeTestRule.onNodeWithContentDescription("Register and Login with Google").assertIsEnabled()
+    // composeTestRule.onNodeWithContentDescription("Register and Login with
+    // Google").assertIsEnabled()
   }
 }
