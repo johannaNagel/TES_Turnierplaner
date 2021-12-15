@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,13 +53,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
+import com.example.turnierplaner.LoginScreens
 import java.util.UUID
 
 
 /*
 TODO Scaffold with Add Button and Name of com.example.turnierplaner.tournament.Tournament in Top
 Nicht die gleichen name exeption
-back button to tornament screen
 Maximum turniere
 Git hub cards
 Symbol für Tourney Screen
@@ -94,7 +95,9 @@ fun Tournament(navController: NavHostController) {
                     title = { Text(text = "All Tournaments") },
                     actions = {
                         IconButton(
-                            onClick = { navController.navigate(BottomBarScreens.Add.route) },
+                            onClick = { navController.navigate(BottomBarScreens.Add.route)
+                                        createAddToAllTournaments("Test",5)
+                                      },
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Add,
@@ -213,6 +216,16 @@ fun singleTournamentScreen(navController: NavController, tournamentName: String?
                             Icon(
                                 imageVector = Icons.Rounded.Delete,
                                 contentDescription = "Button to Delete Tournament",
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                navController.navigate(BottomBarScreens.Home.route)
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.ArrowBack,
+                                contentDescription = "Button to go back to homescreen",
                             )
                         }
                     })

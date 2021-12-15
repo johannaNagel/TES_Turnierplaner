@@ -123,7 +123,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
             verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
-              OutlinedTextField(
+              /*OutlinedTextField(
                   modifier = Modifier.fillMaxWidth(),
                   value = userEmail,
                   label = { Text(text = "Enter Email") },
@@ -142,7 +142,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
                   content = { Text(text = "Login") },
                   onClick = {
                     viewModel.signInWithEmailAndPassword(userEmail.trim(), userPassword.trim())
-                  })
+                  })*/
 
               Spacer(modifier = Modifier.height(18.dp))
 
