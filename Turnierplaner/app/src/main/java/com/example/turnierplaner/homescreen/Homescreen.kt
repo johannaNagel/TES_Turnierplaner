@@ -3,6 +3,10 @@ package com.example.turnierplaner.homescreen
 
 import android.os.Handler
 import android.os.Looper
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.TextView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -52,6 +56,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -145,7 +150,6 @@ fun Home(navController: NavHostController) {
 fun Add(navController: NavHostController) {
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text(text = "Add") }
   var teamname by remember { mutableStateOf("") }
-  var kindOfSport by remember { mutableStateOf("") }
   var numberOfPlayers by remember { mutableStateOf("") }
   var victoryPoints by remember { mutableStateOf("") }
   var tiePoints by remember { mutableStateOf("") }
@@ -188,15 +192,7 @@ fun Add(navController: NavHostController) {
                   value = numberOfPlayers,
                   singleLine = true,
                   onValueChange = { newNumberOfPlayers ->
-                    if (newNumberOfPlayers.isEmpty()) {
-                      numberOfPlayers = newNumberOfPlayers
-                    } else {
-                      numberOfPlayers =
-                          when (newNumberOfPlayers.toIntOrNull()) {
-                            null -> numberOfPlayers // old value
-                            else -> newNumberOfPlayers // new value
-                          }
-                    }
+                      numberOfPlayers = newNumberOfPlayers.filter { it.isDigit() }
                   },
                   label = { Text(text = "NumberOfPlayers") },
                   keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -208,7 +204,8 @@ fun Add(navController: NavHostController) {
 
               // Tournament type
               val icon =
-                  if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
+                  if (expanded) Icons.Filled.KeyboardArrowUp
+                  else Icons.Filled.KeyboardArrowDown
 
               Column() {
                 OutlinedTextField(
@@ -229,7 +226,7 @@ fun Add(navController: NavHostController) {
                       }
                     },
                     trailingIcon = {
-                      Icon(icon, "contentDescription", Modifier.clickable { expanded = !expanded })
+                      Icon(icon, "Arrow", Modifier.clickable { expanded = !expanded })
                     })
                 DropdownMenu(
                     expanded = expanded,
@@ -250,16 +247,9 @@ fun Add(navController: NavHostController) {
               OutlinedTextField(
                   value = victoryPoints,
                   onValueChange = { newVictoryPoints ->
-                    if (newVictoryPoints.isEmpty()) {
-                      victoryPoints = newVictoryPoints
-                    } else {
-                      victoryPoints =
-                          when (newVictoryPoints.toIntOrNull()) {
-                            null -> victoryPoints // old value
-                            else -> newVictoryPoints // new value
-                          }
-                    }
+                      victoryPoints = newVictoryPoints.filter { it.isDigit() }
                   },
+
                   singleLine = true,
                   label = { Text(text = "Victory points") },
                   keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -272,7 +262,9 @@ fun Add(navController: NavHostController) {
               OutlinedTextField(
                   value = tiePoints,
                   onValueChange = { newTiePoints ->
-                    if (newTiePoints.isEmpty()) {
+
+                      tiePoints = newTiePoints.filter { it.isDigit() }
+                  /*  if (newTiePoints.isEmpty()) {
                       tiePoints = newTiePoints
                     } else {
                       tiePoints =
@@ -280,7 +272,7 @@ fun Add(navController: NavHostController) {
                             null -> tiePoints // old value
                             else -> newTiePoints // new value
                           }
-                    }
+                    }*/
                   },
                   singleLine = true,
                   label = { Text(text = "Tie points") },
@@ -472,3 +464,4 @@ fun HomeScreen(navController: NavHostController) {
   }
 }
  */
+
