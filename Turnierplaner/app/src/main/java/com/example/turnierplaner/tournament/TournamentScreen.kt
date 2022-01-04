@@ -76,7 +76,8 @@ Ranking Im Turnier
 wenn voll neue Zeile beim adden von players
  */
 
-
+//Database
+val database = Firebase.database("https://turnierplaner-86dfe-default-rtdb.europe-west1.firebasedatabase.app/")
 // List with all Tournaments
 private val allTournament = mutableListOf<TournamentClass>()
 /*
@@ -435,29 +436,12 @@ fun sortTournamentByPoints(tournamentName: String?){
 }
 
 fun basicReadWrite() {
-    // [START write_message]
     // Write a message to the database
-    val database = Firebase.database
-    val myRef = database.getReference("message")
+    val database = Firebase.database("https://turnierplaner-86dfe-default-rtdb.europe-west1.firebasedatabase.app/")
+    val myRef = database.getReference("Torunaments")
 
-    myRef.setValue("Hello, World!")
-    // [END write_message]
+    myRef.setValue(allTournament)
 
-    // [START read_message]
-    // Read from the database
-    myRef.addValueEventListener(object : ValueEventListener {
-        override fun onDataChange(dataSnapshot: DataSnapshot) {
-            // This method is called once with the initial value and again
-            // whenever data at this location is updated.
-            val value = dataSnapshot.getValue<String>()
-            Log.d(TAG, "Value is: $value")
-        }
-
-        override fun onCancelled(error: DatabaseError) {
-            // Failed to read value
-            Log.w(TAG, "Failed to read value.", error.toException())
-        }
-    })
     // [END read_message]
 }
 
