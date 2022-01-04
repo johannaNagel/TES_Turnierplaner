@@ -87,7 +87,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
               backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "Login") },
-              actions = {
+              /*actions = {
                 val context = LocalContext.current
                 IconButton(
                     onClick = {
@@ -108,7 +108,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
                       contentDescription = "Button for Logout",
                   )
                 }
-              })
+              }*/)
           if (state.status == LoadingState.Status.RUNNING) {
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
           }

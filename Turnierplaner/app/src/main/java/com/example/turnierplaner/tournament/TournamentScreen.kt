@@ -88,16 +88,7 @@ fun Tournament(navController: NavHostController) {
               backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "All Tournaments") },
-              actions = {
-                IconButton(
-                    onClick = { navController.navigate(BottomBarScreens.Add.route) },
-                ) {
-                  Icon(
-                      imageVector = Icons.Rounded.Add,
-                      contentDescription = "Button to add new Tournment",
-                  )
-                }
-              })
+              )
         }
       },
       content = {
