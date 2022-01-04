@@ -33,7 +33,7 @@ android {
         targetCompatibility(JavaVersion.VERSION_11)
     }
     kotlinOptions {
-        jvmTarget = ('1.8')
+        jvmTarget = ('11')
         useIR = (true)
     }
     buildFeatures { compose(true) }
@@ -99,6 +99,13 @@ dependencies {
     // Juni Dependency
     testImplementation('junit:junit:4.13.2')
     testImplementation('org.jetbrains.kotlin:kotlin-test')
+
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:29.0.3')
+
+    // Declare the dependency for the Realtime Database library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation ('com.google.firebase:firebase-database-ktx')
 }
 
 spotless {

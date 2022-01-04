@@ -1,6 +1,7 @@
 /* (C)2021 */
 package com.example.turnierplaner.tournament
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -55,6 +56,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import java.util.*
 
 
@@ -188,7 +195,10 @@ fun singleTournamentScreen(navController: NavController, tournamentName: String?
               actions = {
                 IconButton(
                     onClick = {
-                      showAddTeamDialog.value = true
+
+                        basicReadWrite()
+
+                      //showAddTeamDialog.value = true
                       // navController.navigate(BottomBarScreens.Add.route)
                     },
                 ) {
@@ -405,7 +415,7 @@ fun addPlayerToTournament(tournamentName: String?, playerName: String){
     }
   }
   tourney.numberOfPlayers = tourney.numberOfPlayers + 1
-  //tourney.players.add(Player(playerName, 0, 0))
+  tourney.players.add(Player(playerName, 0, 0, tourney.numberOfPlayers))
 }
 
 fun sortTournamentByPoints(tournamentName: String?){
@@ -422,6 +432,33 @@ fun sortTournamentByPoints(tournamentName: String?){
         tourney.players[idx].rank = idx + 1
     }
 
+}
+
+fun basicReadWrite() {
+    // [START write_message]
+    // Write a message to the database
+    val database = Firebase.database
+    val myRef = database.getReference("message")
+
+    myRef.setValue("Hello, World!")
+    // [END write_message]
+
+    // [START read_message]
+    // Read from the database
+    myRef.addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            // This method is called once with the initial value and again
+            // whenever data at this location is updated.
+            val value = dataSnapshot.getValue<String>()
+            Log.d(TAG, "Value is: $value")
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            // Failed to read value
+            Log.w(TAG, "Failed to read value.", error.toException())
+        }
+    })
+    // [END read_message]
 }
 
 data class Player(
