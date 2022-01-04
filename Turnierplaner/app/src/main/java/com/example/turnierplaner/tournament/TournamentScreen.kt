@@ -1,6 +1,7 @@
 /* (C)2021 */
 package com.example.turnierplaner.tournament
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,6 +33,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Delete
@@ -53,15 +55,20 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
-import java.util.UUID
+import java.util.*
+
 
 /*
 TODO Scaffold with Add Button and Name of com.example.turnierplaner.tournament.Tournament in Top
 Nicht die gleichen name exeption
+back button to tornament screen
 Maximum turniere
 Git hub cards
+Symbol für Tourney Screen
 Ranking Im Turnier
+wenn voll neue Zeile beim adden von players
  */
+
 
 // List with all Tournaments
 private val allTournament = mutableListOf<TournamentClass>()
@@ -150,13 +157,13 @@ fun Tournament(navController: NavHostController) {
       })
   // Text feld namen Trunier -> Variable
 
-  // Turnierform auswählen drop down -> Liga
+    // Turnierform auswählen drop down -> Liga
 
-  // LATER: Punkte einstellen, Hinrunde
+    // LATER: Punkte einstellen, Hinrunde
 
-  // Textfeld #Spieler/Teams
+    // Textfeld #Spieler/Teams
 
-  // Bestätigen Button -> Turnier
+    // Bestätigen Button -> Turnier
 }
 
 @Composable
@@ -215,60 +222,63 @@ fun singleTournamentScreen(navController: NavController, tournamentName: String?
       },
       content = {
 
-        // set cell Width of the table
-        val cellWidth: (Int) -> Dp = { index ->
-          when (index) {
-            2 -> 125.dp
-            else -> 125.dp
-          }
-        }
-        // set title of the columns
-        val headerCellTitle: @Composable (Int) -> Unit = { index ->
-          val value =
-              when (index) {
-                0 -> "Name"
-                1 -> "Games"
-                2 -> "Points"
-                else -> ""
-              }
-          // define text specs
-          Text(
-              text = value,
-              fontSize = 20.sp,
-              textAlign = TextAlign.Center,
-              modifier = Modifier.padding(16.dp),
-              maxLines = 1,
-              overflow = TextOverflow.Ellipsis,
-              fontWeight = FontWeight.Black,
-              textDecoration = TextDecoration.Underline)
-        }
-        val cellText: @Composable (Int, Player) -> Unit = { index, item ->
-          val value =
-              when (index) {
-                0 -> item.name
-                1 -> item.games.toString()
-                2 -> item.points.toString()
-                else -> ""
-              }
+            // set cell Width of the table
+            val cellWidth: (Int) -> Dp = { index ->
+                when (index) {
+                    0 -> 80.dp
+                    2 -> 125.dp
+                    else -> 125.dp
+                }
+            }
+            // set title of the columns
+            val headerCellTitle: @Composable (Int) -> Unit = { index ->
+                val value =
+                    when (index) {
+                        0 -> "Rank"
+                        1 -> "Name"
+                        2 -> "Games"
+                        3 -> "Points"
+                        else -> ""
+                    }
+                // define text specs
+                Text(
+                    text = value,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(16.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Black,
+                    textDecoration = TextDecoration.Underline)
+            }
+            val cellText: @Composable (Int, Player) -> Unit = { index, item ->
+                val value =
+                    when (index) {
+                        0 -> item.rank.toString()
+                        1 -> item.name
+                        2 -> item.games.toString()
+                        3 -> item.points.toString()
+                        else -> ""
+                    }
+                Text(
+                    text = value,
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(16.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
 
-          Text(
-              text = value,
-              fontSize = 20.sp,
-              textAlign = TextAlign.Center,
-              modifier = Modifier.padding(16.dp),
-              maxLines = 1,
-              overflow = TextOverflow.Ellipsis,
-          )
-        }
+            Table(
+                columnCount = 4,
+                cellWidth = cellWidth,
+                data = tourney.players,
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                headerCellContent = headerCellTitle,
+                cellContent = cellText)
+        })
 
-        Table(
-            columnCount = 3,
-            cellWidth = cellWidth,
-            data = tourney.players,
-            modifier = Modifier.verticalScroll(rememberScrollState()),
-            headerCellContent = headerCellTitle,
-            cellContent = cellText)
-      })
 }
 
 @Composable
@@ -315,20 +325,24 @@ fun addTeamPopUP(tournamentName: String?) {
 @Composable
 fun deletePopUp(navController: NavController, tourney: TournamentClass) {
 
-  AlertDialog(
-      onDismissRequest = { showDeleteDialog.value = false },
-      title = { Text(text = "Delete Tournament?") },
-      text = { Text("Are you sure you want do delete this Tournament?") },
-      dismissButton = { Button(onClick = { showDeleteDialog.value = false }) { Text("No") } },
-      confirmButton = {
-        Button(
-            content = { Text("Yes") },
-            onClick = {
-              showDeleteDialog.value = false
-              deleteTournament(tourney.name)
-              navController.navigate(BottomBarScreens.Tournament.route)
-            })
-      })
+    AlertDialog(
+        onDismissRequest = { showDeleteDialog.value = false },
+        title = { Text(text = "Delete Tournament?") },
+        text = { Text("Are you sure you want do delete this Tournament?") },
+        dismissButton = {
+            Button(
+                onClick = { showDeleteDialog.value = false }) { Text("No") } },
+        confirmButton = {
+            Button(
+                content = { Text("Yes") },
+                onClick = {
+
+                    deleteTournament(tourney.name)
+                    showDeleteDialog.value = false
+                    navController.navigate(BottomBarScreens.Tournament.route)}
+            )
+        })
+
 }
 
 fun createAddToAllTournaments(name: String, numberOfTeams: Int) {
@@ -337,11 +351,13 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int) {
 
   // create a list of players
   val players = mutableListOf<Player>()
+    val random = Random()
+    random.nextInt(100)
 
   // fill the tourney with empty rows depending on how many player were set
   for (idx in 1..numberOfTeams) {
 
-    players.add(Player("", 0, 0))
+    players.add(Player("", 0, 0, idx))
   }
 
   val tourney = TournamentClass(name, id, numberOfTeams, players)
@@ -376,9 +392,9 @@ fun getAllTournaments(): List<TournamentClass> {
   return allTournament
 }
 
-fun addPlayerToTournament(name: String?, playerName: String) {
+fun addPlayerToTournament(tournamentName: String?, playerName: String){
 
-  val tourney = findTournament(name)
+    val tourney = findTournament(tournamentName)
 
   for (idx in 1..tourney.numberOfPlayers) {
 
@@ -389,20 +405,37 @@ fun addPlayerToTournament(name: String?, playerName: String) {
     }
   }
   tourney.numberOfPlayers = tourney.numberOfPlayers + 1
-  tourney.players.add(Player(playerName, 0, 0))
+  //tourney.players.add(Player(playerName, 0, 0))
+}
+
+fun sortTournamentByPoints(tournamentName: String?){
+
+    val tourney = findTournament(tournamentName)
+    val players = tourney.players
+
+    players.sortByDescending { it.points }
+
+    tourney.players[0].rank = 1
+
+    for (idx in 1 until tourney.numberOfPlayers) {
+
+        tourney.players[idx].rank = idx + 1
+    }
+
 }
 
 data class Player(
     var name: String,
-    val games: Int,
-    val points: Int,
+    var games: Int,
+    var points: Int,
+    var rank: Int,
 )
 
 data class TournamentClass(
     var name: String,
-    val id: UUID,
+    var id: UUID,
     var numberOfPlayers: Int,
-    val players: MutableList<Player>
+    var players: MutableList<Player>
 )
 
 /**
