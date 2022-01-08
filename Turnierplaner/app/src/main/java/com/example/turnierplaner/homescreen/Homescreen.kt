@@ -3,10 +3,6 @@ package com.example.turnierplaner.homescreen
 
 import android.os.Handler
 import android.os.Looper
-import android.view.ActionMode
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.TextView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +38,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SportsFootball
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarHalf
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -56,7 +51,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,6 +59,7 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.LoginScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
+import com.example.turnierplaner.tournament.addTournamentToDb
 import com.example.turnierplaner.tournament.createAddToAllTournaments
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -287,14 +282,15 @@ fun Add(navController: NavHostController) {
                   modifier = Modifier.fillMaxWidth().height(50.dp),
                   enabled =
                       teamname.isNotEmpty() &&
-                          numberOfPlayers.isNotEmpty() &&
-                          victoryPoints.isNotEmpty() &&
-                          tiePoints.isNotEmpty() &&
-                          selectedTournamentType.isNotEmpty(),
+                          numberOfPlayers.isNotEmpty(),
+                          //victoryPoints.isNotEmpty() &&
+                          //tiePoints.isNotEmpty() &&
+                          //selectedTournamentType.isNotEmpty(),
                   content = { Text(text = "Add") },
                   onClick = {
                     createAddToAllTournaments(teamname, numberOfPlayers.toInt())
                     navController.navigate("single_tournament_route/$teamname")
+                      addTournamentToDb()
                     // Navigiere zum com.example.turnierplaner.tournament.Tournament Tab
                   })
             })
