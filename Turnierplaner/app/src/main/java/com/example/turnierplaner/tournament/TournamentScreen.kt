@@ -1,8 +1,7 @@
 /* (C)2021 */
 package com.example.turnierplaner.tournament
 
-import android.content.ContentValues.TAG
-import android.util.Log
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,7 +33,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Delete
@@ -58,30 +56,14 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import java.util.*
-import com.google.firebase.database.ChildEventListener
 
-
-
-
-
-/*
-TODO Scaffold with Add Button and Name of com.example.turnierplaner.tournament.Tournament in Top
-Nicht die gleichen name exeption
-back button to tornament screen
-Maximum turniere
-Git hub cards
-Symbol für Tourney Screen
-Ranking Im Turnier
-wenn voll neue Zeile beim adden von players
- */
 
 //Database
 val database = Firebase.database("https://turnierplaner-86dfe-default-rtdb.europe-west1.firebasedatabase.app/")
 // List with all Tournaments
-private val allTournament = mutableListOf<TournamentClass>()
+private var allTournament = mutableListOf<TournamentClass>()
 /*
 It is not possible to open PopUpMenu from onclick Method
 Therefore a separate function has to be created
@@ -112,16 +94,18 @@ fun Tournament(navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
-              for (s in allTournament) {
+                getTeamsFromDb()
+                for (s in allTournament) {
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
-                    content = { Text(text = "${s.name}") },
+                    content = { Text(text = s.name) },
                     onClick = { navController.navigate("single_tournament_route/${s.name}") })
               }
             })
@@ -181,15 +165,15 @@ fun Tournament(navController: NavHostController) {
 }
 
 @Composable
-fun singleTournamentScreen(navController: NavController, tournamentName: String?) {
+fun SingleTournamentScreen(navController: NavController, tournamentName: String?) {
 
-  var tourney = findTournament(tournamentName)
+  val tourney = findTournament(tournamentName)
 
   if (showAddTeamDialog.value) {
-    addTeamPopUP(tournamentName)
+    AddTeamPopUP(tournamentName)
   }
   if (showDeleteDialog.value) {
-    deletePopUp(navController, tourney)
+    DeletePopUp(navController, tourney)
   }
 
   Scaffold(
@@ -296,7 +280,7 @@ fun singleTournamentScreen(navController: NavController, tournamentName: String?
 }
 
 @Composable
-fun addTeamPopUP(tournamentName: String?) {
+fun AddTeamPopUP(tournamentName: String?) {
   var playername by remember { mutableStateOf("") }
 
   AlertDialog(
@@ -326,7 +310,7 @@ fun addTeamPopUP(tournamentName: String?) {
             content = { Text(text = "Add") },
             onClick = {
               showAddTeamDialog.value = false
-              addPlayerToTournament(tournamentName, "$playername")
+              addPlayerToTournament(tournamentName, playername)
             })
         Button(
             modifier = Modifier
@@ -341,7 +325,7 @@ fun addTeamPopUP(tournamentName: String?) {
 }
 
 @Composable
-fun deletePopUp(navController: NavController, tourney: TournamentClass) {
+fun DeletePopUp(navController: NavController, tourney: TournamentClass) {
 
     AlertDialog(
         onDismissRequest = { showDeleteDialog.value = false },
@@ -356,6 +340,7 @@ fun deletePopUp(navController: NavController, tourney: TournamentClass) {
                 onClick = {
 
                     deleteTournament(tourney.name)
+                    database.getReference("Tournaments").child(tourney.id).removeValue()
                     showDeleteDialog.value = false
                     navController.navigate(BottomBarScreens.Tournament.route)}
             )
@@ -365,7 +350,7 @@ fun deletePopUp(navController: NavController, tourney: TournamentClass) {
 
 fun createAddToAllTournaments(name: String, numberOfTeams: Int) {
 
-  val id = UUID.randomUUID()
+  val id = UUID.randomUUID().toString()
 
   // create a list of players
   val players = mutableListOf<Player>()
@@ -374,13 +359,31 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int) {
 
   // fill the tourney with empty rows depending on how many player were set
   for (idx in 1..numberOfTeams) {
-
     players.add(Player("", 0, 0, idx))
   }
 
   val tourney = TournamentClass(name, id, numberOfTeams, players)
 
   allTournament.add(tourney)
+    addTournamentToDb()
+}
+//If DB has new Tourney, then we need to use the ID already assigned
+fun createAddToAllTournaments(name: String, numberOfTeams: Int, id: String) {
+
+    // create a list of players
+    val players = mutableListOf<Player>()
+    val random = Random()
+    random.nextInt(100)
+
+    // fill the tourney with empty rows depending on how many player were set
+    for (idx in 1..numberOfTeams) {
+        players.add(Player("", 0, 0, idx))
+    }
+
+    val tourney = TournamentClass(name, id, numberOfTeams, players)
+
+    allTournament.add(tourney)
+    addTournamentToDb()
 }
 
 fun deleteTournament(name: String) {
@@ -392,7 +395,7 @@ fun deleteTournament(name: String) {
 
 fun findTournament(name: String?): TournamentClass {
 
-  var tourney = TournamentClass("", UUID.randomUUID(), 0, mutableListOf())
+  var tourney = TournamentClass("", UUID.randomUUID().toString(), 0, mutableListOf())
 
   for (s in allTournament) {
 
@@ -444,16 +447,47 @@ fun sortTournamentByPoints(tournamentName: String?){
 
 fun addTournamentToDb() {
     for (s in allTournament){
-        database.getReference("Tournaments").child(s.id.toString()).setValue(s)
+        database.getReference("Tournaments").child(s.id).setValue(s)
     }
+}
+
+fun getTeamsFromDb() {
+    database.getReference("Tournaments/").addValueEventListener(object:
+        ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            allTournament.clear()
+            val items: Iterator<DataSnapshot> = snapshot.children.iterator()
+            while (items.hasNext()){
+                val item: DataSnapshot = items.next()
+                val name : String  = item.getValue(TournamentClass::class.java)!!.name
+                val id : String? = item.key
+                val numberOfPlayers : Int = item.getValue(TournamentClass::class.java)!!.numberOfPlayers
+                val players : MutableList<Player> = item.getValue(TournamentClass::class.java)!!.players
+                if (id != null) {
+                    val tourney = TournamentClass(name, id, numberOfPlayers, players)
+                    allTournament.add(tourney)
+                }
+            }
+        }
+        /**
+         * This method will be triggered in the event that this listener either failed at the server, or
+         * is removed as a result of the security and Firebase Database rules. For more information on
+         * securing your data, see: [ Security
+ * Quickstart](https://firebase.google.com/docs/database/security/quickstart)
+         *
+         * @param error A description of the error that occurred
+         */
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+    })
 }
 
 fun updateNameInDb() {
     database.getReference("Tournaments").addChildEventListener(QuotesChildEventListener())
-
 }
 
-class QuotesChildEventListener : ChildEventListener{
+class QuotesChildEventListener : ChildEventListener {
     /**
      * This method is triggered when a new child is added to the location to which this listener was
      * added.
@@ -463,7 +497,11 @@ class QuotesChildEventListener : ChildEventListener{
      * will be null for the first child node of a location.
      */
     override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-        TODO("Not yet implemented")
+        val tourney = snapshot.getValue(TournamentClass::class.java)
+        if (tourney != null) {
+            tourney.id = snapshot.key.toString()
+            createAddToAllTournaments(tourney.name, tourney.numberOfPlayers, tourney.id)
+        }
     }
 
     /**
@@ -484,7 +522,7 @@ class QuotesChildEventListener : ChildEventListener{
      * @param snapshot An immutable snapshot of the data at the child that was removed.
      */
     override fun onChildRemoved(snapshot: DataSnapshot) {
-        TODO("Not yet implemented")
+
     }
 
     /**
@@ -516,16 +554,23 @@ data class Player(
     var games: Int,
     var points: Int,
     var rank: Int,
-)
+){
+    constructor() : this("",0,0,0)
+}
 
 data class TournamentClass(
     var name: String,
     //To avoid storing in firebase database
     @get:Exclude
-    var id: UUID,
+    var id: String,
     var numberOfPlayers: Int,
     var players: MutableList<Player>
-)
+){
+    constructor() : this("", "", 0, mutableListOf())
+}
+
+
+
 
 /**
  * The horizontally scrollable table with header and content.

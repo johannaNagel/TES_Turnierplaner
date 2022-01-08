@@ -290,7 +290,6 @@ fun Add(navController: NavHostController) {
                   onClick = {
                     createAddToAllTournaments(teamname, numberOfPlayers.toInt())
                     navController.navigate("single_tournament_route/$teamname")
-                      addTournamentToDb()
                     // Navigiere zum com.example.turnierplaner.tournament.Tournament Tab
                   })
             })

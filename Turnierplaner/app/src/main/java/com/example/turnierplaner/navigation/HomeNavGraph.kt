@@ -13,7 +13,7 @@ import com.example.turnierplaner.homescreen.Home
 import com.example.turnierplaner.homescreen.Profile
 import com.example.turnierplaner.homescreen.Setting
 import com.example.turnierplaner.tournament.Tournament
-import com.example.turnierplaner.tournament.singleTournamentScreen
+import com.example.turnierplaner.tournament.SingleTournamentScreen
 
 fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
 
@@ -31,7 +31,7 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
     composable(route = BottomBarScreens.Setting.route) { Setting(navController = navController) }
 
     composable(route = TournamentScreens.SingleTournament.route) { backStackEntry ->
-      singleTournamentScreen(navController, backStackEntry.arguments?.getString("tournamentName"))
+      SingleTournamentScreen(navController, backStackEntry.arguments?.getString("tournamentName"))
     }
   }
 }
