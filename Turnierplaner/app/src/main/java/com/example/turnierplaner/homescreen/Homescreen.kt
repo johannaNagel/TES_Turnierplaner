@@ -59,7 +59,6 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.LoginScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
-import com.example.turnierplaner.tournament.addTournamentToDb
 import com.example.turnierplaner.tournament.createAddToAllTournaments
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -187,7 +186,7 @@ fun Add(navController: NavHostController) {
                   value = numberOfPlayers,
                   singleLine = true,
                   onValueChange = { newNumberOfPlayers ->
-                      numberOfPlayers = newNumberOfPlayers.filter { it.isDigit() }
+                    numberOfPlayers = newNumberOfPlayers.filter { it.isDigit() }
                   },
                   label = { Text(text = "NumberOfPlayers") },
                   keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -199,8 +198,7 @@ fun Add(navController: NavHostController) {
 
               // Tournament type
               val icon =
-                  if (expanded) Icons.Filled.KeyboardArrowUp
-                  else Icons.Filled.KeyboardArrowDown
+                  if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
 
               Column() {
                 OutlinedTextField(
@@ -242,9 +240,8 @@ fun Add(navController: NavHostController) {
               OutlinedTextField(
                   value = victoryPoints,
                   onValueChange = { newVictoryPoints ->
-                      victoryPoints = newVictoryPoints.filter { it.isDigit() }
+                    victoryPoints = newVictoryPoints.filter { it.isDigit() }
                   },
-
                   singleLine = true,
                   label = { Text(text = "Victory points") },
                   keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -257,9 +254,8 @@ fun Add(navController: NavHostController) {
               OutlinedTextField(
                   value = tiePoints,
                   onValueChange = { newTiePoints ->
-
-                      tiePoints = newTiePoints.filter { it.isDigit() }
-                  /*  if (newTiePoints.isEmpty()) {
+                    tiePoints = newTiePoints.filter { it.isDigit() }
+                    /*  if (newTiePoints.isEmpty()) {
                       tiePoints = newTiePoints
                     } else {
                       tiePoints =
@@ -280,12 +276,10 @@ fun Add(navController: NavHostController) {
 
               Button(
                   modifier = Modifier.fillMaxWidth().height(50.dp),
-                  enabled =
-                      teamname.isNotEmpty() &&
-                          numberOfPlayers.isNotEmpty(),
-                          //victoryPoints.isNotEmpty() &&
-                          //tiePoints.isNotEmpty() &&
-                          //selectedTournamentType.isNotEmpty(),
+                  enabled = teamname.isNotEmpty() && numberOfPlayers.isNotEmpty(),
+                  // victoryPoints.isNotEmpty() &&
+                  // tiePoints.isNotEmpty() &&
+                  // selectedTournamentType.isNotEmpty(),
                   content = { Text(text = "Add") },
                   onClick = {
                     createAddToAllTournaments(teamname, numberOfPlayers.toInt())
@@ -459,4 +453,3 @@ fun HomeScreen(navController: NavHostController) {
   }
 }
  */
-

@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
@@ -28,7 +27,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -49,14 +47,11 @@ import com.example.turnierplaner.HOME_GRAPH_ROUTE
 import com.example.turnierplaner.R
 import com.example.turnierplaner.googlesignin.ui.theme.FirebaseAuthComposeTheme
 import com.example.turnierplaner.googlesignin.util.LoadingState
-import com.example.turnierplaner.tournament.getTeamsFromDb
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 @Composable
 fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: NavHostController) {
@@ -109,7 +104,8 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
                       contentDescription = "Button for Logout",
                   )
                 }
-              }*/)
+              }*/
+              )
           if (state.status == LoadingState.Status.RUNNING) {
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
           }
