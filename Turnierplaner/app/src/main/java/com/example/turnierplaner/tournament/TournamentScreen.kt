@@ -36,6 +36,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -87,6 +88,19 @@ fun Tournament(navController: NavHostController) {
               backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "All Tournaments") },
+              actions = {
+                  IconButton(
+                      onClick = {
+                          getTeamsFromDb()
+
+                      },
+                  ) {
+                      Icon(
+                          imageVector = Icons.Rounded.Refresh,
+                          contentDescription = "Update Tournamanet List",
+                      )
+                  }
+              }
               )
         }
       },
@@ -170,10 +184,10 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
   val tourney = findTournament(tournamentName)
 
   if (showAddTeamDialog.value) {
-    AddTeamPopUP(tournamentName)
+    AddTeamToTournamentPopUP(tournamentName)
   }
   if (showDeleteDialog.value) {
-    DeletePopUp(navController, tourney)
+    DeleteTournamentPopUp(navController, tourney)
   }
 
   Scaffold(
@@ -280,7 +294,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
 }
 
 @Composable
-fun AddTeamPopUP(tournamentName: String?) {
+fun AddTeamToTournamentPopUP(tournamentName: String?) {
   var playername by remember { mutableStateOf("") }
 
   AlertDialog(
@@ -311,6 +325,7 @@ fun AddTeamPopUP(tournamentName: String?) {
             onClick = {
               showAddTeamDialog.value = false
               addPlayerToTournament(tournamentName, playername)
+                addTournamentToDb()
             })
         Button(
             modifier = Modifier
@@ -325,7 +340,7 @@ fun AddTeamPopUP(tournamentName: String?) {
 }
 
 @Composable
-fun DeletePopUp(navController: NavController, tourney: TournamentClass) {
+fun DeleteTournamentPopUp(navController: NavController, tourney: TournamentClass) {
 
     AlertDialog(
         onDismissRequest = { showDeleteDialog.value = false },
@@ -469,21 +484,13 @@ fun getTeamsFromDb() {
                 }
             }
         }
-        /**
-         * This method will be triggered in the event that this listener either failed at the server, or
-         * is removed as a result of the security and Firebase Database rules. For more information on
-         * securing your data, see: [ Security
- * Quickstart](https://firebase.google.com/docs/database/security/quickstart)
-         *
-         * @param error A description of the error that occurred
-         */
         override fun onCancelled(error: DatabaseError) {
             TODO("Not yet implemented")
         }
     })
 }
 
-fun updateNameInDb() {
+fun updateDb() {
     database.getReference("Tournaments").addChildEventListener(QuotesChildEventListener())
 }
 
@@ -512,7 +519,17 @@ class QuotesChildEventListener : ChildEventListener {
      * be null for the first child node of a location.
      */
     override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-        TODO("Not yet implemented")
+        val id:String = snapshot.key.toString()
+        for (s in allTournament){
+            if(s.id == id){
+                val tourney = snapshot.getValue(TournamentClass::class.java)
+                if (tourney != null) {
+                    s.name = tourney.name
+                    s.numberOfPlayers = tourney.numberOfPlayers
+                    s.players = tourney.players
+                }
+            }
+        }
     }
 
     /**
@@ -569,18 +586,6 @@ data class TournamentClass(
     constructor() : this("", "", 0, mutableListOf())
 }
 
-
-
-
-/**
- * The horizontally scrollable table with header and content.
- * @param columnCount the count of columns in the table
- * @param cellWidth the width of column, can be configured based on index of the column.
- * @param data the data to populate table.
- * @param modifier the modifier to apply to this layout node.
- * @param headerCellContent a block which describes the header cell content.
- * @param cellContent a block which describes the cell content.
- */
 @Composable
 fun <T> Table(
     columnCount: Int,
