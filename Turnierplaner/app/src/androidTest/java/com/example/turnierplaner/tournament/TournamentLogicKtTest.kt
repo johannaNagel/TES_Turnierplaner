@@ -1,6 +1,11 @@
 /* (C)2021 */
 package com.example.turnierplaner.tournament
 
+import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
+import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
+import com.example.turnierplaner.tournament.leagueSystem.deleteTournament
+import com.example.turnierplaner.tournament.leagueSystem.findTournament
+import com.example.turnierplaner.tournament.leagueSystem.getAllTournaments
 import junit.framework.TestCase
 import org.junit.Test
 

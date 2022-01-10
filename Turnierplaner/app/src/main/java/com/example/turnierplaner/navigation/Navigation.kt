@@ -9,7 +9,7 @@ import com.example.turnierplaner.homescreen.Add
 import com.example.turnierplaner.homescreen.Home
 import com.example.turnierplaner.homescreen.Profile
 import com.example.turnierplaner.homescreen.Setting
-import com.example.turnierplaner.tournament.Tournament
+import com.example.turnierplaner.tournament.leagueSystem.Tournament
 
 @Composable
 fun BottomNavHost(navController: NavHostController) {

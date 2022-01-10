@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.turnierplaner.Turnierplaner
 import com.example.turnierplaner.navigation.SetupNavGraph
+import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Rule

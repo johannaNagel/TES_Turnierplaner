@@ -59,7 +59,7 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.LoginScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
-import com.example.turnierplaner.tournament.createAddToAllTournaments
+import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -105,13 +105,13 @@ fun Home(navController: NavHostController) {
 
                 BottomNavigationItem(
                     icon = { Icon(Icons.Filled.List, "") },
-                    label = { Text(text = "com.example.turnierplaner.tournament.Tournament") },
+                    label = { Text(text = "com.example.turnierplaner.tournament.leagueSystem.Tournament") },
                     selected =
-                        selectedItem.value == "com.example.turnierplaner.tournament.Tournament",
+                        selectedItem.value == "com.example.turnierplaner.tournament.leagueSystem.Tournament",
                     onClick = {
                       navController.navigate(BottomBarScreens.Tournament.route)
 
-                      selectedItem.value = "com.example.turnierplaner.tournament.Tournament"
+                      selectedItem.value = "com.example.turnierplaner.tournament.leagueSystem.Tournament"
                     },
                     alwaysShowLabel = false)
 
@@ -284,7 +284,7 @@ fun Add(navController: NavHostController) {
                   onClick = {
                     createAddToAllTournaments(teamname, numberOfPlayers.toInt())
                     navController.navigate("single_tournament_route/$teamname")
-                    // Navigiere zum com.example.turnierplaner.tournament.Tournament Tab
+                    // Navigiere zum com.example.turnierplaner.tournament.leagueSystem.Tournament Tab
                   })
             })
       },
@@ -304,12 +304,12 @@ fun Add(navController: NavHostController) {
 
                 BottomNavigationItem(
                     icon = { Icon(Icons.Filled.List, "") },
-                    label = { Text(text = "com.example.turnierplaner.tournament.Tournament") },
+                    label = { Text(text = "com.example.turnierplaner.tournament.leagueSystem.Tournament") },
                     selected =
-                        selectedItem.value == "com.example.turnierplaner.tournament.Tournament",
+                        selectedItem.value == "com.example.turnierplaner.tournament.leagueSystem.Tournament",
                     onClick = {
                       navController.navigate(BottomBarScreens.Tournament.route)
-                      selectedItem.value = "com.example.turnierplaner.tournament.Tournament"
+                      selectedItem.value = "com.example.turnierplaner.tournament.leagueSystem.Tournament"
                     },
                     alwaysShowLabel = false)
 
