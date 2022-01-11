@@ -23,6 +23,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.CalendarToday
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,8 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
-import com.example.turnierplaner.tournament.addTournamentToDb
-import com.example.turnierplaner.tournament.database
+import com.example.turnierplaner.Schedule
+import com.example.turnierplaner.tournament.tournamentDB.addTournamentToDb
+import com.example.turnierplaner.tournament.tournamentDB.database
 
 /*
 It is not possible to open PopUpMenu from onclick Method
@@ -70,6 +72,17 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
                     elevation = 1.dp,
                     title = { Text(text = tourney.name) },
                     actions = {
+                        IconButton(
+                            onClick = {
+                                 navController.navigate("schedule_route/${tourney.name}")
+                                // navController.navigate(BottomBarScreens.Add.route)
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.CalendarToday,
+                                contentDescription = "Button to see the game schedule",
+                            )
+                        }
                         IconButton(
                             onClick = {
                                 showAddTeamDialog.value = true
@@ -109,8 +122,8 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
             // set cell Width of the table
             val cellWidth: (Int) -> Dp = { index ->
                 when (index) {
-                    0 -> 80.dp
-                    2 -> 125.dp
+                    0 -> 85.dp
+                    2,3 -> 85.dp
                     else -> 125.dp
                 }
             }
@@ -129,7 +142,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
                     text = value,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(10.dp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     fontWeight = FontWeight.Black,
@@ -148,7 +161,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
                     text = value,
                     fontSize = 20.sp,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(10.dp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -188,7 +201,9 @@ fun AddTeamToTournamentPopUP(tournamentName: String?) {
                 label = { Text(text = "Player Name") },
             )
             Button(
-                modifier = Modifier.fillMaxWidth().height(50.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
                 enabled = playername.isNotEmpty(),
                 content = { Text(text = "Add") },
                 onClick = {
@@ -197,7 +212,9 @@ fun AddTeamToTournamentPopUP(tournamentName: String?) {
                     addTournamentToDb()
                 })
             Button(
-                modifier = Modifier.fillMaxWidth().height(50.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
                 content = { Text(text = "Cancel") },
                 onClick = { showAddTeamDialog.value = false })
         },

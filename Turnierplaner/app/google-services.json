@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "322292157514",
+    "firebase_url": "https://turnierplaner-86dfe-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "turnierplaner-86dfe",
     "storage_bucket": "turnierplaner-86dfe.appspot.com"
   },
@@ -13,6 +14,30 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "322292157514-dog1tmvoigvb1kt96bk5mqa6r86b2u2r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.turnierplaner",
+            "certificate_hash": "f5fdaefbea77b3e60b8e2235581a03724d7e99b8"
+          }
+        },
+        {
+          "client_id": "322292157514-lmne00a7cbqtfednlfiisoohgsh625nq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.turnierplaner",
+            "certificate_hash": "8a68dbb64a235b9a50d29b2a66b3d7b4348e0363"
+          }
+        },
+        {
+          "client_id": "322292157514-pktq0h0j2tdnrf8bplb1673l4p3rca5b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.turnierplaner",
+            "certificate_hash": "f5af758be3c59e623fc61f71a308f980545bf948"
+          }
+        },
         {
           "client_id": "322292157514-69lo8nq7u25sak0mic18db19ogjp0a7e.apps.googleusercontent.com",
           "client_type": 3

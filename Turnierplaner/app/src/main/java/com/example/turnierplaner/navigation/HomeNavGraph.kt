@@ -7,11 +7,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.HOME_GRAPH_ROUTE
+import com.example.turnierplaner.Schedule
 import com.example.turnierplaner.TournamentScreens
 import com.example.turnierplaner.homescreen.Add
 import com.example.turnierplaner.homescreen.Home
 import com.example.turnierplaner.homescreen.Profile
 import com.example.turnierplaner.homescreen.Setting
+import com.example.turnierplaner.tournament.leagueSystem.ScheduleCompose
 import com.example.turnierplaner.tournament.leagueSystem.SingleTournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.Tournament
 
@@ -32,6 +34,9 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
 
     composable(route = TournamentScreens.SingleTournament.route) { backStackEntry ->
       SingleTournamentScreen(navController, backStackEntry.arguments?.getString("tournamentName"))
+    }
+    composable(route= Schedule.Tournamentschedule.route){backStackEntry ->
+      ScheduleCompose(navController = navController,backStackEntry.arguments?.getString("tournamentName")  )
     }
   }
 }
