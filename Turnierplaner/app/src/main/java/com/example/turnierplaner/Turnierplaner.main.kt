@@ -7,6 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.turnierplaner.navigation.SetupNavGraph
+import com.example.turnierplaner.tournament.tournamentDB.QuotesChildEventListener
+import com.example.turnierplaner.tournament.tournamentDB.database
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
 
 class Turnierplaner : ComponentActivity() {
@@ -18,6 +20,7 @@ class Turnierplaner : ComponentActivity() {
     setContent {
       TurnierplanerTheme {
         navController = rememberNavController()
+        //database.getReference("Tournaments").addChildEventListener(QuotesChildEventListener())
         SetupNavGraph(navController = navController)
       }
     }

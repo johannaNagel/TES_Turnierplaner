@@ -1,8 +1,12 @@
 /* (C)2021 */
 package com.example.turnierplaner.tournament.leagueSystem
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,8 +29,12 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +49,8 @@ import java.util.UUID
 
 // List with all Tournaments
 var allTournament = mutableListOf<TournamentClass>()
+var changeState by mutableStateOf(0)
+
 
 @Composable
 fun Tournament(navController: NavHostController) {
@@ -48,16 +58,22 @@ fun Tournament(navController: NavHostController) {
   // val result = remember { mutableStateOf("") }
   val selectedItem = remember { mutableStateOf("tournament") }
 
+
   Scaffold(
       topBar = {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxWidth()
+        ) {
           TopAppBar(
               backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "All Tournaments") },
               actions = {
                 IconButton(
-                    onClick = { getTeamsFromDb() },
+                    modifier = Modifier.clickable {  changeState++},
+                    onClick = {
+                        getTeamsFromDb()
+                        navController.navigate(BottomBarScreens.Tournament.route)
+                              },
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.Refresh,

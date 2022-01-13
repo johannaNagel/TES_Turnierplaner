@@ -11,6 +11,7 @@ import com.example.turnierplaner.homescreen.Profile
 import com.example.turnierplaner.homescreen.Setting
 import com.example.turnierplaner.tournament.leagueSystem.Tournament
 
+/*
 @Composable
 fun BottomNavHost(navController: NavHostController) {
 
@@ -24,7 +25,7 @@ fun BottomNavHost(navController: NavHostController) {
     composable(route = BottomBarScreens.Setting.route) { Setting(navController = navController) }
   }
 }
-
+*/
 /*
 @Composable
 fun LoginNaviagtion() {

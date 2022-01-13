@@ -52,6 +52,7 @@ Therefore a separate function has to be created
 private val showAddTeamDialog = mutableStateOf(false)
 private val showDeleteDialog = mutableStateOf(false)
 
+
 @Composable
 fun SingleTournamentScreen(navController: NavController, tournamentName: String?) {
 
@@ -107,7 +108,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
                             )
                         }
                         IconButton(
-                            onClick = { navController.navigate(BottomBarScreens.Home.route) },
+                            onClick = { navController.navigate(BottomBarScreens.Tournament.route) },
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.ArrowBack,

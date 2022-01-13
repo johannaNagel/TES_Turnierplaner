@@ -3,6 +3,7 @@ package com.example.turnierplaner.tournament.tournamentDB
 import com.example.turnierplaner.tournament.leagueSystem.Player
 import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
+import com.example.turnierplaner.tournament.leagueSystem.changeState
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -48,9 +49,11 @@ fun getTeamsFromDb() {
             })
 }
 
+
 fun updateDb() {
     database.getReference("Tournaments").addChildEventListener(QuotesChildEventListener())
 }
+
 
 class QuotesChildEventListener : ChildEventListener {
     /**
@@ -66,7 +69,11 @@ class QuotesChildEventListener : ChildEventListener {
         if (tourney != null) {
             tourney.id = snapshot.key.toString()
             createAddToAllTournaments(tourney.name, tourney.numberOfPlayers, tourney.id)
+            //Change State
+            changeState++
+            println("changed1")
         }
+
     }
 
     /**
@@ -85,9 +92,15 @@ class QuotesChildEventListener : ChildEventListener {
                     s.name = tourney.name
                     s.numberOfPlayers = tourney.numberOfPlayers
                     s.players = tourney.players
+
+                    //Change State
+                    changeState++
+                    println("changed2")
                 }
+
             }
         }
+
     }
 
     /**
@@ -96,7 +109,11 @@ class QuotesChildEventListener : ChildEventListener {
      *
      * @param snapshot An immutable snapshot of the data at the child that was removed.
      */
-    override fun onChildRemoved(snapshot: DataSnapshot) {}
+    override fun onChildRemoved(snapshot: DataSnapshot) {
+        //Change State
+        changeState++
+        println("changed3")
+    }
 
     /**
      * This method is triggered when a child location's priority changes.

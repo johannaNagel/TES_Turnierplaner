@@ -1,6 +1,7 @@
 /* (C)2021 */
 package com.example.turnierplaner.navigation
 
+
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -18,6 +19,8 @@ import com.example.turnierplaner.tournament.leagueSystem.SingleTournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.Tournament
 
 fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
+
+
 
   navigation(startDestination = BottomBarScreens.Home.route, route = HOME_GRAPH_ROUTE) {
     composable(route = BottomBarScreens.Home.route) { Home(navController = navController) }
