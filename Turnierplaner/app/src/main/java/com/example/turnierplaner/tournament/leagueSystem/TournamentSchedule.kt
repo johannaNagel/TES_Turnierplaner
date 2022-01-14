@@ -46,10 +46,26 @@ import androidx.compose.ui.unit.toSize
 @Composable
 fun ScheduleCompose (navController: NavHostController, tournamentName: String?){
     val tourney = findTournament(tournamentName)
-    val suggestions = listOf("Round1", "Round2", "Round3")
+    val numberOfpossiblePlayers = tourney.players.size-1
+    var numberOfPlayers= 0
+    var roundNumber = 0
+    for(i in 0..numberOfpossiblePlayers-1){
+        if (tourney.players.get(i).name != ""){
+            numberOfPlayers++
+        }
+    }
+    val numberOfRounds: Int = numberOfPlayers-1
+    val suggestions =  mutableListOf<String>()
     var selectedTournamentRound by remember { mutableStateOf("") }
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
     var expanded by remember { mutableStateOf(false) }
+    for(i in 0..numberOfRounds-1){
+        suggestions.add(i,"round: ${i+1}" )
+
+    }
+
+    val arrayGames = createSchedule(tourney,numberOfPlayers)
+    var gameRound = Array(numberOfRounds){ Array(2){""} }
 
     Scaffold(
         topBar = {
@@ -58,7 +74,7 @@ fun ScheduleCompose (navController: NavHostController, tournamentName: String?){
                     backgroundColor = Color.White,
                     elevation = 1.dp,
                     title = {
-                            Text(text = "Tournament schedule: ${tourney.name}" ) },
+                        Text(text = "Tournament schedule: ${tourney.name}" ) },
                     actions = {
                         IconButton(
                             onClick = { navController.navigate("single_tournament_route/${tourney.name}") },
@@ -66,7 +82,7 @@ fun ScheduleCompose (navController: NavHostController, tournamentName: String?){
                             Icon(
                                 imageVector = Icons.Rounded.ArrowBack,
                                 contentDescription = "Button to go back to SingleTournamentScreen",
-                             )
+                            )
                         }
                     }
 
@@ -76,6 +92,7 @@ fun ScheduleCompose (navController: NavHostController, tournamentName: String?){
             }
         },
         content = {
+
             // Tournament type
             val icon =
                 if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
@@ -114,6 +131,14 @@ fun ScheduleCompose (navController: NavHostController, tournamentName: String?){
                             onClick = {
                                 selectedTournamentRound = label
                                 expanded = false
+                                val splitList = selectedTournamentRound.split(" ")
+                                roundNumber = splitList.get(1).toInt()
+                                if(roundNumber != 1){
+                                    gameRound = changeOpponent(arrayGames, getRow(numberOfPlayers),2, roundNumber)
+                                } else{
+                                    gameRound = arrayGames
+                                }
+
                             }) { Text(text = label) }
                     }
                 }
@@ -149,16 +174,22 @@ fun ScheduleCompose (navController: NavHostController, tournamentName: String?){
                         textDecoration = TextDecoration.Underline
                     )
                 }
-                val cellText: @Composable (Int, Player) -> Unit = { index, item ->
+                val i: Int = 0
+
+                val listGames = convertMatrixtoList(gameRound)
+                val listResult = convertToResultList(gameRound, getRow(numberOfPlayers), 2)
+                val cellText: @Composable (Int, Result ) -> Unit = { index,  match ->
                     val value =
                         when (index) {
-                            0 -> item.rank.toString()
-                            1 -> item.name
-                            2 -> "${item.games.toString()} : ${item.games.toString()}"
-                            3 -> item.name
-                            4 -> item.points.toString()
+                            0 -> "$i"
+                            1 -> match.player1
+                            2 -> " ${match.resultPlayer1}:${match.resultPlayer2} "
+                            3 -> match.player2
+                            4 -> "hello"
                             else -> ""
+
                         }
+
                     Text(
                         text = value,
                         fontSize = 20.sp,
@@ -172,7 +203,7 @@ fun ScheduleCompose (navController: NavHostController, tournamentName: String?){
                 Table(
                     columnCount = 5,
                     cellWidth = cellWidth,
-                    data = tourney.players,
+                    data = listResult ,
                     modifier = Modifier.verticalScroll(rememberScrollState()),
                     headerCellContent = headerCellTitle,
                     cellContent = cellText
@@ -183,53 +214,87 @@ fun ScheduleCompose (navController: NavHostController, tournamentName: String?){
 
 }
 
-fun createSchedule(tourney : TournamentClass){
+fun createSchedule(tourney : TournamentClass, numberOfActualPlayers: Int):Array<Array<String>> {
     var list = tourney.players
-    var row = if((list.size % 2) == 1){
-        (list.size  % 2) +1
-    } else {
-        (list.size % 2)
-    }
+    var row = getRow(numberOfActualPlayers)
     var column: Int = 2
     var matrix = Array(row){ Array(column){""} }
     var count = 0
-    var numberOfRounds = list.size -1
-    var matchRound = Array(list.size -1 ){""}
-    for (match in matchRound)
-        for (i in 0..row-1){
-            for(j in 0..column-1){
-                matrix[i][j] = list.get(count).name
-                count++
-                println(matrix[i][j])
-            }
-
+    for (i in 0..row-1){
+        for(j in 0..column-1){
+            matrix[i][j] = list.get(count).name
+            count++
+            println(matrix[i][j])
         }
-    for (k in 1..numberOfRounds){
-        changeOpponent(matrix, row, column)
+
     }
 
+    return matrix
 
 }
 
 //rotate the matrix
 //change the opponent for the Games
-fun changeOpponent(arrayGames:Array<Array<String>>, row:Int, column:Int ): Array<Array<String>>{
-    var arrayNewRound = Array(row){ Array(column){""} }
-    for (i in 0..row-1){
-        for (j in 0..column-1){
-            if(i== 0 && j == 0){
-                arrayNewRound[0][0]= arrayGames[0][0]
-            }else if(i== row-1 && j == 0){
-                arrayNewRound[i][j+1]= arrayGames[i][j]
-            } else if(i== 0 && j ==1){
-                arrayNewRound[i+1][j-1] = arrayGames[i][j]
-            }else if(j==0){
-                arrayNewRound[i+1][j]= arrayGames[i][j]
-            }else if(j == 1){
-                arrayNewRound[i][j-1]= arrayGames[i][j]
-            }
+fun changeOpponent(arrayGames:Array<Array<String>>, row:Int, column:Int, roundNumber: Int ): Array<Array<String>>{
+    var arrayGames1 = arrayGames
+    for (k in 2..roundNumber) {
+        var arrayNewRound = Array(row){ Array(column){""} }
+        for (i in 0..row - 1) {
+            for (j in 0..column - 1) {
+                if (i == 0 && j == 0) {
+                    arrayNewRound[0][0] = arrayGames1[0][0]
+                } else if (i == row - 1 && j == 0) {
+                    arrayNewRound[i][j + 1] = arrayGames1[i][j]
+                } else if (i == 0 && j == 1) {
+                    arrayNewRound[i + 1][j - 1] = arrayGames1[i][j]
+                } else if (j == 0) {
+                    arrayNewRound[i + 1][j] = arrayGames1[i][j]
+                } else if (j == 1) {
+                    arrayNewRound[i-1][j] = arrayGames1[i][j]
+                }
 
+            }
         }
+        arrayGames1 = arrayNewRound
     }
-    return arrayNewRound
+    return arrayGames1
+}
+
+fun convertMatrixtoList(arrayGames: Array<Array<String>>): List<Array<String>>{
+    var gameSchedule = mutableListOf<Array<String>>()
+    for(i in 0..arrayGames.size-1){
+        gameSchedule.add(arrayGames[i])
+    }
+    return gameSchedule
+}
+
+fun getRow(numberOfActualPlayers: Int): Int{
+    val row =  if((numberOfActualPlayers % 2) == 1){
+        (numberOfActualPlayers  / 2) +1
+    } else {
+        (numberOfActualPlayers / 2 )
+    }
+    return row
+}
+
+fun convertToResultList(arrayGames: Array<Array<String>>, row:Int, column:Int) : List<Result>{
+    var arraygames = mutableListOf<Result>()
+    for(i in 0..row-1){
+        arraygames.add(Result())
+        arraygames.get(i).player1 = arrayGames[i][0]
+        arraygames.get(i).player2 = arrayGames[i][1]
+
+    }
+    return arraygames
+}
+
+
+data class Result(
+    var player1: String,
+    var player2: String,
+    var resultPlayer1: Int,
+    var resultPlayer2: Int
+){
+    constructor() : this("", "", 0, 0)
+
 }
