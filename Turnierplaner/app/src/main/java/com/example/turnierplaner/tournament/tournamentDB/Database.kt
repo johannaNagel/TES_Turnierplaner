@@ -5,6 +5,7 @@ import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.changeState
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
+import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,13 +24,16 @@ fun addTournamentToDb() {
     }
 }
 
-fun removeTournamentFromDB(tourney:TournamentClass){
+fun removeTournament(tourney:TournamentClass){
     database.getReference("Tournaments").child(tourney.id).removeValue()
+    val tourney = findTournament(tourney.name)
+    allTournament.remove(tourney)
 }
 
 /*
 This Method gets all Teams from Database
  */
+
 fun getTeamsFromDb() {
     database
         .getReference(reference)

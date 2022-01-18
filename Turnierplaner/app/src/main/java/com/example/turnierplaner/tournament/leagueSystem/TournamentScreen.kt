@@ -162,6 +162,7 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int) {
   allTournament.add(tourney)
   addTournamentToDb()
 }
+
 // If DB has new Tourney, then we need to use the ID already assigned
 fun createAddToAllTournaments(name: String, numberOfTeams: Int, id: String) {
 
@@ -179,13 +180,6 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int, id: String) {
 
   allTournament.add(tourney)
   addTournamentToDb()
-}
-
-fun deleteTournamentLocal(name: String) {
-
-  val tourney = findTournament(name)
-
-  allTournament.remove(tourney)
 }
 
 fun findTournament(name: String?): TournamentClass {

@@ -3,11 +3,11 @@ package com.example.turnierplaner.DB
 import com.example.turnierplaner.tournament.leagueSystem.Player
 import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
-import com.example.turnierplaner.tournament.leagueSystem.deleteTournamentLocal
+import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.example.turnierplaner.tournament.tournamentDB.addTournamentToDb
 import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
-import com.example.turnierplaner.tournament.tournamentDB.removeTournamentFromDB
+import com.example.turnierplaner.tournament.tournamentDB.removeTournament
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -25,14 +25,12 @@ class TestingDeletingFromDB {
     @Before
     fun initialize(){
         getTeamsFromDb()
-        allTournament.add(tourney)
-        addTournamentToDb()
+        createAddToAllTournaments(tourney.name, numberOfTeams)
     }
 
     @Test
     fun testDeletingTournamentToDB(){
-        deleteTournamentLocal(tourney.name)
-        removeTournamentFromDB(tourney)
+        removeTournament(tourney)
         getTeamsFromDb()
         assertEquals("", findTournament(tourney.name).name)
     }

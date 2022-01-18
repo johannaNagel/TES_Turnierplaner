@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.tournament.tournamentDB.addTournamentToDb
-import com.example.turnierplaner.tournament.tournamentDB.removeTournamentFromDB
+import com.example.turnierplaner.tournament.tournamentDB.removeTournament
 
 /*
 It is not possible to open PopUpMenu from onclick Method
@@ -182,7 +182,7 @@ fun AddTeamToTournamentPopUP(tournamentName: String?) {
     var playername by remember { mutableStateOf("") }
 
     AlertDialog(
-        modifier = Modifier.size(250.dp, 275.dp),
+        modifier = Modifier.size(250.dp, 225.dp),
         text = {
             Column {
                 Text(
@@ -195,7 +195,7 @@ fun AddTeamToTournamentPopUP(tournamentName: String?) {
         onDismissRequest = { showAddTeamDialog.value = false },
         buttons = {
             OutlinedTextField(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
                 value = playername,
                 onValueChange = { newTeamname -> playername = newTeamname },
                 label = { Text(text = "Player Name") },
@@ -211,15 +211,7 @@ fun AddTeamToTournamentPopUP(tournamentName: String?) {
                     addPlayerToTournament(tournamentName, playername)
                     addTournamentToDb()
                 })
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                content = { Text(text = "Cancel") },
-                onClick = { showAddTeamDialog.value = false })
         },
-        // modifier = Modifier.size(250.dp, 250.dp),
-        // shape = MaterialTheme.shapes.large,
     )
 }
 
@@ -235,8 +227,7 @@ fun DeleteTournamentPopUp(navController: NavController, tourney: TournamentClass
             Button(
                 content = { Text("Yes") },
                 onClick = {
-                    deleteTournamentLocal(tourney.name)
-                    removeTournamentFromDB(tourney)
+                    removeTournament(tourney)
                     showDeleteDialog.value = false
                     navController.navigate(BottomBarScreens.Tournament.route)
                 })

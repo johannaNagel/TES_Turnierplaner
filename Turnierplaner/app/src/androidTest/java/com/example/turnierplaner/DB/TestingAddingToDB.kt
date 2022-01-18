@@ -3,11 +3,14 @@ package com.example.turnierplaner.DB
 import com.example.turnierplaner.tournament.leagueSystem.Player
 import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
+import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import com.example.turnierplaner.tournament.tournamentDB.addTournamentToDb
 import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
+import com.example.turnierplaner.tournament.tournamentDB.removeTournament
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import junit.framework.Assert.assertEquals
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import java.util.UUID
@@ -26,12 +29,17 @@ class TestingAddingToDB {
     @Before
     fun initialize(){
         getTeamsFromDb()
-        allTournament.add(tourney)
+        createAddToAllTournaments(tourney.name, numberOfTeams)
     }
 
     @Test
     fun testAddingTournamentToDB(){
         addTournamentToDb()
         assertEquals(id, database.getReference(reference).child(tourney.id).key)
+    }
+
+    @After
+    fun tearDown(){
+        removeTournament(tourney)
     }
 }

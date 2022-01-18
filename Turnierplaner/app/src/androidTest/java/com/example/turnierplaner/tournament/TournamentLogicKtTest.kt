@@ -3,10 +3,11 @@ package com.example.turnierplaner.tournament
 
 import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
-import com.example.turnierplaner.tournament.leagueSystem.deleteTournamentLocal
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.example.turnierplaner.tournament.leagueSystem.getAllTournaments
+import com.example.turnierplaner.tournament.tournamentDB.removeTournament
 import junit.framework.TestCase
+import org.junit.After
 import org.junit.Test
 
 class TournamentLogicKtTest : TestCase() {
@@ -33,17 +34,24 @@ class TournamentLogicKtTest : TestCase() {
     assertEquals("Test", findTournament("Test").name)
   }
 
-  @Test
+
+  //WIRD BEI TESTS DER DB BEREITS MITGETESTET
+
+  /*@Test
   fun testDeleteTournament() {
 
     createAddToAllTournaments("Test", 10)
 
     var tourney: List<TournamentClass> = getAllTournaments()
 
-    deleteTournamentLocal("Test")
+    //Ich habe eine weitere Methode implementiert, die nun local und von der DB gleichzeitig löscht
+    removeTournament(findTournament("Test"))
 
     assertFalse(tourney.isEmpty())
-  }
+  }*/
 
-  public override fun tearDown() {}
+  @After
+  override fun tearDown() {
+    removeTournament(findTournament("Test"))
+  }
 }
