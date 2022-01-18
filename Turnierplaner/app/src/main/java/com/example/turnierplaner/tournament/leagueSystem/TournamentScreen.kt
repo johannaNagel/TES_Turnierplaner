@@ -77,7 +77,7 @@ fun Tournament(navController: NavHostController) {
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.Refresh,
-                      contentDescription = "Update Tournamanet List",
+                      contentDescription = "Update Tournamet List",
                   )
                 }
               })
@@ -181,7 +181,7 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int, id: String) {
   addTournamentToDb()
 }
 
-fun deleteTournament(name: String) {
+fun deleteTournamentLocal(name: String) {
 
   val tourney = findTournament(name)
 
@@ -199,8 +199,7 @@ fun findTournament(name: String?): TournamentClass {
       tourney = s
     }
   }
-
-  return tourney
+    return tourney
 }
 
 fun getAllTournaments(): List<TournamentClass> {

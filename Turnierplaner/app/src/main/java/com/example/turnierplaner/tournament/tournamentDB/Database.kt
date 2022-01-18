@@ -14,16 +14,25 @@ import com.google.firebase.ktx.Firebase
 
 // Database
 val database = Firebase.database("https://turnierplaner-86dfe-default-rtdb.europe-west1.firebasedatabase.app/")
+const val reference: String = "Tournaments"
+
 
 fun addTournamentToDb() {
     for (s in allTournament) {
-        database.getReference("Tournaments").child(s.id).setValue(s)
+        database.getReference(reference).child(s.id).setValue(s)
     }
 }
 
+fun removeTournamentFromDB(tourney:TournamentClass){
+    database.getReference("Tournaments").child(tourney.id).removeValue()
+}
+
+/*
+This Method gets all Teams from Database
+ */
 fun getTeamsFromDb() {
     database
-        .getReference("Tournaments/")
+        .getReference(reference)
         .addValueEventListener(
             object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -53,7 +62,6 @@ fun getTeamsFromDb() {
 fun updateDb() {
     database.getReference("Tournaments").addChildEventListener(QuotesChildEventListener())
 }
-
 
 class QuotesChildEventListener : ChildEventListener {
     /**

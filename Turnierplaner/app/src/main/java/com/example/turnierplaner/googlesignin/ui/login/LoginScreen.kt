@@ -48,6 +48,7 @@ import com.example.turnierplaner.R
 import com.example.turnierplaner.googlesignin.ui.theme.FirebaseAuthComposeTheme
 import com.example.turnierplaner.googlesignin.util.LoadingState
 import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
+import com.example.turnierplaner.tournament.tournamentDB.updateDb
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -57,6 +58,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 @Composable
 fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: NavHostController) {
     getTeamsFromDb()
+    updateDb()
   var userEmail by remember { mutableStateOf("") }
   var userPassword by remember { mutableStateOf("") }
 

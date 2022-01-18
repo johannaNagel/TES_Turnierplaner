@@ -41,9 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
-import com.example.turnierplaner.Schedule
 import com.example.turnierplaner.tournament.tournamentDB.addTournamentToDb
-import com.example.turnierplaner.tournament.tournamentDB.database
+import com.example.turnierplaner.tournament.tournamentDB.removeTournamentFromDB
 
 /*
 It is not possible to open PopUpMenu from onclick Method
@@ -236,8 +235,8 @@ fun DeleteTournamentPopUp(navController: NavController, tourney: TournamentClass
             Button(
                 content = { Text("Yes") },
                 onClick = {
-                    deleteTournament(tourney.name)
-                    database.getReference("Tournaments").child(tourney.id).removeValue()
+                    deleteTournamentLocal(tourney.name)
+                    removeTournamentFromDB(tourney)
                     showDeleteDialog.value = false
                     navController.navigate(BottomBarScreens.Tournament.route)
                 })
