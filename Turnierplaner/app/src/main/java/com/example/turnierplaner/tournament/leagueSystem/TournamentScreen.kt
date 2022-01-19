@@ -29,19 +29,14 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
-import com.example.turnierplaner.tournament.tournamentDB.addTournamentToDb
+import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
 import com.google.firebase.database.Exclude
 import java.util.Random
@@ -89,7 +84,6 @@ fun Tournament(navController: NavHostController) {
             verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
-              getTeamsFromDb()
               for (s in allTournament) {
                 Button(
                     modifier = Modifier.fillMaxWidth().height(50.dp),
@@ -160,7 +154,7 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int) {
   val tourney = TournamentClass(name, id, numberOfTeams, players)
 
   allTournament.add(tourney)
-  addTournamentToDb()
+  pushLocalToDb()
 }
 
 // If DB has new Tourney, then we need to use the ID already assigned
@@ -179,7 +173,7 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int, id: String) {
   val tourney = TournamentClass(name, id, numberOfTeams, players)
 
   allTournament.add(tourney)
-  addTournamentToDb()
+  pushLocalToDb()
 }
 
 fun findTournament(name: String?): TournamentClass {

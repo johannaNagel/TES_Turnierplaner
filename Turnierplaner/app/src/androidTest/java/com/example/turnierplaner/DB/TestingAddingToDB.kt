@@ -2,9 +2,8 @@ package com.example.turnierplaner.DB
 
 import com.example.turnierplaner.tournament.leagueSystem.Player
 import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
-import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
-import com.example.turnierplaner.tournament.tournamentDB.addTournamentToDb
+import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.removeTournament
 import com.google.firebase.database.ktx.database
@@ -34,7 +33,7 @@ class TestingAddingToDB {
 
     @Test
     fun testAddingTournamentToDB(){
-        addTournamentToDb()
+        pushLocalToDb()
         assertEquals(id, database.getReference(reference).child(tourney.id).key)
     }
 

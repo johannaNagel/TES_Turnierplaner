@@ -5,7 +5,7 @@ import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
 import com.example.turnierplaner.tournament.leagueSystem.addPlayerToTournament
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
-import com.example.turnierplaner.tournament.tournamentDB.addTournamentToDb
+import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.removeTournament
 import junit.framework.Assert.assertEquals
@@ -32,7 +32,7 @@ class TestingUpdateDB {
     @Test
     fun testAddPlayerToTournament(){
         addPlayerToTournament(tourney.name, "TestPlayer1")
-        addTournamentToDb()
+        pushLocalToDb()
         Thread.sleep(5005)
         assertEquals("TestPlayer1", findTournament(tourney.name).players[0].name)
     }

@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
-import com.example.turnierplaner.tournament.tournamentDB.addTournamentToDb
+import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.removeTournament
 
 /*
@@ -209,7 +209,7 @@ fun AddTeamToTournamentPopUP(tournamentName: String?) {
                 onClick = {
                     showAddTeamDialog.value = false
                     addPlayerToTournament(tournamentName, playername)
-                    addTournamentToDb()
+                    pushLocalToDb()
                 })
         },
     )

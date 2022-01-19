@@ -7,9 +7,14 @@ import androidx.activity.compose.setContent
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.turnierplaner.navigation.SetupNavGraph
+import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.tournamentDB.QuotesChildEventListener
+import com.example.turnierplaner.tournament.tournamentDB.addEventListenerDb
 import com.example.turnierplaner.tournament.tournamentDB.database
-import com.example.turnierplaner.tournament.tournamentDB.updateDb
+import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
+import com.example.turnierplaner.tournament.tournamentDB.getTeamsSingleFromDb
+import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
+import com.example.turnierplaner.tournament.tournamentDB.updateLocal
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
 import com.google.firebase.database.ChildEventListener
 
@@ -29,6 +34,6 @@ class Turnierplaner : ComponentActivity() {
 
   override fun onStart() {
     super.onStart()
-    updateDb()
+    getTeamsFromDb()
   }
 }
