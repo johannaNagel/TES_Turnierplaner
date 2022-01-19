@@ -58,7 +58,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 @Composable
 fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: NavHostController) {
     getTeamsFromDb()
-    updateDb()
   var userEmail by remember { mutableStateOf("") }
   var userPassword by remember { mutableStateOf("") }
 
