@@ -9,7 +9,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.turnierplaner.navigation.SetupNavGraph
 import com.example.turnierplaner.tournament.tournamentDB.QuotesChildEventListener
 import com.example.turnierplaner.tournament.tournamentDB.database
+import com.example.turnierplaner.tournament.tournamentDB.updateDb
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
+import com.google.firebase.database.ChildEventListener
 
 class Turnierplaner : ComponentActivity() {
 
@@ -20,9 +22,13 @@ class Turnierplaner : ComponentActivity() {
     setContent {
       TurnierplanerTheme {
         navController = rememberNavController()
-        //database.getReference("Tournaments").addChildEventListener(QuotesChildEventListener())
         SetupNavGraph(navController = navController)
       }
     }
+  }
+
+  override fun onStart() {
+    super.onStart()
+    updateDb()
   }
 }

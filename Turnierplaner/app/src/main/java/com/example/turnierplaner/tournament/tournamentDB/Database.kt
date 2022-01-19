@@ -63,8 +63,61 @@ fun getTeamsFromDb() {
 }
 
 
+
+
+
+
+
 fun updateDb() {
-    database.getReference("Tournaments").addChildEventListener(QuotesChildEventListener())
+    database.getReference(reference).addChildEventListener(object:ChildEventListener{
+
+        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+            val tourney = snapshot.getValue(TournamentClass::class.java)
+            if (tourney != null) {
+                tourney.id = snapshot.key.toString()
+                createAddToAllTournaments(tourney.name, tourney.numberOfPlayers, tourney.id)
+                //Change State
+                changeState++
+                println("changed1")
+            }
+
+        }
+
+        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+            val id: String = snapshot.key.toString()
+            for (s in allTournament) {
+                if (s.id == id) {
+                    val tourney = snapshot.getValue(TournamentClass::class.java)
+                    if (tourney != null) {
+                        s.name = tourney.name
+                        s.numberOfPlayers = tourney.numberOfPlayers
+                        s.players = tourney.players
+
+                        //Change State
+                        changeState++
+                        println("changed2")
+                    }
+
+                }
+            }
+
+        }
+
+        override fun onChildRemoved(snapshot: DataSnapshot) {
+            //Change State
+            changeState++
+            println("changed3")
+        }
+
+        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+
+    })
 }
 
 class QuotesChildEventListener : ChildEventListener {
