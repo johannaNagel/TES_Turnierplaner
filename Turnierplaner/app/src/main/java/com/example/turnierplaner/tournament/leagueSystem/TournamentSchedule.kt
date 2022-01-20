@@ -288,7 +288,6 @@ fun convertToResultList(arrayGames: Array<Array<String>>, row:Int, column:Int) :
     return arraygames
 }
 
-
 data class Result(
     var player1: String,
     var player2: String,

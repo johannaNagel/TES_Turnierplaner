@@ -6,6 +6,7 @@ import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.changeState
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
+import com.example.turnierplaner.tournament.leagueSystem.showRefreshPopUp
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -18,6 +19,7 @@ import com.google.firebase.ktx.Firebase
 // Database
 val database = Firebase.database("https://turnierplaner-86dfe-default-rtdb.europe-west1.firebasedatabase.app/")
 const val reference: String = "Tournaments"
+var refreshActivate = false
 
 fun pushLocalToDb() {
     for (s in allTournament) {
@@ -55,7 +57,10 @@ fun getTeamsFromDb() {
                             allTournament.add(tourney)
                         }
                     }
-                    changeState++
+                    if(refreshActivate){
+                        showRefreshPopUp.value = true
+                    }
+
                 }
                 override fun onCancelled(error: DatabaseError) {
                     TODO("Not yet implemented")
@@ -114,6 +119,12 @@ fun addEventListenerDb() {
     })
 }
 
+
+fun updateDb() {
+    database.getReference("Tournaments").addChildEventListener(QuotesChildEventListener())
+}
+
+
 class QuotesChildEventListener : ChildEventListener {
     /**
      * This method is triggered when a new child is added to the location to which this listener was
@@ -132,6 +143,7 @@ class QuotesChildEventListener : ChildEventListener {
             changeState++
             println("changed1")
         }
+
     }
 
     /**

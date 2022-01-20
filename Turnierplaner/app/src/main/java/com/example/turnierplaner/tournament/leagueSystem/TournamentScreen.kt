@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -29,15 +30,22 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
+import com.example.turnierplaner.tournament.tournamentDB.refreshActivate
 import com.google.firebase.database.Exclude
 import java.util.Random
 import java.util.UUID
@@ -45,14 +53,20 @@ import java.util.UUID
 // List with all Tournaments
 var allTournament = mutableListOf<TournamentClass>()
 var changeState by mutableStateOf(0)
+var showRefreshPopUp = mutableStateOf(false)
 
 
 @Composable
 fun Tournament(navController: NavHostController) {
+    refreshActivate = true
 
   // val result = remember { mutableStateOf("") }
   val selectedItem = remember { mutableStateOf("tournament") }
 
+
+    if (showRefreshPopUp.value) {
+        RefreshPopUp(navController = navController)
+    }
 
   Scaffold(
       topBar = {
@@ -66,13 +80,13 @@ fun Tournament(navController: NavHostController) {
                 IconButton(
                     modifier = Modifier.clickable {  changeState++},
                     onClick = {
-                        getTeamsFromDb()
+                        //getTeamsFromDb()
                         navController.navigate(BottomBarScreens.Tournament.route)
                               },
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.Refresh,
-                      contentDescription = "Update Tournamet List",
+                      contentDescription = "Update Tournamanet List",
                   )
                 }
               })
@@ -80,13 +94,18 @@ fun Tournament(navController: NavHostController) {
       },
       content = {
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
               for (s in allTournament) {
                 Button(
-                    modifier = Modifier.fillMaxWidth().height(50.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
                     content = { Text(text = s.name) },
                     onClick = { navController.navigate("single_tournament_route/${s.name}") })
               }
@@ -135,6 +154,26 @@ fun Tournament(navController: NavHostController) {
               }
             })
       })
+}
+
+@Composable
+fun RefreshPopUp(navController: NavController) {
+
+    AlertDialog(
+        onDismissRequest = { showRefreshPopUp.value = false },
+        title = { Text(text = "Delete Tournament?") },
+        text = { Text("Are you sure you want do delete this Tournament?") },
+        dismissButton = { Button(onClick = { showRefreshPopUp.value = false }) { Text("No") } },
+        confirmButton = {
+            Button(
+                content = { Text("Yes") },
+                onClick = {
+                    //deleteTournament(tourney.name)
+                    //database.getReference("Tournaments").child(tourney.id).removeValue()
+                    //showRefreshPopUp.value = false
+                    navController.navigate(BottomBarScreens.Tournament.route)
+                })
+        })
 }
 
 fun createAddToAllTournaments(name: String, numberOfTeams: Int) {
