@@ -63,6 +63,9 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
     if (showDeleteDialog.value) {
         DeleteTournamentPopUp(navController, tourney)
     }
+    if (showRefreshPopUp.value) {
+        RefreshPopUp()
+    }
 
     Scaffold(
         topBar = {

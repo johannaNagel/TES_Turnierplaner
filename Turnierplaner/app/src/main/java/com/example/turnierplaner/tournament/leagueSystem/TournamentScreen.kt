@@ -65,7 +65,7 @@ fun Tournament(navController: NavHostController) {
 
 
     if (showRefreshPopUp.value) {
-        RefreshPopUp(navController = navController)
+        RefreshPopUp()
     }
 
   Scaffold(
@@ -157,21 +157,17 @@ fun Tournament(navController: NavHostController) {
 }
 
 @Composable
-fun RefreshPopUp(navController: NavController) {
+fun RefreshPopUp() {
 
     AlertDialog(
         onDismissRequest = { showRefreshPopUp.value = false },
-        title = { Text(text = "Delete Tournament?") },
-        text = { Text("Are you sure you want do delete this Tournament?") },
-        dismissButton = { Button(onClick = { showRefreshPopUp.value = false }) { Text("No") } },
+        title = { Text(text = "Changes were made.") },
+        text = { Text("Press Ok do continue.") },
         confirmButton = {
             Button(
-                content = { Text("Yes") },
+                content = { Text("OK") },
                 onClick = {
-                    //deleteTournament(tourney.name)
-                    //database.getReference("Tournaments").child(tourney.id).removeValue()
-                    //showRefreshPopUp.value = false
-                    navController.navigate(BottomBarScreens.Tournament.route)
+                    showRefreshPopUp.value = false
                 })
         })
 }
