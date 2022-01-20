@@ -47,10 +47,6 @@ import com.example.turnierplaner.HOME_GRAPH_ROUTE
 import com.example.turnierplaner.R
 import com.example.turnierplaner.googlesignin.ui.theme.FirebaseAuthComposeTheme
 import com.example.turnierplaner.googlesignin.util.LoadingState
-import com.example.turnierplaner.tournament.leagueSystem.allTournament
-import com.example.turnierplaner.tournament.leagueSystem.getAllTournaments
-import com.example.turnierplaner.tournament.tournamentDB.addEventListenerDb
-import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException

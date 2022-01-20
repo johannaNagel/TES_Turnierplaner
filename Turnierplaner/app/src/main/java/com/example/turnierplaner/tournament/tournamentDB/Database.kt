@@ -19,66 +19,19 @@ import com.google.firebase.ktx.Firebase
 val database = Firebase.database("https://turnierplaner-86dfe-default-rtdb.europe-west1.firebasedatabase.app/")
 const val reference: String = "Tournaments"
 
-fun updateLocal(){
-    val item: DataSnapshot? =  database.getReference(reference).get().result
-    val items: Iterator<DataSnapshot> = item!!.children.iterator()
-    while(items.hasNext()) {
-        val snap: DataSnapshot = items.next()
-            val name:String = snap.getValue(TournamentClass::class.java)!!.name
-            val id:String? = snap.key
-            val numberOfPlayers: Int =
-                snap.getValue(TournamentClass::class.java)!!.numberOfPlayers
-            val players: MutableList<Player> =
-                snap.getValue(TournamentClass::class.java)!!.players
-            if (id != null) {
-                val tourney = TournamentClass(name, id, numberOfPlayers, players)
-                allTournament.add(tourney)
-            }
-    }
-}
-
 fun pushLocalToDb() {
     for (s in allTournament) {
         database.getReference(reference).child(s.id).setValue(s)
     }
+    changeState++
 }
 
 fun removeTournament(tourney:TournamentClass){
     database.getReference("Tournaments").child(tourney.id).removeValue()
     val tourney = findTournament(tourney.name)
     allTournament.remove(tourney)
+    changeState++
 }
-
-fun getTeamsSingleFromDb() {
-    database
-        .getReference(reference)
-        .addListenerForSingleValueEvent(
-            object : ValueEventListener {
-
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    allTournament.clear()
-                    val items: Iterator<DataSnapshot> = snapshot.children.iterator()
-                    while (items.hasNext()) {
-                        val item: DataSnapshot = items.next()
-                        val name: String = item.getValue(TournamentClass::class.java)!!.name
-                        val id: String? = item.key
-                        val numberOfPlayers: Int =
-                            item.getValue(TournamentClass::class.java)!!.numberOfPlayers
-                        val players: MutableList<Player> =
-                            item.getValue(TournamentClass::class.java)!!.players
-                        if (id != null) {
-                            val tourney = TournamentClass(name, id, numberOfPlayers, players)
-                            allTournament.add(tourney)
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
-}
-
 
 fun getTeamsFromDb() {
     database
@@ -102,6 +55,7 @@ fun getTeamsFromDb() {
                             allTournament.add(tourney)
                         }
                     }
+                    changeState++
                 }
                 override fun onCancelled(error: DatabaseError) {
                     TODO("Not yet implemented")
@@ -121,7 +75,6 @@ fun addEventListenerDb() {
                 changeState++
                 println("changed1")
             }
-
         }
 
         override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -179,7 +132,6 @@ class QuotesChildEventListener : ChildEventListener {
             changeState++
             println("changed1")
         }
-
     }
 
     /**
