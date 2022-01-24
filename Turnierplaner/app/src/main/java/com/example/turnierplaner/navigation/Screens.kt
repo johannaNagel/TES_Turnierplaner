@@ -49,7 +49,11 @@ sealed class TournamentScreens(val title: String, val route: String) {
 sealed class Schedule(val title:String, val route:String){
     object Tournamentschedule:
         Schedule(
-        title = "schedule",
-        route ="schedule_route/{tournamentName}",
-    )
+            title = "schedule",
+            route ="schedule_route/{tournamentName}",
+        )
+    object PointsResult:
+        Schedule(title = "pointsResult", route = "pointsResult_route/{tournamentName}")
+    object ChangeResult:
+        Schedule(title = "changeResult", route = "changeResult_route/{tournamentName}")
 }

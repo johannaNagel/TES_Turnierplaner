@@ -52,8 +52,10 @@ fun getTeamsFromDb() {
                             item.getValue(TournamentClass::class.java)!!.numberOfPlayers
                         val players: MutableList<Player> =
                             item.getValue(TournamentClass::class.java)!!.players
+                        val pointsVic: Int = item.getValue(TournamentClass::class.java)!!.pointsVictory
+                        val pointsTie: Int = item.getValue(TournamentClass::class.java)!!.pointsTie
                         if (id != null) {
-                            val tourney = TournamentClass(name, id, numberOfPlayers, players)
+                            val tourney = TournamentClass(name, id, numberOfPlayers, players, pointsVic, pointsTie)
                             allTournament.add(tourney)
                         }
                     }
@@ -75,7 +77,7 @@ fun addEventListenerDb() {
             val tourney = snapshot.getValue(TournamentClass::class.java)
             if (tourney != null) {
                 tourney.id = snapshot.key.toString()
-                createAddToAllTournaments(tourney.name, tourney.numberOfPlayers, tourney.id)
+                createAddToAllTournaments(tourney.name, tourney.numberOfPlayers, tourney.id, tourney.pointsVictory, tourney.pointsTie)
                 //Change State
                 changeState++
                 println("changed1")
@@ -138,7 +140,7 @@ class QuotesChildEventListener : ChildEventListener {
         val tourney = snapshot.getValue(TournamentClass::class.java)
         if (tourney != null) {
             tourney.id = snapshot.key.toString()
-            createAddToAllTournaments(tourney.name, tourney.numberOfPlayers, tourney.id)
+            createAddToAllTournaments(tourney.name, tourney.numberOfPlayers, tourney.id, tourney.pointsVictory, tourney.pointsTie)
             //Change State
             changeState++
             println("changed1")

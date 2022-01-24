@@ -2,6 +2,7 @@
 package com.example.turnierplaner.navigation
 
 
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -14,10 +15,13 @@ import com.example.turnierplaner.homescreen.Add
 import com.example.turnierplaner.homescreen.Home
 import com.example.turnierplaner.homescreen.Profile
 import com.example.turnierplaner.homescreen.Setting
-import com.example.turnierplaner.tournament.leagueSystem.ScheduleCompose
+import com.example.turnierplaner.tournament.leagueSystem.AddResultPoints
+import com.example.turnierplaner.tournament.leagueSystem.ChangeGameResult
+import com.example.turnierplaner.tournament.leagueSystem.ScheduleComposable
 import com.example.turnierplaner.tournament.leagueSystem.SingleTournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.Tournament
 
+@ExperimentalComposeUiApi
 fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
 
 
@@ -39,8 +43,14 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
       SingleTournamentScreen(navController, backStackEntry.arguments?.getString("tournamentName"))
     }
     composable(route= Schedule.Tournamentschedule.route){backStackEntry ->
-      ScheduleCompose(navController = navController,backStackEntry.arguments?.getString("tournamentName")  )
+      ScheduleComposable(navController = navController,backStackEntry.arguments?.getString("tournamentName")  )
     }
+    composable(route = Schedule.PointsResult.route){backStackEntry ->
+      AddResultPoints(navController = navController,backStackEntry.arguments?.getString("tournamentName") )
+    }
+    /*composable(route = Schedule.ChangeResult.route){backStackEntry ->
+      ChangeGameResult(navController = navController,backStackEntry.arguments?.getString("tournamentName"))
+    }*/
   }
 }
 

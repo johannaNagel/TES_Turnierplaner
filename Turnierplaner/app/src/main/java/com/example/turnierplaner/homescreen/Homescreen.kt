@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.BottomNavigation
@@ -45,12 +46,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -140,6 +144,7 @@ fun Home(navController: NavHostController) {
       })
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun Add(navController: NavHostController) {
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text(text = "Add") }
@@ -152,6 +157,7 @@ fun Add(navController: NavHostController) {
   var selectedTournamentType by remember { mutableStateOf("") }
   val selectedItem = remember { mutableStateOf("home") }
   var textfieldSize by remember { mutableStateOf(Size.Zero) }
+  val keyboardController = LocalSoftwareKeyboardController.current
 
   Scaffold(
       topBar = {
@@ -174,6 +180,10 @@ fun Add(navController: NavHostController) {
                   singleLine = true,
                   onValueChange = { newTeamname -> teamname = newTeamname },
                   label = { Text(text = "Teamname") },
+                  keyboardOptions = KeyboardOptions( imeAction = ImeAction.Done),
+                  keyboardActions = KeyboardActions(
+                      onDone = { keyboardController?.hide() }
+                  ),
                   leadingIcon = {
                     IconButton(onClick = { /*TODO*/}) {
                       Icon(
@@ -185,11 +195,14 @@ fun Add(navController: NavHostController) {
               OutlinedTextField(
                   value = numberOfPlayers,
                   singleLine = true,
+                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                  keyboardActions = KeyboardActions(
+                      onDone = { keyboardController?.hide() }),
                   onValueChange = { newNumberOfPlayers ->
                     numberOfPlayers = newNumberOfPlayers.filter { it.isDigit() }
                   },
                   label = { Text(text = "NumberOfPlayers") },
-                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+
                   leadingIcon = {
                     IconButton(onClick = { /*TODO*/}) {
                       Icon(imageVector = Icons.Filled.Groups, contentDescription = "Groups")
@@ -244,7 +257,10 @@ fun Add(navController: NavHostController) {
                   },
                   singleLine = true,
                   label = { Text(text = "Victory points") },
-                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                  keyboardActions = KeyboardActions(
+                      onDone = { keyboardController?.hide() }
+                  ),
                   leadingIcon = {
                     IconButton(onClick = { /*TODO*/}) {
                       Icon(imageVector = Icons.Filled.Star, contentDescription = "VictoryStar")
@@ -267,7 +283,10 @@ fun Add(navController: NavHostController) {
                   },
                   singleLine = true,
                   label = { Text(text = "Tie points") },
-                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                  keyboardActions = KeyboardActions(
+                      onDone = { keyboardController?.hide() }
+                  ),
                   leadingIcon = {
                     IconButton(onClick = { /*TODO*/}) {
                       Icon(imageVector = Icons.Filled.StarHalf, contentDescription = "TieStar")
@@ -276,13 +295,13 @@ fun Add(navController: NavHostController) {
 
               Button(
                   modifier = Modifier.fillMaxWidth().height(50.dp),
-                  enabled = teamname.isNotEmpty() && numberOfPlayers.isNotEmpty(),
+                  enabled = teamname.isNotEmpty() && numberOfPlayers.isNotEmpty() && tiePoints.isNotEmpty()&& victoryPoints.isNotEmpty() && selectedTournamentType.isNotEmpty(),
                   // victoryPoints.isNotEmpty() &&
                   // tiePoints.isNotEmpty() &&
                   // selectedTournamentType.isNotEmpty(),
                   content = { Text(text = "Add") },
                   onClick = {
-                    createAddToAllTournaments(teamname, numberOfPlayers.toInt())
+                    createAddToAllTournaments(teamname, numberOfPlayers.toInt(), victoryPoints.toInt(), tiePoints.toInt())
                     navController.navigate("single_tournament_route/$teamname")
                     // Navigiere zum com.example.turnierplaner.tournament.leagueSystem.Tournament Tab
                   })

@@ -172,7 +172,7 @@ fun RefreshPopUp() {
         })
 }
 
-fun createAddToAllTournaments(name: String, numberOfTeams: Int) {
+fun createAddToAllTournaments(name: String, numberOfTeams: Int, pointsVict: Int, pointsTie: Int) {
 
   val id = UUID.randomUUID().toString()
 
@@ -186,14 +186,14 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int) {
     players.add(Player("", 0, 0, idx))
   }
 
-  val tourney = TournamentClass(name, id, numberOfTeams, players)
+  val tourney = TournamentClass(name, id, numberOfTeams, players, pointsVict, pointsTie)
 
   allTournament.add(tourney)
   pushLocalToDb()
 }
 
 // If DB has new Tourney, then we need to use the ID already assigned
-fun createAddToAllTournaments(name: String, numberOfTeams: Int, id: String) {
+fun createAddToAllTournaments(name: String, numberOfTeams: Int, id: String, pointsVict: Int, pointsTie: Int) {
 
   // create a list of players
   val players = mutableListOf<Player>()
@@ -205,7 +205,7 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int, id: String) {
     players.add(Player("", 0, 0, idx))
   }
 
-  val tourney = TournamentClass(name, id, numberOfTeams, players)
+  val tourney = TournamentClass(name, id, numberOfTeams, players, pointsVict, pointsTie)
 
   allTournament.add(tourney)
   pushLocalToDb()
@@ -213,7 +213,7 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int, id: String) {
 
 fun findTournament(name: String?): TournamentClass {
 
-  var tourney = TournamentClass("", UUID.randomUUID().toString(), 0, mutableListOf())
+  var tourney = TournamentClass("", UUID.randomUUID().toString(), 0, mutableListOf(), 0, 0)
 
   for (s in allTournament) {
 
@@ -260,8 +260,10 @@ data class TournamentClass(
     // To avoid storing in firebase database
     @get:Exclude var id: String,
     var numberOfPlayers: Int,
-    var players: MutableList<Player>
+    var players: MutableList<Player>,
+    var pointsVictory: Int,
+    var pointsTie: Int
 ) {
-  constructor() : this("", "", 0, mutableListOf())
+  constructor() : this("", "", 0, mutableListOf(), 0, 0)
 }
 
