@@ -8,17 +8,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.turnierplaner.navigation.SetupNavGraph
-import com.example.turnierplaner.tournament.leagueSystem.Player
-import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
-import com.example.turnierplaner.tournament.leagueSystem.allTournament
-import com.example.turnierplaner.tournament.leagueSystem.changeState
-import com.example.turnierplaner.tournament.tournamentDB.database
 import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
-import com.example.turnierplaner.tournament.tournamentDB.reference
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 
 class Turnierplaner : ComponentActivity() {
 

@@ -1,16 +1,6 @@
 /* (C)2021 */
 package com.example.turnierplaner
 
-import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import com.example.turnierplaner.homescreen.Add
-import com.example.turnierplaner.homescreen.Home
-import com.example.turnierplaner.homescreen.Profile
-import com.example.turnierplaner.homescreen.Setting
-import com.example.turnierplaner.tournament.leagueSystem.Tournament
-
 /*
 @Composable
 fun BottomNavHost(navController: NavHostController) {

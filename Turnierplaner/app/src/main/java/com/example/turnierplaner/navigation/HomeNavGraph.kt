@@ -1,7 +1,6 @@
 /* (C)2021 */
 package com.example.turnierplaner.navigation
 
-
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -16,15 +15,12 @@ import com.example.turnierplaner.homescreen.Home
 import com.example.turnierplaner.homescreen.Profile
 import com.example.turnierplaner.homescreen.Setting
 import com.example.turnierplaner.tournament.leagueSystem.AddResultPoints
-import com.example.turnierplaner.tournament.leagueSystem.ChangeGameResult
 import com.example.turnierplaner.tournament.leagueSystem.ScheduleComposable
 import com.example.turnierplaner.tournament.leagueSystem.SingleTournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.Tournament
 
 @ExperimentalComposeUiApi
 fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
-
-
 
   navigation(startDestination = BottomBarScreens.Home.route, route = HOME_GRAPH_ROUTE) {
     composable(route = BottomBarScreens.Home.route) { Home(navController = navController) }
@@ -42,11 +38,13 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
     composable(route = TournamentScreens.SingleTournament.route) { backStackEntry ->
       SingleTournamentScreen(navController, backStackEntry.arguments?.getString("tournamentName"))
     }
-    composable(route= Schedule.Tournamentschedule.route){backStackEntry ->
-      ScheduleComposable(navController = navController,backStackEntry.arguments?.getString("tournamentName")  )
+    composable(route = Schedule.Tournamentschedule.route) { backStackEntry ->
+      ScheduleComposable(
+          navController = navController, backStackEntry.arguments?.getString("tournamentName"))
     }
-    composable(route = Schedule.PointsResult.route){backStackEntry ->
-      AddResultPoints(navController = navController,backStackEntry.arguments?.getString("tournamentName") )
+    composable(route = Schedule.PointsResult.route) { backStackEntry ->
+      AddResultPoints(
+          navController = navController, backStackEntry.arguments?.getString("tournamentName"))
     }
     /*composable(route = Schedule.ChangeResult.route){backStackEntry ->
       ChangeGameResult(navController = navController,backStackEntry.arguments?.getString("tournamentName"))

@@ -19,7 +19,7 @@ class TournamentLogicKtTest : TestCase() {
   @Test
   fun testAddToTournaments() {
 
-    createAddToAllTournaments("Test", 10)
+    createAddToAllTournaments("Test", 10, 0, 0)
 
     var tourney: List<TournamentClass> = getAllTournaments()
 
@@ -29,13 +29,12 @@ class TournamentLogicKtTest : TestCase() {
   @Test
   fun testCreateTournament() {
 
-    createAddToAllTournaments("Test", 10)
+    createAddToAllTournaments("Test", 10, 0, 0)
 
     assertEquals("Test", findTournament("Test").name)
   }
 
-
-  //WIRD BEI TESTS DER DB BEREITS MITGETESTET
+  // WIRD BEI TESTS DER DB BEREITS MITGETESTET
 
   /*@Test
   fun testDeleteTournament() {

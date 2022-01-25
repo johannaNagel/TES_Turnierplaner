@@ -31,7 +31,6 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -55,8 +54,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 
 @Composable
 fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: NavHostController) {
-  //var userEmail by remember { mutableStateOf("") }
-  //var userPassword by remember { mutableStateOf("") }
+  // var userEmail by remember { mutableStateOf("") }
+  // var userPassword by remember { mutableStateOf("") }
 
   val snackbarHostState = remember { SnackbarHostState() }
   val state by viewModel.loadingState.collectAsState()
@@ -158,7 +157,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
                     } else {
                       // TODO: if user did not loged out previously, he should move to homescreen
                       // automatically
-                      showMessage(context, message = "Loged in already")
+                      // showMessage(context, message = "Loged in already")
                       navController.navigate(HOME_GRAPH_ROUTE)
                     }
                   },
@@ -187,7 +186,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
               when (state.status) {
                 LoadingState.Status.SUCCESS -> {
                   val user = FirebaseAuth.getInstance().currentUser
-                  showMessage(context, message = "Loged in as " + user?.displayName)
+                  // showMessage(context, message = "Loged in as " + user?.displayName)
                   val handler = Handler(Looper.getMainLooper())
                   handler.postDelayed({ navController.navigate(HOME_GRAPH_ROUTE) }, 1000)
                 }

@@ -1,3 +1,4 @@
+/* (C)2022 */
 package com.example.turnierplaner.tournament.leagueSystem
 
 import androidx.compose.foundation.BorderStroke
@@ -51,205 +52,202 @@ Therefore a separate function has to be created
 private val showAddTeamDialog = mutableStateOf(false)
 private val showDeleteDialog = mutableStateOf(false)
 
-
 @Composable
 fun SingleTournamentScreen(navController: NavController, tournamentName: String?) {
 
-    val tourney = findTournament(tournamentName)
+  val tourney = findTournament(tournamentName)
 
-    if (showAddTeamDialog.value) {
-        AddTeamToTournamentPopUP(tournamentName)
-    }
-    if (showDeleteDialog.value) {
-        DeleteTournamentPopUp(navController, tourney)
-    }
-    if (showRefreshPopUp.value) {
-        RefreshPopUp()
-    }
+  if (showAddTeamDialog.value) {
+    AddTeamToTournamentPopUP(tournamentName)
+  }
+  if (showDeleteDialog.value) {
+    DeleteTournamentPopUp(navController, tourney)
+  }
+  if (showRefreshPopUp.value) {
+    RefreshPopUp()
+  }
 
-    Scaffold(
-        topBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                TopAppBar(
-                    backgroundColor = Color.White,
-                    elevation = 1.dp,
-                    title = { Text(text = tourney.name) },
-                    actions = {
-                        IconButton(
-                            onClick = {
-                                 navController.navigate("schedule_route/${tourney.name}")
-                                // navController.navigate(BottomBarScreens.Add.route)
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.CalendarToday,
-                                contentDescription = "Button to see the game schedule",
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                showAddTeamDialog.value = true
-                                // navController.navigate(BottomBarScreens.Add.route)
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.Add,
-                                contentDescription = "Button to add new Player",
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                showDeleteDialog.value = true
-                                // deleteTournament(tourney.name)
-                                // navController.navigate(BottomBarScreens.Tournament.route)
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.Delete,
-                                contentDescription = "Button to Delete Tournament",
-                            )
-                        }
-                        IconButton(
-                            onClick = { navController.navigate(BottomBarScreens.Tournament.route) },
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowBack,
-                                contentDescription = "Button to go back to homescreen",
-                            )
-                        }
-                    })
-            }
-        },
-        content = {
-
-            // set cell Width of the table
-            val cellWidth: (Int) -> Dp = { index ->
-                when (index) {
-                    0 -> 85.dp
-                    2,3 -> 85.dp
-                    else -> 125.dp
+  Scaffold(
+      topBar = {
+        Column(modifier = Modifier.fillMaxWidth()) {
+          TopAppBar(
+              backgroundColor = Color.White,
+              elevation = 1.dp,
+              title = { Text(text = tourney.name) },
+              actions = {
+                IconButton(
+                    onClick = {
+                      navController.navigate("schedule_route/${tourney.name}")
+                      // navController.navigate(BottomBarScreens.Add.route)
+                    },
+                ) {
+                  Icon(
+                      imageVector = Icons.Rounded.CalendarToday,
+                      contentDescription = "Button to see the game schedule",
+                  )
                 }
-            }
-            // set title of the columns
-            val headerCellTitle: @Composable (Int) -> Unit = { index ->
-                val value =
-                    when (index) {
-                        0 -> "Rank"
-                        1 -> "Name"
-                        2 -> "Games"
-                        3 -> "Points"
-                        else -> ""
-                    }
-                // define text specs
-                Text(
-                    text = value,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(10.dp),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.Black,
-                    textDecoration = TextDecoration.Underline)
-            }
-            val cellText: @Composable (Int, Player) -> Unit = { index, item ->
-                val value =
-                    when (index) {
-                        0 -> item.rank.toString()
-                        1 -> item.name
-                        2 -> item.games.toString()
-                        3 -> item.points.toString()
-                        else -> ""
-                    }
-                Text(
-                    text = value,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(10.dp),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
+                IconButton(
+                    onClick = {
+                      showAddTeamDialog.value = true
+                      // navController.navigate(BottomBarScreens.Add.route)
+                    },
+                ) {
+                  Icon(
+                      imageVector = Icons.Rounded.Add,
+                      contentDescription = "Button to add new Player",
+                  )
+                }
+                IconButton(
+                    onClick = {
+                      showDeleteDialog.value = true
+                      // deleteTournament(tourney.name)
+                      // navController.navigate(BottomBarScreens.Tournament.route)
+                    },
+                ) {
+                  Icon(
+                      imageVector = Icons.Rounded.Delete,
+                      contentDescription = "Button to Delete Tournament",
+                  )
+                }
+                IconButton(
+                    onClick = { navController.navigate(BottomBarScreens.Tournament.route) },
+                ) {
+                  Icon(
+                      imageVector = Icons.Rounded.ArrowBack,
+                      contentDescription = "Button to go back to homescreen",
+                  )
+                }
+              })
+        }
+      },
+      content = {
 
-            Table(
-                columnCount = 4,
-                cellWidth = cellWidth,
-                data = tourney.players,
-                modifier = Modifier.verticalScroll(rememberScrollState()),
-                headerCellContent = headerCellTitle,
-                cellContent = cellText)
-        })
+        // set cell Width of the table
+        val cellWidth: (Int) -> Dp = { index ->
+          when (index) {
+            0 -> 85.dp
+            2, 3 -> 85.dp
+            else -> 125.dp
+          }
+        }
+        // set title of the columns
+        val headerCellTitle: @Composable (Int) -> Unit = { index ->
+          val value =
+              when (index) {
+                0 -> "Rank"
+                1 -> "Name"
+                2 -> "Games"
+                3 -> "Points"
+                else -> ""
+              }
+          // define text specs
+          Text(
+              text = value,
+              fontSize = 20.sp,
+              textAlign = TextAlign.Center,
+              modifier = Modifier.padding(10.dp),
+              maxLines = 1,
+              overflow = TextOverflow.Ellipsis,
+              fontWeight = FontWeight.Black,
+              textDecoration = TextDecoration.Underline)
+        }
+        val cellText: @Composable (Int, Player) -> Unit = { index, item ->
+          val value =
+              when (index) {
+                0 -> item.rank.toString()
+                1 -> item.name
+                2 -> item.games.toString()
+                3 -> item.points.toString()
+                else -> ""
+              }
+          Text(
+              text = value,
+              fontSize = 20.sp,
+              textAlign = TextAlign.Center,
+              modifier = Modifier.padding(10.dp),
+              maxLines = 1,
+              overflow = TextOverflow.Ellipsis,
+          )
+        }
+
+        Table(
+            columnCount = 4,
+            cellWidth = cellWidth,
+            data = tourney.players,
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+            headerCellContent = headerCellTitle,
+            cellContent = cellText)
+      })
 }
 
 @Composable
 fun AddTeamToTournamentPopUP(tournamentName: String?) {
-    var playername by remember { mutableStateOf("") }
+  var playername by remember { mutableStateOf("") }
 
-    AlertDialog(
-        modifier = Modifier.size(250.dp, 225.dp),
-        text = {
-            Column {
-                Text(
-                    modifier = Modifier.padding(horizontal = 10.dp),
-                    text = "Add new Player to Tournament")
+  AlertDialog(
+      modifier = Modifier.size(250.dp, 225.dp),
+      text = {
+        Column {
+          Text(
+              modifier = Modifier.padding(horizontal = 10.dp),
+              text = "Add new Player to Tournament")
 
-                // Rest of the dialog content
-            }
-        },
-        onDismissRequest = { showAddTeamDialog.value = false },
-        buttons = {
-            OutlinedTextField(
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
-                value = playername,
-                onValueChange = { newTeamname -> playername = newTeamname },
-                label = { Text(text = "Player Name") },
-            )
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                enabled = playername.isNotEmpty(),
-                content = { Text(text = "Add") },
-                onClick = {
-                    showAddTeamDialog.value = false
-                    addPlayerToTournament(tournamentName, playername)
-                    pushLocalToDb()
-                })
-        },
-    )
+          // Rest of the dialog content
+        }
+      },
+      onDismissRequest = { showAddTeamDialog.value = false },
+      buttons = {
+        OutlinedTextField(
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
+            value = playername,
+            onValueChange = { newTeamname -> playername = newTeamname },
+            label = { Text(text = "Player Name") },
+        )
+        Button(
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+            enabled = playername.isNotEmpty(),
+            content = { Text(text = "Add") },
+            onClick = {
+              showAddTeamDialog.value = false
+              addPlayerToTournament(tournamentName, playername)
+              pushLocalToDb()
+            })
+      },
+  )
 }
 
 @Composable
 fun DeleteTournamentPopUp(navController: NavController, tourney: TournamentClass) {
 
-    AlertDialog(
-        onDismissRequest = { showDeleteDialog.value = false },
-        title = { Text(text = "Delete Tournament?") },
-        text = { Text("Are you sure you want do delete this Tournament?") },
-        dismissButton = { Button(onClick = { showDeleteDialog.value = false }) { Text("No") } },
-        confirmButton = {
-            Button(
-                content = { Text("Yes") },
-                onClick = {
-                    removeTournament(tourney)
-                    showDeleteDialog.value = false
-                    navController.navigate(BottomBarScreens.Tournament.route)
-                })
-        })
+  AlertDialog(
+      onDismissRequest = { showDeleteDialog.value = false },
+      title = { Text(text = "Delete Tournament?") },
+      text = { Text("Are you sure you want do delete this Tournament?") },
+      dismissButton = { Button(onClick = { showDeleteDialog.value = false }) { Text("No") } },
+      confirmButton = {
+        Button(
+            content = { Text("Yes") },
+            onClick = {
+              removeTournament(tourney)
+              showDeleteDialog.value = false
+              navController.navigate(BottomBarScreens.Tournament.route)
+            })
+      })
 }
 
 fun sortTournamentByPoints(tournamentName: String?) {
 
-    val tourney = findTournament(tournamentName)
-    val players = tourney.players
+  val tourney = findTournament(tournamentName)
+  val players = tourney.players
 
-    players.sortByDescending { it.points }
+  players.sortByDescending { it.points }
 
-    tourney.players[0].rank = 1
+  tourney.players[0].rank = 1
 
-    for (idx in 1 until tourney.numberOfPlayers) {
+  for (idx in 1 until tourney.numberOfPlayers) {
 
-        tourney.players[idx].rank = idx + 1
-    }
+    tourney.players[idx].rank = idx + 1
+  }
 }
 
 @Composable
@@ -261,24 +259,24 @@ fun <T> Table(
     headerCellContent: @Composable (index: Int) -> Unit,
     cellContent: @Composable (index: Int, item: T) -> Unit,
 ) {
-    Surface(modifier = modifier) {
-        LazyRow(modifier = Modifier.padding(16.dp)) {
-            items((0 until columnCount).toList()) { columnIndex ->
-                Column {
-                    (0..data.size).forEach { index ->
-                        Surface(
-                            border = BorderStroke(1.dp, Color.LightGray),
-                            contentColor = Color.Transparent,
-                            modifier = Modifier.width(cellWidth(columnIndex))) {
-                            if (index == 0) {
-                                headerCellContent(columnIndex)
-                            } else {
-                                cellContent(columnIndex, data[index - 1])
-                            }
-                        }
-                    }
-                }
+  Surface(modifier = modifier) {
+    LazyRow(modifier = Modifier.padding(16.dp)) {
+      items((0 until columnCount).toList()) { columnIndex ->
+        Column {
+          (0..data.size).forEach { index ->
+            Surface(
+                border = BorderStroke(1.dp, Color.LightGray),
+                contentColor = Color.Transparent,
+                modifier = Modifier.width(cellWidth(columnIndex))) {
+              if (index == 0) {
+                headerCellContent(columnIndex)
+              } else {
+                cellContent(columnIndex, data[index - 1])
+              }
             }
+          }
         }
+      }
     }
+  }
 }

@@ -7,7 +7,6 @@ const val ROOT_GRAPH_ROUTE = "root"
 const val AUTH_GRAPH_ROUTE = "auth"
 const val HOME_GRAPH_ROUTE = "home"
 
-
 sealed class BottomBarScreens(val title: String, val route: String, @DrawableRes val icons: Int) {
   object Home :
       BottomBarScreens(title = "home", route = "home_route", icons = R.drawable.ic_baseline_home)
@@ -46,14 +45,14 @@ sealed class TournamentScreens(val title: String, val route: String) {
       LoginScreens(title = "single_tournament", route = "single_tournament_route/{tournamentName}")
 }
 
-sealed class Schedule(val title:String, val route:String){
-    object Tournamentschedule:
-        Schedule(
-            title = "schedule",
-            route ="schedule_route/{tournamentName}",
-        )
-    object PointsResult:
-        Schedule(title = "pointsResult", route = "pointsResult_route/{tournamentName}")
-    object ChangeResult:
-        Schedule(title = "changeResult", route = "changeResult_route/{tournamentName}")
+sealed class Schedule(val title: String, val route: String) {
+  object Tournamentschedule :
+      Schedule(
+          title = "schedule",
+          route = "schedule_route/{tournamentName}",
+      )
+  object PointsResult :
+      Schedule(title = "pointsResult", route = "pointsResult_route/{tournamentName}")
+  object ChangeResult :
+      Schedule(title = "changeResult", route = "changeResult_route/{tournamentName}")
 }

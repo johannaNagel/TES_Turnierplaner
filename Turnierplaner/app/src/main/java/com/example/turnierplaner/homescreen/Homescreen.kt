@@ -109,13 +109,17 @@ fun Home(navController: NavHostController) {
 
                 BottomNavigationItem(
                     icon = { Icon(Icons.Filled.List, "") },
-                    label = { Text(text = "com.example.turnierplaner.tournament.leagueSystem.Tournament") },
+                    label = {
+                      Text(text = "com.example.turnierplaner.tournament.leagueSystem.Tournament")
+                    },
                     selected =
-                        selectedItem.value == "com.example.turnierplaner.tournament.leagueSystem.Tournament",
+                        selectedItem.value ==
+                            "com.example.turnierplaner.tournament.leagueSystem.Tournament",
                     onClick = {
                       navController.navigate(BottomBarScreens.Tournament.route)
 
-                      selectedItem.value = "com.example.turnierplaner.tournament.leagueSystem.Tournament"
+                      selectedItem.value =
+                          "com.example.turnierplaner.tournament.leagueSystem.Tournament"
                     },
                     alwaysShowLabel = false)
 
@@ -180,10 +184,8 @@ fun Add(navController: NavHostController) {
                   singleLine = true,
                   onValueChange = { newTeamname -> teamname = newTeamname },
                   label = { Text(text = "Teamname") },
-                  keyboardOptions = KeyboardOptions( imeAction = ImeAction.Done),
-                  keyboardActions = KeyboardActions(
-                      onDone = { keyboardController?.hide() }
-                  ),
+                  keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                  keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                   leadingIcon = {
                     IconButton(onClick = { /*TODO*/}) {
                       Icon(
@@ -195,14 +197,14 @@ fun Add(navController: NavHostController) {
               OutlinedTextField(
                   value = numberOfPlayers,
                   singleLine = true,
-                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
-                  keyboardActions = KeyboardActions(
-                      onDone = { keyboardController?.hide() }),
+                  keyboardOptions =
+                      KeyboardOptions(
+                          keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                  keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                   onValueChange = { newNumberOfPlayers ->
                     numberOfPlayers = newNumberOfPlayers.filter { it.isDigit() }
                   },
                   label = { Text(text = "NumberOfPlayers") },
-
                   leadingIcon = {
                     IconButton(onClick = { /*TODO*/}) {
                       Icon(imageVector = Icons.Filled.Groups, contentDescription = "Groups")
@@ -257,10 +259,10 @@ fun Add(navController: NavHostController) {
                   },
                   singleLine = true,
                   label = { Text(text = "Victory points") },
-                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
-                  keyboardActions = KeyboardActions(
-                      onDone = { keyboardController?.hide() }
-                  ),
+                  keyboardOptions =
+                      KeyboardOptions(
+                          keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                  keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                   leadingIcon = {
                     IconButton(onClick = { /*TODO*/}) {
                       Icon(imageVector = Icons.Filled.Star, contentDescription = "VictoryStar")
@@ -283,10 +285,10 @@ fun Add(navController: NavHostController) {
                   },
                   singleLine = true,
                   label = { Text(text = "Tie points") },
-                  keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
-                  keyboardActions = KeyboardActions(
-                      onDone = { keyboardController?.hide() }
-                  ),
+                  keyboardOptions =
+                      KeyboardOptions(
+                          keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                  keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                   leadingIcon = {
                     IconButton(onClick = { /*TODO*/}) {
                       Icon(imageVector = Icons.Filled.StarHalf, contentDescription = "TieStar")
@@ -295,15 +297,22 @@ fun Add(navController: NavHostController) {
 
               Button(
                   modifier = Modifier.fillMaxWidth().height(50.dp),
-                  enabled = teamname.isNotEmpty() && numberOfPlayers.isNotEmpty() && tiePoints.isNotEmpty()&& victoryPoints.isNotEmpty() && selectedTournamentType.isNotEmpty(),
+                  enabled =
+                      teamname.isNotEmpty() &&
+                          numberOfPlayers.isNotEmpty() &&
+                          tiePoints.isNotEmpty() &&
+                          victoryPoints.isNotEmpty() &&
+                          selectedTournamentType.isNotEmpty(),
                   // victoryPoints.isNotEmpty() &&
                   // tiePoints.isNotEmpty() &&
                   // selectedTournamentType.isNotEmpty(),
                   content = { Text(text = "Add") },
                   onClick = {
-                    createAddToAllTournaments(teamname, numberOfPlayers.toInt(), victoryPoints.toInt(), tiePoints.toInt())
+                    createAddToAllTournaments(
+                        teamname, numberOfPlayers.toInt(), victoryPoints.toInt(), tiePoints.toInt())
                     navController.navigate("single_tournament_route/$teamname")
-                    // Navigiere zum com.example.turnierplaner.tournament.leagueSystem.Tournament Tab
+                    // Navigiere zum com.example.turnierplaner.tournament.leagueSystem.Tournament
+                    // Tab
                   })
             })
       },
@@ -323,12 +332,16 @@ fun Add(navController: NavHostController) {
 
                 BottomNavigationItem(
                     icon = { Icon(Icons.Filled.List, "") },
-                    label = { Text(text = "com.example.turnierplaner.tournament.leagueSystem.Tournament") },
+                    label = {
+                      Text(text = "com.example.turnierplaner.tournament.leagueSystem.Tournament")
+                    },
                     selected =
-                        selectedItem.value == "com.example.turnierplaner.tournament.leagueSystem.Tournament",
+                        selectedItem.value ==
+                            "com.example.turnierplaner.tournament.leagueSystem.Tournament",
                     onClick = {
                       navController.navigate(BottomBarScreens.Tournament.route)
-                      selectedItem.value = "com.example.turnierplaner.tournament.leagueSystem.Tournament"
+                      selectedItem.value =
+                          "com.example.turnierplaner.tournament.leagueSystem.Tournament"
                     },
                     alwaysShowLabel = false)
 

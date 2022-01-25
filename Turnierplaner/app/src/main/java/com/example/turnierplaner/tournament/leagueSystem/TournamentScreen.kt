@@ -4,9 +4,6 @@ package com.example.turnierplaner.tournament.leagueSystem
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,8 +27,6 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,12 +35,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
-import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
+import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.refreshActivate
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.Exclude
 import java.util.Random
 import java.util.UUID
@@ -55,34 +50,31 @@ var allTournament = mutableListOf<TournamentClass>()
 var changeState by mutableStateOf(0)
 var showRefreshPopUp = mutableStateOf(false)
 
-
 @Composable
 fun Tournament(navController: NavHostController) {
-    refreshActivate = true
+  refreshActivate = true
 
   // val result = remember { mutableStateOf("") }
   val selectedItem = remember { mutableStateOf("tournament") }
 
-
-    if (showRefreshPopUp.value) {
-        RefreshPopUp()
-    }
+  if (showRefreshPopUp.value) {
+    RefreshPopUp()
+  }
 
   Scaffold(
       topBar = {
-        Column(modifier = Modifier.fillMaxWidth()
-        ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
               backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "All Tournaments") },
               actions = {
                 IconButton(
-                    modifier = Modifier.clickable {  changeState++},
+                    modifier = Modifier.clickable { changeState++ },
                     onClick = {
-                        //getTeamsFromDb()
-                        navController.navigate(BottomBarScreens.Tournament.route)
-                              },
+                      getTeamsFromDb()
+                      navController.navigate(BottomBarScreens.Tournament.route)
+                    },
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.Refresh,
@@ -94,20 +86,22 @@ fun Tournament(navController: NavHostController) {
       },
       content = {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(24.dp),
+            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
-              for (s in allTournament) {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
-                    content = { Text(text = s.name) },
-                    onClick = { navController.navigate("single_tournament_route/${s.name}") })
+              for (tournament in allTournament) {
+                for (player in tournament.players) {
+                  if (player.id == FirebaseAuth.getInstance().currentUser?.uid.toString()) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth().height(50.dp),
+                        content = { Text(text = tournament.name) },
+                        onClick = {
+                          navController.navigate("single_tournament_route/${tournament.name}")
+                        })
+                    break
+                  }
+                }
               }
             })
       },
@@ -159,17 +153,13 @@ fun Tournament(navController: NavHostController) {
 @Composable
 fun RefreshPopUp() {
 
-    AlertDialog(
-        onDismissRequest = { showRefreshPopUp.value = false },
-        title = { Text(text = "Changes were made.") },
-        text = { Text("Press Ok do continue.") },
-        confirmButton = {
-            Button(
-                content = { Text("OK") },
-                onClick = {
-                    showRefreshPopUp.value = false
-                })
-        })
+  AlertDialog(
+      onDismissRequest = { showRefreshPopUp.value = false },
+      title = { Text(text = "Changes were made.") },
+      text = { Text("Press Ok do continue.") },
+      confirmButton = {
+        Button(content = { Text("OK") }, onClick = { showRefreshPopUp.value = false })
+      })
 }
 
 fun createAddToAllTournaments(name: String, numberOfTeams: Int, pointsVict: Int, pointsTie: Int) {
@@ -183,7 +173,7 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int, pointsVict: Int,
 
   // fill the tourney with empty rows depending on how many player were set
   for (idx in 1..numberOfTeams) {
-    players.add(Player("", 0, 0, idx))
+    players.add(Player("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
   }
 
   val tourney = TournamentClass(name, id, numberOfTeams, players, pointsVict, pointsTie)
@@ -193,7 +183,13 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int, pointsVict: Int,
 }
 
 // If DB has new Tourney, then we need to use the ID already assigned
-fun createAddToAllTournaments(name: String, numberOfTeams: Int, id: String, pointsVict: Int, pointsTie: Int) {
+fun createAddToAllTournaments(
+    name: String,
+    numberOfTeams: Int,
+    id: String,
+    pointsVict: Int,
+    pointsTie: Int
+) {
 
   // create a list of players
   val players = mutableListOf<Player>()
@@ -202,7 +198,7 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int, id: String, poin
 
   // fill the tourney with empty rows depending on how many player were set
   for (idx in 1..numberOfTeams) {
-    players.add(Player("", 0, 0, idx))
+    players.add(Player("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
   }
 
   val tourney = TournamentClass(name, id, numberOfTeams, players, pointsVict, pointsTie)
@@ -222,7 +218,7 @@ fun findTournament(name: String?): TournamentClass {
       tourney = s
     }
   }
-    return tourney
+  return tourney
 }
 
 fun getAllTournaments(): List<TournamentClass> {
@@ -243,7 +239,15 @@ fun addPlayerToTournament(tournamentName: String?, playerName: String) {
     }
   }
   tourney.numberOfPlayers = tourney.numberOfPlayers + 1
-  tourney.players.add(Player(playerName, 0, 0, tourney.numberOfPlayers))
+  // Every Player which is added have to have a UID, currently the UID from the Loged-In User is
+  // assigned
+  tourney.players.add(
+      Player(
+          playerName,
+          0,
+          0,
+          tourney.numberOfPlayers,
+          FirebaseAuth.getInstance().currentUser?.uid.toString()))
 }
 
 data class Player(
@@ -251,8 +255,9 @@ data class Player(
     var games: Int,
     var points: Int,
     var rank: Int,
+    var id: String,
 ) {
-  constructor() : this("", 0, 0, 0)
+  constructor() : this("", 0, 0, 0, "")
 }
 
 data class TournamentClass(
@@ -266,4 +271,3 @@ data class TournamentClass(
 ) {
   constructor() : this("", "", 0, mutableListOf(), 0, 0)
 }
-
