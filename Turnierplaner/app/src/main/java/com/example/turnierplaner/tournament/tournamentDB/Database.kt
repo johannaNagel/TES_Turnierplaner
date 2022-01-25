@@ -16,6 +16,12 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
+/*
+In jedes TournamentClass soll ein Schedule Object rein.
+Beim erstellen eines Turniers wird das Schedule Objekt initialisert.
+* */
+
+
 // Database
 val database =
     Firebase.database("https://turnierplaner-86dfe-default-rtdb.europe-west1.firebasedatabase.app/")
@@ -60,6 +66,10 @@ fun getTeamsFromDb() {
                       TournamentClass(name, id, numberOfPlayers, players, pointsVic, pointsTie)
                   allTournament.add(tourney)
                 }
+              }
+
+              if(refreshActivate){
+                showRefreshPopUp.value = true
               }
             }
             override fun onCancelled(error: DatabaseError) {

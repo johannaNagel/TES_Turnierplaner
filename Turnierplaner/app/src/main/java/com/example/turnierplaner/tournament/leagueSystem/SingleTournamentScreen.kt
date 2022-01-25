@@ -248,6 +248,7 @@ fun sortTournamentByPoints(tournamentName: String?) {
 
     tourney.players[idx].rank = idx + 1
   }
+
 }
 
 @Composable
