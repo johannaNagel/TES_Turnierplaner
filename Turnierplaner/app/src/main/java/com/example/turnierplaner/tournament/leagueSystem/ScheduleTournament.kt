@@ -52,9 +52,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 var roundNumber = 1
@@ -91,11 +89,11 @@ fun ScheduleComposable (navController: NavHostController, tournamentName: String
                     backgroundColor = Color.White,
                     elevation = 1.dp,
                     title = {
-                        Text(text = "Tournament schedule: ${getTournament(tournamentName!!)?.name}" ) },
+                        Text(text = "Tournament schedule: ${getTournament(tournamentName)?.name}" ) },
                     actions = {
                         IconButton(
                             onClick = {
-                                navController.navigate("single_tournament_route/${getTournament(tournamentName!!)?.name}")
+                                navController.navigate("single_tournament_route/${getTournament(tournamentName)?.name}")
                             },
                         ) {
                             Icon(
@@ -196,7 +194,7 @@ fun ScheduleComposable (navController: NavHostController, tournamentName: String
                 val cellText: @Composable (Int, Result ) -> Unit = { index,  match ->
                     val value =
                         when (index) {
-                            0 -> (listResult!!.allGames.get(roundNumber-1).indexOf(match) + 1).toString()
+                            0 -> (listResult!!.allGames[roundNumber-1].indexOf(match) + 1).toString()
                             1 -> match.player1.name
                             2 -> "${match.resultPlayer1} : ${match.resultPlayer2}"
                             3 -> match.player2.name
@@ -228,7 +226,7 @@ fun ScheduleComposable (navController: NavHostController, tournamentName: String
                     horizontalAlignment = Alignment.CenterHorizontally){
 
                     Button (
-                        onClick = {navController.navigate("pointsResult_route/${getTournament(tournamentName!!)?.name}")},
+                        onClick = {navController.navigate("pointsResult_route/${getTournament(tournamentName)?.name}")},
                         enabled = true,
                         // border = BorderStroke( width = 1.dp, brush = SolidColor(Color.Blue)),
                         shape = MaterialTheme.shapes.medium
@@ -259,9 +257,9 @@ fun createSchedule (tourney: TournamentClass, numberOfActualPlayers: Int): List<
     val matrix = List(row){Result()}
     var count = 0
     for (i in 0 until row){
-        matrix.get(i).player1 = list.get(count)
+        matrix[i].player1 = list[count]
         if(count+1 != numberOfActualPlayers) {
-            matrix.get(i).player2 = list.get(count + 1)
+            matrix[i].player2 = list[count + 1]
         }
         count += 2
     }
@@ -319,7 +317,7 @@ fun ChangeGameResult(navController: NavHostController, tournamentName: String?){
     val tourneyT = findTournament(tournamentName)
     val icon = if(expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
     val keyboardController = LocalSoftwareKeyboardController.current
-    var game = Result()
+    var game: Result
     var player1Result = ""
     var player2Result = ""
 
@@ -458,7 +456,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     if (showChangeDialog.value) {
-        ChangeTournamentPopUp(navController, tourney )
+        ChangeTournamentPopUp()
     }
 
 
@@ -605,7 +603,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
 * pop up who allows the possibility to change the game result
  */
 @Composable
-fun ChangeTournamentPopUp(navController: NavController, tourneyT: TournamentClass) {
+fun ChangeTournamentPopUp() {
 
     AlertDialog(
         onDismissRequest = { showChangeDialog.value = false },
@@ -748,9 +746,6 @@ fun addResultPointsChange(tourney: TournamentClass, winner: String,player1name: 
                             } else if (winner.equals("")) {
                                 i.points = i.points - tourney.pointsVictory
                                 i.games = i.games - 1
-
-                            } else {
-
                             }
                         } else if (z.resultPlayer1.toInt() == z.resultPlayer2.toInt()) {
 
@@ -823,7 +818,7 @@ fun getNumberOfActualPlayers(tourney: TournamentClass): Int{
     }
 
 /**
- * data class object Result with the following paramters: Player, Strings
+ * data class object Result with the following parameters: Player, Strings
  */
 data class Result(
     var player1: Player,
@@ -845,7 +840,6 @@ data class ListResult( val tourney: TournamentClass ){
         allGames.add(createSchedule(tourney, getNumberOfActualPlayers(tourney)))
         for(i in 2..roundNumber){
             allGames.add(changeOpponent1(allGames.get(0),getRow(roundNumber+1), i))
-            //pushGamesLocaltoDb()
         }
     }
 }
@@ -866,7 +860,7 @@ fun checkIfGamePlayed(player1: String, player2: String): Boolean{
 }
 
 /**
- * fill the mustableList with games
+ * fill the mutableList with games
  */
 fun fillGameString(): MutableList<String> {
     val suggestionsGame = mutableListOf<String>()
