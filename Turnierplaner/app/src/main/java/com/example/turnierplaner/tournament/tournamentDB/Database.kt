@@ -1,4 +1,3 @@
-/* (C)2022 */
 package com.example.turnierplaner.tournament.tournamentDB
 
 import com.example.turnierplaner.tournament.leagueSystem.Player
@@ -7,9 +6,12 @@ import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.changeState
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
+import com.example.turnierplaner.tournament.leagueSystem.showRefreshPopUp
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase

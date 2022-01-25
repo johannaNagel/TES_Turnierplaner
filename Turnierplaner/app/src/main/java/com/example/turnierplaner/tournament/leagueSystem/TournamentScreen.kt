@@ -27,6 +27,8 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
@@ -49,6 +52,7 @@ import java.util.UUID
 var allTournament = mutableListOf<TournamentClass>()
 var changeState by mutableStateOf(0)
 var showRefreshPopUp = mutableStateOf(false)
+
 
 @Composable
 fun Tournament(navController: NavHostController) {
@@ -271,3 +275,4 @@ data class TournamentClass(
 ) {
   constructor() : this("", "", 0, mutableListOf(), 0, 0)
 }
+
