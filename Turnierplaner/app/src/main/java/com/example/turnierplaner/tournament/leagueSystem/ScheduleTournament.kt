@@ -77,7 +77,7 @@ fun ScheduleComposable (navController: NavHostController, tournamentName: String
     if(rememberTournamentRound!= ""){
         selectedTournamentRound = rememberTournamentRound
     }
-    val numberOfRounds = getNumberOfActualPlayers(getTournament(tournamentName)!!)-1
+    val numberOfRounds = getNumberOfActualPlayers(getTournament(tournamentName)!!.players)-1
     for(i in 0 until numberOfRounds){
         suggestions.add(i,"round: ${i+1}" )
     }
@@ -249,16 +249,16 @@ fun ScheduleComposable (navController: NavHostController, tournamentName: String
 }
 
 /**
-  * creates a game schedule for the first round
+ * creates a game schedule for the first round
  */
-fun createSchedule (tourney: TournamentClass, numberOfActualPlayers: Int): List<Result> {
-    val list = tourney.players
-    val row = getRow(numberOfActualPlayers)
+fun createSchedule (players: MutableList<Player>, numberOfActualPlayers: Int): List<Result> {
+    val list = players
+    val row = getRow(numberOfActualPlayers +1)
     val matrix = List(row){Result()}
     var count = 0
     for (i in 0 until row){
         matrix[i].player1 = list[count]
-        if(count+1 != numberOfActualPlayers) {
+        if(count+1 != numberOfActualPlayers + 1) {
             matrix[i].player2 = list[count + 1]
         }
         count += 2
@@ -267,8 +267,8 @@ fun createSchedule (tourney: TournamentClass, numberOfActualPlayers: Int): List<
 }
 
 /**
-  * change the game opponents for roundNumber-2 rounds
-  * rotate the list
+ * change the game opponents for roundNumber-2 rounds
+ * rotate the list
  */
 fun changeOpponent1(list: List<Result> , row: Int, roundNumber: Int ): List<Result> {
     var list1 = list
@@ -293,7 +293,7 @@ fun changeOpponent1(list: List<Result> , row: Int, roundNumber: Int ): List<Resu
 }
 
 /**
-* return the NumberOFGames pro round / rowNumber
+ * return the NumberOFGames pro round / rowNumber
  */
 fun getRow(numberOfActualPlayers: Int): Int{
     val row =  if((numberOfActualPlayers % 2) == 1){
@@ -600,7 +600,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
 }
 
 /**
-* pop up who allows the possibility to change the game result
+ * pop up who allows the possibility to change the game result
  */
 @Composable
 fun ChangeTournamentPopUp() {
@@ -612,8 +612,8 @@ fun ChangeTournamentPopUp() {
         dismissButton = {
             Button(
                 onClick = {
-                showChangeDialog.value = false
-                 change = false
+                    showChangeDialog.value = false
+                    change = false
                 }
             ) { Text("No")
             }
@@ -631,7 +631,7 @@ fun ChangeTournamentPopUp() {
 }
 
 /**
-* methods who adds the points and games to the tournamentClass
+ * methods who adds the points and games to the tournamentClass
  */
 fun addResultPoints(tourney: TournamentClass, winner: String,player1name: String, player2name: String ): TournamentClass {
     for(i in tourney.players){
@@ -670,7 +670,7 @@ fun addResultPoints(tourney: TournamentClass, winner: String,player1name: String
 }
 
 /**
-* methods who adds the changed points and games to the tournamentClass
+ * methods who adds the changed points and games to the tournamentClass
  */
 fun addResultPointsChange(tourney: TournamentClass, winner: String,player1name: String, player2name: String ): TournamentClass {
     for (i in tourney.players) {
@@ -770,7 +770,7 @@ fun addResultPointsChange(tourney: TournamentClass, winner: String,player1name: 
 }
 
 /**
-*  methods who decide which player won the game
+ *  methods who decide which player won the game
  */
 fun winOrTie(resultGame1: String, resultGame2: String): String {
 
@@ -807,15 +807,15 @@ fun addResultToResultList(player1: String, player2: String, resultGame1: String,
 /**
  * return the  Number of actual players
  */
-fun getNumberOfActualPlayers(tourney: TournamentClass): Int{
+fun getNumberOfActualPlayers(players: MutableList<Player>): Int{
     var count = 0
-    for(i in tourney.players){
+    for(i in players){
         if(i.name != ""){
             count++
         }
     }
     return count
-    }
+}
 
 /**
  * data class object Result with the following parameters: Player, Strings
@@ -833,17 +833,26 @@ data class Result(
 /**
  * data object ListResults which contains a list of all GamesRounds and their results
  */
-data class ListResult( val tourney: TournamentClass ){
+data class ListResult(val players: MutableList<Player> ){
     var allGames = mutableListOf<List<Result>>()
-    var roundNumber = getNumberOfActualPlayers(tourney) -  1
+    var roundNumber = getNumberOfActualPlayers(players) - 1
     init{
-        allGames.add(createSchedule(tourney, getNumberOfActualPlayers(tourney)))
+        allGames.add(createSchedule(players, roundNumber + 1))
         for(i in 2..roundNumber){
             allGames.add(changeOpponent1(allGames.get(0),getRow(roundNumber+1), i))
         }
     }
 }
 
+fun createSchedule(players: MutableList<Player>) : MutableList<List<Result>>?{
+    var allGames = mutableListOf<List<Result>>()
+    var roundNumber = getNumberOfActualPlayers(players) - 1
+    allGames.add(createSchedule(players, roundNumber + 1))
+    for(i in 2..roundNumber){
+        allGames.add(changeOpponent1(allGames[0],getRow(roundNumber+1), i))
+    }
+    return allGames
+}
 /**
  * checked if the game has started
  */
@@ -928,5 +937,5 @@ fun getListRes(): ListResult? {
 
 fun setListRes(tournamentName: String){
     var tourney = getTournament(tournamentName)
-    listResult = ListResult(tourney!!)
+    listResult = ListResult(tourney!!.players)
 }

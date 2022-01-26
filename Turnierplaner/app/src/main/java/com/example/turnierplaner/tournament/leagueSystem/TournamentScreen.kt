@@ -27,8 +27,6 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
@@ -179,8 +176,8 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int, pointsVict: Int,
   for (idx in 1..numberOfTeams) {
     players.add(Player("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
   }
+    val tourney = TournamentClass(name, id, numberOfTeams, pointsTie, pointsVict, players, createSchedule(players))
 
-  val tourney = TournamentClass(name, id, numberOfTeams, players, pointsVict, pointsTie)
 
   allTournament.add(tourney)
   pushLocalToDb()
@@ -205,7 +202,8 @@ fun createAddToAllTournaments(
     players.add(Player("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
   }
 
-  val tourney = TournamentClass(name, id, numberOfTeams, players, pointsVict, pointsTie)
+    val tourney = TournamentClass(name, id, numberOfTeams, pointsTie, pointsVict, players,
+        createSchedule(players))
 
   allTournament.add(tourney)
   pushLocalToDb()
@@ -213,7 +211,7 @@ fun createAddToAllTournaments(
 
 fun findTournament(name: String?): TournamentClass {
 
-  var tourney = TournamentClass("", UUID.randomUUID().toString(), 0, mutableListOf(), 0, 0)
+  var tourney = TournamentClass("", UUID.randomUUID().toString(), 0, 0, 0, mutableListOf(), null)
 
   for (s in allTournament) {
 
@@ -269,10 +267,11 @@ data class TournamentClass(
     // To avoid storing in firebase database
     @get:Exclude var id: String,
     var numberOfPlayers: Int,
-    var players: MutableList<Player>,
     var pointsVictory: Int,
-    var pointsTie: Int
+    var pointsTie: Int,
+    var players: MutableList<Player>,
+    var schedule: MutableList<List<Result>>?
 ) {
-  constructor() : this("", "", 0, mutableListOf(), 0, 0)
+  constructor() : this("", "", 0, 0, 0, mutableListOf(), null)
 }
 
