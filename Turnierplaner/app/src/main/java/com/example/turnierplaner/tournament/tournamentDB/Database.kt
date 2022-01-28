@@ -1,13 +1,11 @@
 package com.example.turnierplaner.tournament.tournamentDB
 
-import com.example.turnierplaner.tournament.leagueSystem.ListResult
 import com.example.turnierplaner.tournament.leagueSystem.Player
 import com.example.turnierplaner.tournament.leagueSystem.Result
 import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.changeState
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
-import com.example.turnierplaner.tournament.leagueSystem.createSchedule
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.example.turnierplaner.tournament.leagueSystem.showRefreshPopUp
 import com.google.firebase.database.ChildEventListener
@@ -62,10 +60,10 @@ fun getTeamsFromDb() {
                     item.getValue(TournamentClass::class.java)!!.players
                 val pointsVic: Int = item.getValue(TournamentClass::class.java)!!.pointsVictory
                 val pointsTie: Int = item.getValue(TournamentClass::class.java)!!.pointsTie
-                val schedule:MutableList<List<Result>>? = item.getValue(TournamentClass::class.java)!!.schedule
+                val schedule: MutableList<MutableList<Result>>? = item.getValue(TournamentClass::class.java)!!.schedule
                 if (id != null) {
                   val tourney =
-                      TournamentClass(name, id, numberOfPlayers, pointsTie, pointsVic, players, schedule)
+                      TournamentClass(name, id, numberOfPlayers, pointsVic, pointsTie, players, schedule)
                   allTournament.add(tourney)
                 }
               }

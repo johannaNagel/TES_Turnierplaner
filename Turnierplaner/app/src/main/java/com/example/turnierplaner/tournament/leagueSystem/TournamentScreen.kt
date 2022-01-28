@@ -176,7 +176,7 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int, pointsVict: Int,
   for (idx in 1..numberOfTeams) {
     players.add(Player("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
   }
-    val tourney = TournamentClass(name, id, numberOfTeams, pointsTie, pointsVict, players, createSchedule(players))
+    val tourney = TournamentClass(name, id, numberOfTeams, pointsVict, pointsTie,  players, createScheduleTournament(players))
 
 
   allTournament.add(tourney)
@@ -202,8 +202,8 @@ fun createAddToAllTournaments(
     players.add(Player("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
   }
 
-    val tourney = TournamentClass(name, id, numberOfTeams, pointsTie, pointsVict, players,
-        createSchedule(players))
+    val tourney = TournamentClass(name, id, numberOfTeams,  pointsVict, pointsTie, players,
+        createScheduleTournament(players))
 
   allTournament.add(tourney)
   pushLocalToDb()
@@ -270,7 +270,7 @@ data class TournamentClass(
     var pointsVictory: Int,
     var pointsTie: Int,
     var players: MutableList<Player>,
-    var schedule: MutableList<List<Result>>?
+    var schedule: MutableList<MutableList<Result>>?
 ) {
   constructor() : this("", "", 0, 0, 0, mutableListOf(), null)
 }

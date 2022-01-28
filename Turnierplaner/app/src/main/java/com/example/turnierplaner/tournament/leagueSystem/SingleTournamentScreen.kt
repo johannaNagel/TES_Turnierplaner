@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
+import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.removeTournament
 
@@ -77,6 +78,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
               actions = {
                 IconButton(
                     onClick = {
+                      getTeamsFromDb()
                       navController.navigate("schedule_route/${tourney.name}")
                       // navController.navigate(BottomBarScreens.Add.route)
                     },

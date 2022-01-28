@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavHostController
+import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 var roundNumber = 1
@@ -61,6 +62,7 @@ var rememberTournamentRound = ""
 private val showChangeDialog = mutableStateOf(false)
 var change = false
 var tournament: TournamentClass? = null
+var roundNumberInList = 0
 
 
 /**
@@ -69,7 +71,8 @@ var tournament: TournamentClass? = null
 @Composable
 fun ScheduleComposable (navController: NavHostController, tournamentName: String?){
     setTourn(findTournament(tournamentName))
-    setListRes(tournamentName!!)
+    actualizeTournamentSchedule(getTournament(tournamentName!!)!!)
+    //setListRes(tournamentName!!)
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
     val suggestions =  mutableListOf<String>()
@@ -77,9 +80,13 @@ fun ScheduleComposable (navController: NavHostController, tournamentName: String
     if(rememberTournamentRound!= ""){
         selectedTournamentRound = rememberTournamentRound
     }
-    val numberOfRounds = getNumberOfActualPlayers(getTournament(tournamentName)!!.players)-1
+    val numberOfRounds = (getRow(getNumberOfActualPlayers(getTournament(tournamentName)!!.players)) *2) -1
+
     for(i in 0 until numberOfRounds){
-        suggestions.add(i,"round: ${i+1}" )
+        suggestions.add(
+            i,
+            "round: ${i + 1}"
+        )
     }
 
     Scaffold(
@@ -111,7 +118,7 @@ fun ScheduleComposable (navController: NavHostController, tournamentName: String
             // Tournament type
             val icon =
                 if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-            val actualRound = methodWhichRound()
+            val actualRound =  methodWhichRound(getTournament(tournamentName)!!)
             Column() {
                 Column() {
                     //DropDownMenu for the tournament rounds
@@ -149,10 +156,16 @@ fun ScheduleComposable (navController: NavHostController, tournamentName: String
                             DropdownMenuItem(
                                 onClick = {
                                     selectedTournamentRound = label
-                                    rememberTournamentRound= selectedTournamentRound
+                                    rememberTournamentRound = selectedTournamentRound
                                     expanded = false
                                     val splitList = selectedTournamentRound.split(" ")
                                     roundNumber = splitList[1].toInt()
+                                    roundNumberInList =
+                                        if(roundNumber > 0){
+                                        roundNumber - 1
+                                    } else {
+                                        0
+                                        }
                                     //gameListRound = listResult!!.allGames.get(roundNumber)
                                 }) { Text(text = label) }
                         }
@@ -194,7 +207,7 @@ fun ScheduleComposable (navController: NavHostController, tournamentName: String
                 val cellText: @Composable (Int, Result ) -> Unit = { index,  match ->
                     val value =
                         when (index) {
-                            0 -> (listResult!!.allGames[roundNumber-1].indexOf(match) + 1).toString()
+                            0 -> (getTournament(tournamentName)!!.schedule!![roundNumberInList].indexOf(match) + 1).toString()
                             1 -> match.player1.name
                             2 -> "${match.resultPlayer1} : ${match.resultPlayer2}"
                             3 -> match.player2.name
@@ -215,7 +228,7 @@ fun ScheduleComposable (navController: NavHostController, tournamentName: String
                 Table(
                     columnCount = 4,
                     cellWidth = cellWidth,
-                    data = listResult!!.allGames.get(roundNumber-1) ,
+                    data = getTournament(tournamentName)!!.schedule!![roundNumber-1] ,
                     modifier = Modifier.verticalScroll(rememberScrollState()),
                     headerCellContent = headerCellTitle,
                     cellContent = cellText
@@ -251,14 +264,14 @@ fun ScheduleComposable (navController: NavHostController, tournamentName: String
 /**
  * creates a game schedule for the first round
  */
-fun createSchedule (players: MutableList<Player>, numberOfActualPlayers: Int): List<Result> {
+fun createSchedule (players: MutableList<Player>, numberOfActualPlayers: Int): MutableList<Result> {
     val list = players
-    val row = getRow(numberOfActualPlayers +1)
-    val matrix = List(row){Result()}
+    val row = getRow(numberOfActualPlayers)
+    val matrix = MutableList(row){Result()}
     var count = 0
     for (i in 0 until row){
         matrix[i].player1 = list[count]
-        if(count+1 != numberOfActualPlayers + 1) {
+        if(count+2 != numberOfActualPlayers + 1) {
             matrix[i].player2 = list[count + 1]
         }
         count += 2
@@ -267,13 +280,13 @@ fun createSchedule (players: MutableList<Player>, numberOfActualPlayers: Int): L
 }
 
 /**
- * change the game opponents for roundNumber-2 rounds
+ * change the game opponents for roundNumber - 2 rounds
  * rotate the list
  */
-fun changeOpponent1(list: List<Result> , row: Int, roundNumber: Int ): List<Result> {
+fun changeOpponent1(list: MutableList<Result> , row: Int, roundNumber: Int ): MutableList<Result> {
     var list1 = list
     for (k in 2..roundNumber){
-        val listNewRound = List(row){Result()}
+        val listNewRound = MutableList(row){Result()}
         for (i in 0 until row){
             if (i == 0){
                 listNewRound[i].player1 = list1[i].player1
@@ -313,7 +326,7 @@ fun ChangeGameResult(navController: NavHostController, tournamentName: String?){
     var selectedGame by remember { mutableStateOf("") }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
     var expanded by remember { mutableStateOf(false) }
-    val suggestionsGame = fillGameString()
+    val suggestionsGame = fillGameString(getTournament(tournamentName!!)!!)
     val tourneyT = findTournament(tournamentName)
     val icon = if(expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -371,7 +384,7 @@ fun ChangeGameResult(navController: NavHostController, tournamentName: String?){
                                 onClick = {
                                     selectedGame = label
                                     expanded = false
-                                    game = getGameResult(selectedGame)
+                                    game = getGameResult(selectedGame, getTournament(tournamentName)!!)
                                     player1Result = game.resultPlayer1
                                     player2Result = game.resultPlayer2
 
@@ -417,7 +430,8 @@ fun ChangeGameResult(navController: NavHostController, tournamentName: String?){
                             splitString(selectedGame, 1),
                             resultPlayer1,
                             resultPlayer2,
-                            roundNumber
+                            roundNumber,
+                            getTournament(tournamentName)!!
                         )
                         navController.navigate("schedule_route/${tourneyT.name}")
 
@@ -451,7 +465,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
     var selectedTournamentRound by remember { mutableStateOf("") }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
     var expanded by remember { mutableStateOf(false) }
-    val suggestionsGame = fillGameString()
+    val suggestionsGame = fillGameString(getTournament(tournamentName!!)!!)
     val tourney = findTournament(tournamentName)
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -467,10 +481,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
                     backgroundColor = Color.White,
                     elevation = 1.dp,
                     title ={ Text(text = "Add or change the result of the game") },
-
-
                     )
-
             }
         },
         content = {
@@ -543,7 +554,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
                     enabled = selectedTournamentRound.isNotEmpty() && ((resPlayer1.isEmpty() && resPlayer2.isEmpty()) || (resPlayer1.isNotEmpty() && resPlayer2.isNotEmpty())),
                     content = { Text(text = "Add or Change") },
                     onClick = {
-                        if(!checkIfGamePlayed(splitString(selectedTournamentRound, 0), splitString(selectedTournamentRound, 1))) {
+                        if(!checkIfGamePlayed(splitString(selectedTournamentRound, 0), splitString(selectedTournamentRound, 1), getTournament(tournamentName)!!)) {
                             addResultPoints(
                                 tourney,
                                 winOrTie(resPlayer1, resPlayer2),
@@ -555,7 +566,8 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
                                 splitString(selectedTournamentRound, 1),
                                 resPlayer1,
                                 resPlayer2,
-                                roundNumber
+                                roundNumber,
+                                getTournament(tournamentName)!!
 
                             )
                             pushLocalToDb()
@@ -572,7 +584,9 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
                                 splitString(selectedTournamentRound, 1),
                                 resPlayer1,
                                 resPlayer2,
-                                roundNumber
+                                roundNumber,
+                                getTournament(tournamentName)!!
+
                             )
                             change = false
                             pushLocalToDb()
@@ -675,7 +689,7 @@ fun addResultPoints(tourney: TournamentClass, winner: String,player1name: String
 fun addResultPointsChange(tourney: TournamentClass, winner: String,player1name: String, player2name: String ): TournamentClass {
     for (i in tourney.players) {
         if (i.name.equals(player1name)) {
-            for (k in listResult!!.allGames) {
+            for (k in tourney.schedule!!) {
                 for (z in k) {
                     if (z.player1.name.equals(player1name) && z.player2.name.equals(player2name)) {
                         if (z.resultPlayer1.toInt() > z.resultPlayer2.toInt()) {
@@ -720,7 +734,7 @@ fun addResultPointsChange(tourney: TournamentClass, winner: String,player1name: 
                 }
             }
         } else if (i.name.equals(player2name)) {
-            for (k in listResult!!.allGames) {
+            for (k in tourney.schedule!!) {
                 for (z in k) {
                     if (z.player1.name.equals(player1name) && z.player2.name.equals(player2name)) {
                         if (z.resultPlayer1.toInt() > z.resultPlayer2.toInt()) {
@@ -795,8 +809,8 @@ fun splitString(games : String, index: Int ): String{
 /**
  * method who add the object Result to the ResultList
  */
-fun addResultToResultList(player1: String, player2: String, resultGame1: String, resultGame2: String, gameRound: Int){
-    for(i in listResult!!.allGames.get(gameRound-1)){
+fun addResultToResultList(player1: String, player2: String, resultGame1: String, resultGame2: String, gameRound: Int, tourney: TournamentClass){
+    for(i in tourney.schedule!![(gameRound-1)]){
         if(i.player1.name.equals(player1) && i.player2.name.equals(player2)){
             i.resultPlayer1 = resultGame1
             i.resultPlayer2 = resultGame2
@@ -834,31 +848,63 @@ data class Result(
  * data object ListResults which contains a list of all GamesRounds and their results
  */
 data class ListResult(val players: MutableList<Player> ){
-    var allGames = mutableListOf<List<Result>>()
-    var roundNumber = getNumberOfActualPlayers(players) - 1
+    var allGames = mutableListOf<MutableList<Result>>()
+    var roundNumber = (getRow(getNumberOfActualPlayers(players))*2)-1
     init{
-        allGames.add(createSchedule(players, roundNumber + 1))
+        allGames.add(createSchedule(players, getNumberOfActualPlayers(players)))
         for(i in 2..roundNumber){
             allGames.add(changeOpponent1(allGames.get(0),getRow(roundNumber+1), i))
         }
     }
 }
 
-fun createSchedule(players: MutableList<Player>) : MutableList<List<Result>>?{
-    var allGames = mutableListOf<List<Result>>()
-    var roundNumber = getNumberOfActualPlayers(players) - 1
-    allGames.add(createSchedule(players, roundNumber + 1))
-    for(i in 2..roundNumber){
-        allGames.add(changeOpponent1(allGames[0],getRow(roundNumber+1), i))
+fun createScheduleTournament(players: MutableList<Player>) : MutableList<MutableList<Result>>{
+    val allGames = mutableListOf<MutableList<Result>>()
+    val roundNumber = 0
+    allGames.add(createSchedule(players, 0))
+    if(roundNumber>= 2) {
+        for (i in 2..roundNumber) {
+            allGames.add(changeOpponent1(allGames[0], getRow(roundNumber + 1), i))
+        }
     }
     return allGames
 }
+
+fun actualizeTournamentSchedule(tourney1: TournamentClass):  MutableList<MutableList<Result>>{
+    val oldSchedule = tourney1.schedule
+        //listCopy(tourney1)
+    val playerList = tourney1.players
+    val scheduleNew =  mutableListOf<MutableList<Result>>()
+    val roundnumber2 = (getRow(getNumberOfActualPlayers(playerList))*2)-1
+    scheduleNew.add(createSchedule(playerList, getNumberOfActualPlayers(playerList)))
+    for(i in 2..roundnumber2 ) {
+        scheduleNew.add(changeOpponent1(scheduleNew[0], getRow(getNumberOfActualPlayers(playerList)), i))
+    }
+    if (oldSchedule != null) {
+        for(i in oldSchedule){
+            for(j in i){
+                for(k in scheduleNew){
+                    for( z in k){
+                        if((j.player1 == z.player1) && (j.player2 == z.player2) ){
+                            z.resultPlayer1 = j.resultPlayer1
+                            z.resultPlayer2 = j.resultPlayer2
+                        }
+                    }
+                }
+            }
+        }
+    }
+    tourney1.schedule = scheduleNew
+    return tourney1.schedule!!
+
+}
+
 /**
  * checked if the game has started
  */
-fun checkIfGamePlayed(player1: String, player2: String): Boolean{
+fun checkIfGamePlayed(player1: String, player2: String, tourney: TournamentClass): Boolean{
     var played = false
-    for (i in listResult!!.allGames){
+    for (i in tourney.schedule!!){
         for (j in i){
             if( j.player1.name.equals(player1) && j.player2.name.equals(player2)){
                 played = !(j.resultPlayer1.equals("") && j.resultPlayer2.equals(""))
@@ -871,11 +917,11 @@ fun checkIfGamePlayed(player1: String, player2: String): Boolean{
 /**
  * fill the mutableList with games
  */
-fun fillGameString(): MutableList<String> {
+fun fillGameString(tourney: TournamentClass): MutableList<String> {
     val suggestionsGame = mutableListOf<String>()
-    for(i in 0..listResult!!.allGames[roundNumber-1].size-1){
-        val k = listResult!!.allGames.get(roundNumber-1).get(i).player1.name
-        val dummy = listResult!!.allGames.get(roundNumber-1).get(i).player2.name
+    for(i in 0 until tourney.schedule!![roundNumber-1].size){
+        val k = tourney.schedule!![roundNumber-1][i].player1.name
+        val dummy = tourney.schedule!![roundNumber-1][i].player2.name
         suggestionsGame.add(i, "$k vs. $dummy")
 
     }
@@ -885,13 +931,13 @@ fun fillGameString(): MutableList<String> {
 /**
  * return the actual round
  */
-fun methodWhichRound(): Int {
-    var round = -1
-    for( i in listResult!!.allGames){
+fun methodWhichRound(tourney: TournamentClass): Int {
+    var round = 0
+    for( i in tourney.schedule!!){
         for (j in i){
-            if(j.resultPlayer1.equals("") && j.resultPlayer2.equals("")){
-                round = i.indexOf(j)
-                break
+            if((j.resultPlayer1 == "") && (j.resultPlayer2 == "")){
+                round = tourney.schedule!!.indexOf(i)
+                return round +1
             }
         }
     }
@@ -901,12 +947,12 @@ fun methodWhichRound(): Int {
 /**
  * return the gameresult
  */
-fun getGameResult(game: String): Result{
+fun getGameResult(game: String, tourney: TournamentClass): Result{
     val splitString = game.split(" vs. ")
     val player1 = splitString[0]
     val player2 = splitString[1]
     var result = Result()
-    for (i in listResult!!.allGames){
+    for (i in tourney.schedule!!){
         for (j in i){
             if (j.player1.name.equals(player1) && j.player2.name.equals(player2)){
                 result = j
@@ -938,4 +984,21 @@ fun getListRes(): ListResult? {
 fun setListRes(tournamentName: String){
     var tourney = getTournament(tournamentName)
     listResult = ListResult(tourney!!.players)
+}
+
+
+fun listCopy(tournament: TournamentClass): MutableList<MutableList<Result>> {
+    var list = mutableListOf<MutableList<Result>>()
+    var list2 = mutableListOf<Result>()
+    for(i in 0..tournament.schedule!!.size-1){
+        list.add(list2)
+        for(j in 0..tournament.schedule!![i].size-1){
+            list[i].add(Result())
+            list[i][j].player1 = tournament.schedule!![i][j].player1
+            list[i][j].player2 = tournament.schedule!![i][j].player2
+            list[i][j].resultPlayer1 = tournament.schedule!![i][j].resultPlayer1
+            list[i][j].resultPlayer2 = tournament.schedule!![i][j].resultPlayer2
+        }
+    }
+    return list
 }
