@@ -63,27 +63,3 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
     }*/
   }
 }
-
-/*
-@Composable
-fun BottomNavigationScreen(navController: NavController, items: List<Screens>) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-    BottomNavigation {
-        items.forEach { screens ->
-            BottomNavigationItem(
-                selected = currentDestination?.route == screens.route,
-                onClick = {
-                    navController.navigate(screens.route) {
-                        launchSingleTop = true
-                        popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                        restoreState = true
-                    }
-                },
-                icon = { Icon(painter = painterResource(id = screens.icons), contentDescription = null) },
-                label = { Text(text = screens.title) },
-                alwaysShowLabel = false)
-        }
-    }
-}
-*/
