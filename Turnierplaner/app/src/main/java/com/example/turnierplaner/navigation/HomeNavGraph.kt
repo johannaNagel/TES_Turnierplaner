@@ -58,8 +58,6 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
       editPointsScreen(
           navController = navController, backStackEntry.arguments?.getString("tournamentName"))
     }
-    /*composable(route = Schedule.ChangeResult.route){backStackEntry ->
-      ChangeGameResult(navController = navController,backStackEntry.arguments?.getString("tournamentName"))
-    }*/
+
   }
 }
