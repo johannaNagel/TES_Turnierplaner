@@ -10,12 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Turnierplaner" >
         <activity
-            android:name=".tournament.MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".tournament.test"
-            android:exported="false" />
-        <activity
             android:name=".tournament.Tournament"
             android:exported="true" >
             <intent-filter>
