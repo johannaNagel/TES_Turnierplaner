@@ -1,37 +1,61 @@
 /* (C)2022 */
 package com.example.turnierplaner.tournament.leagueSystem
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.material.Card
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.DismissValue
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.ListItem
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.CalendarToday
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,7 +66,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
-import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
+import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.removeTournament
 
@@ -50,16 +74,23 @@ import com.example.turnierplaner.tournament.tournamentDB.removeTournament
 It is not possible to open PopUpMenu from onclick Method
 Therefore a separate function has to be created
  */
-private val showAddTeamDialog = mutableStateOf(false)
+private val showAddParticipantDialog = mutableStateOf(false)
 private val showDeleteDialog = mutableStateOf(false)
 
+@ExperimentalMaterialApi
 @Composable
 fun SingleTournamentScreen(navController: NavController, tournamentName: String?) {
 
+  // for
+  if (findTournament(tournamentName).name != "") {
+
+    sortTournamentByPoints(tournamentName)
+  }
+
   val tourney = findTournament(tournamentName)
 
-  if (showAddTeamDialog.value) {
-    AddTeamToTournamentPopUP(tournamentName)
+  if (showAddParticipantDialog.value) {
+    AddParticipantToTournamentPopUP(tournamentName)
   }
   if (showDeleteDialog.value) {
     DeleteTournamentPopUp(navController, tourney)
@@ -67,6 +98,16 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
   if (showRefreshPopUp.value) {
     RefreshPopUp()
   }
+
+  var expanded by remember { mutableStateOf(false) }
+
+  var selectedIndex by remember { mutableStateOf(0) }
+  val items =
+      listOf(
+          "Remove Participants",
+          "Edit Point System",
+      )
+  val buttonTitle = items[selectedIndex]
 
   Scaffold(
       topBar = {
@@ -78,7 +119,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
               actions = {
                 IconButton(
                     onClick = {
-                      getTeamsFromDb()
+                      getParticipantsFromDb()
                       navController.navigate("schedule_route/${tourney.name}")
                       // navController.navigate(BottomBarScreens.Add.route)
                     },
@@ -89,15 +130,33 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
                   )
                 }
                 IconButton(
-                    onClick = {
-                      showAddTeamDialog.value = true
-                      // navController.navigate(BottomBarScreens.Add.route)
-                    },
+                    onClick = { showAddParticipantDialog.value = true },
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.Add,
-                      contentDescription = "Button to add new Player",
+                      contentDescription = "Button to add new Participants",
                   )
+                }
+
+                DropdownMenu(
+                    expanded = expanded,
+                    selectedIndex = selectedIndex,
+                    items = items,
+                    onSelect = { index ->
+                      selectedIndex = index
+                      expanded = false
+                    },
+                    onDismissRequest = { expanded = false },
+                    navController = navController,
+                    tournamentName = tournamentName) {
+                  IconButton(
+                      onClick = { expanded = true },
+                  ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Edit,
+                        contentDescription = "Button to remove Participants",
+                    )
+                  }
                 }
                 IconButton(
                     onClick = {
@@ -153,7 +212,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
               fontWeight = FontWeight.Black,
               textDecoration = TextDecoration.Underline)
         }
-        val cellText: @Composable (Int, Player) -> Unit = { index, item ->
+        val cellText: @Composable (Int, Participant) -> Unit = { index, item ->
           val value =
               when (index) {
                 0 -> item.rank.toString()
@@ -175,7 +234,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
         Table(
             columnCount = 4,
             cellWidth = cellWidth,
-            data = tourney.players,
+            data = tourney.participants,
             modifier = Modifier.verticalScroll(rememberScrollState()),
             headerCellContent = headerCellTitle,
             cellContent = cellText)
@@ -183,8 +242,9 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
 }
 
 @Composable
-fun AddTeamToTournamentPopUP(tournamentName: String?) {
-  var playername by remember { mutableStateOf("") }
+fun AddParticipantToTournamentPopUP(tournamentName: String?) {
+  var participantName by remember { mutableStateOf("") }
+  val tourney = findTournament(tournamentName)
 
   AlertDialog(
       modifier = Modifier.size(250.dp, 225.dp),
@@ -192,26 +252,29 @@ fun AddTeamToTournamentPopUP(tournamentName: String?) {
         Column {
           Text(
               modifier = Modifier.padding(horizontal = 10.dp),
-              text = "Add new Player to Tournament")
+              text = "Add a new Participant to Tournament")
 
           // Rest of the dialog content
         }
       },
-      onDismissRequest = { showAddTeamDialog.value = false },
+      onDismissRequest = { showAddParticipantDialog.value = false },
       buttons = {
         OutlinedTextField(
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
-            value = playername,
-            onValueChange = { newTeamname -> playername = newTeamname },
-            label = { Text(text = "Player Name") },
+            singleLine = true,
+            value = participantName,
+            onValueChange = { newParticipantname -> participantName = newParticipantname },
+            label = { Text(text = "Participant Name") },
         )
         Button(
             modifier = Modifier.fillMaxWidth().height(50.dp),
-            enabled = playername.isNotEmpty(),
+            enabled =
+                participantName.isNotEmpty() &&
+                    !tournamentContainsPlayer(tournamentName, participantName),
             content = { Text(text = "Add") },
             onClick = {
-              showAddTeamDialog.value = false
-              addPlayerToTournament(tournamentName, playername)
+              showAddParticipantDialog.value = false
+              addParticipantToTournament(tournamentName, participantName)
               pushLocalToDb()
             })
       },
@@ -230,9 +293,9 @@ fun DeleteTournamentPopUp(navController: NavController, tourney: TournamentClass
         Button(
             content = { Text("Yes") },
             onClick = {
-              removeTournament(tourney)
-              showDeleteDialog.value = false
+              // showDeleteDialog.value = false
               navController.navigate(BottomBarScreens.Tournament.route)
+              removeTournament(tourney)
             })
       })
 }
@@ -240,17 +303,16 @@ fun DeleteTournamentPopUp(navController: NavController, tourney: TournamentClass
 fun sortTournamentByPoints(tournamentName: String?) {
 
   val tourney = findTournament(tournamentName)
-  val players = tourney.players
+  val participants = tourney.participants
 
-  players.sortByDescending { it.points }
+  participants.sortByDescending { it.points }
 
-  tourney.players[0].rank = 1
+  tourney.participants[0].rank = 1
 
-  for (idx in 1 until tourney.numberOfPlayers) {
+  for (idx in 1 until tourney.numberOfParticipants) {
 
-    tourney.players[idx].rank = idx + 1
+    tourney.participants[idx].rank = idx + 1
   }
-
 }
 
 @Composable
@@ -277,6 +339,207 @@ fun <T> Table(
                 cellContent(columnIndex, data[index - 1])
               }
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun deleteParticipantsScreen(navController: NavController, tournamentName: String?) {
+
+  val tourney = findTournament(tournamentName)
+  val items = tourney.participants
+  var expanded by remember { mutableStateOf(false) }
+  var selectedTournamentType by remember { mutableStateOf("") }
+  var textfieldSize by remember { mutableStateOf(Size.Zero) }
+  val suggestions = listOf("Leauge", "KnockOut-System", "Double KnockOut-System")
+
+  Scaffold(
+      topBar = {
+        Column(modifier = Modifier.fillMaxWidth()) {
+          TopAppBar(
+              backgroundColor = Color.White,
+              elevation = 1.dp,
+              title = { Text(text = tourney.name) },
+              actions = {
+                IconButton(
+                    onClick = { navController.navigate("single_tournament_route/${tourney.name}") },
+                ) {
+                  Icon(
+                      imageVector = Icons.Rounded.ArrowBack,
+                      contentDescription = "Button to go back to homescreen",
+                  )
+                }
+              })
+        }
+      },
+      content = {
+        LazyColumn {
+          items(items) { item ->
+            var unread by remember { mutableStateOf(false) }
+            val dismissState =
+                rememberDismissState(
+                    confirmStateChange = {
+                      if (it == DismissValue.DismissedToEnd ||
+                          it == DismissValue.DismissedToStart) {
+                        unread = !unread
+                        items.remove(item)
+                        findTournament(tournamentName).numberOfParticipants--
+                        pushLocalToDb()
+                      }
+                      it != DismissValue.DismissedToEnd
+                    })
+            SwipeToDismiss(
+                state = dismissState,
+                modifier = Modifier.padding(vertical = 4.dp),
+                directions = setOf(DismissDirection.StartToEnd, DismissDirection.EndToStart),
+                dismissThresholds = { direction ->
+                  FractionalThreshold(if (direction == DismissDirection.StartToEnd) 0.25f else 0.5f)
+                },
+                background = {
+                  val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
+                  val color by
+                      animateColorAsState(
+                          when (dismissState.targetValue) {
+                            DismissValue.Default -> Color.LightGray
+                            DismissValue.DismissedToEnd -> Color.Green
+                            DismissValue.DismissedToStart -> Color.Red
+                          })
+                  val alignment =
+                      when (direction) {
+                        DismissDirection.StartToEnd -> Alignment.CenterStart
+                        DismissDirection.EndToStart -> Alignment.CenterEnd
+                      }
+                  val icon =
+                      when (direction) {
+                        DismissDirection.StartToEnd -> Icons.Default.Done
+                        DismissDirection.EndToStart -> Icons.Default.Delete
+                      }
+                  val scale by
+                      animateFloatAsState(
+                          if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f)
+
+                  Box(
+                      Modifier.fillMaxSize().background(color).padding(horizontal = 20.dp),
+                      contentAlignment = alignment) {
+                    Icon(
+                        icon,
+                        contentDescription = "Localized description",
+                        modifier = Modifier.scale(scale))
+                  }
+                },
+                dismissContent = {
+                  Card(
+                      elevation =
+                          animateDpAsState(
+                                  if (dismissState.dismissDirection != null) 4.dp else 0.dp)
+                              .value) {
+                    ListItem(
+                        text = {
+                          Text(item.name, fontWeight = if (unread) FontWeight.Bold else null)
+                        },
+                        secondaryText = {
+                          Text(
+                              if (item.name == "") {
+                                "empty"
+                              } else {
+                                item.name
+                              })
+                        })
+                  }
+                })
+          }
+        }
+      })
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun editPointsScreen(navController: NavController, tournamentName: String?) {
+
+  val tourney = findTournament(tournamentName)
+  val items = tourney.participants
+
+  Scaffold(
+      topBar = {
+        Column(modifier = Modifier.fillMaxWidth()) {
+          TopAppBar(
+              backgroundColor = Color.White,
+              elevation = 1.dp,
+              title = { Text(text = tourney.name) },
+              actions = {
+                IconButton(
+                    onClick = { navController.navigate("single_tournament_route/${tourney.name}") },
+                ) {
+                  Icon(
+                      imageVector = Icons.Rounded.ArrowBack,
+                      contentDescription = "Button to go back to homescreen",
+                  )
+                }
+              })
+        }
+      },
+      content = {})
+}
+
+@Composable
+fun DropdownMenu(
+    expanded: Boolean,
+    selectedIndex: Int,
+    items: List<String>,
+    onSelect: (Int) -> Unit,
+    onDismissRequest: () -> Unit,
+    navController: NavController,
+    tournamentName: String?,
+    content: @Composable () -> Unit,
+) {
+  val tourney = findTournament(tournamentName)
+  Box {
+    content()
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest,
+        modifier =
+            Modifier.height(120.dp)
+                .width(200.dp)
+                .background(color = Color.White, shape = RoundedCornerShape(16.dp))) {
+      items.forEachIndexed { index, s ->
+        if (selectedIndex == index) {
+          DropdownMenuItem(
+              modifier =
+                  Modifier.fillMaxWidth()
+                      .background(color = Color.White, shape = RoundedCornerShape(16.dp)),
+              onClick = {
+                if (s == "Remove Participants") {
+                  navController.navigate("remove_participant_route/${tourney.name}")
+                } else {
+                  navController.navigate("edit_points_route/${tourney.name}")
+                }
+              }) {
+            Text(
+                text = s,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth())
+          }
+        } else {
+          DropdownMenuItem(
+              modifier = Modifier.fillMaxWidth(),
+              onClick = {
+                if (s == "Remove Participants") {
+                  navController.navigate("remove_participant_route/${tourney.name}")
+                } else {
+                  navController.navigate("edit_points_route/${tourney.name}")
+                }
+              }) {
+            Text(
+                text = s,
+                color = Color.DarkGray,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth())
           }
         }
       }

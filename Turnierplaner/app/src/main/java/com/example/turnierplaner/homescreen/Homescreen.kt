@@ -152,12 +152,12 @@ fun Home(navController: NavHostController) {
 @Composable
 fun Add(navController: NavHostController) {
   Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text(text = "Add") }
-  var teamname by remember { mutableStateOf("") }
-  var numberOfPlayers by remember { mutableStateOf("") }
+  var tournamentName by remember { mutableStateOf("") }
+  var numberOfParticipants by remember { mutableStateOf("") }
   var victoryPoints by remember { mutableStateOf("") }
   var tiePoints by remember { mutableStateOf("") }
   var expanded by remember { mutableStateOf(false) }
-  val suggestions = listOf("Leauge", "KnockOut-System", "Double KnockOut-System")
+  val suggestions = listOf("League", "KnockOut-System", "Double KnockOut-System")
   var selectedTournamentType by remember { mutableStateOf("") }
   val selectedItem = remember { mutableStateOf("home") }
   var textfieldSize by remember { mutableStateOf(Size.Zero) }
@@ -180,10 +180,10 @@ fun Add(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
               OutlinedTextField(
-                  value = teamname,
+                  value = tournamentName,
                   singleLine = true,
-                  onValueChange = { newTeamname -> teamname = newTeamname },
-                  label = { Text(text = "Teamname") },
+                  onValueChange = { newTournament -> tournamentName = newTournament },
+                  label = { Text(text = "Tournament Name") },
                   keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                   keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                   leadingIcon = {
@@ -195,16 +195,16 @@ fun Add(navController: NavHostController) {
                   })
 
               OutlinedTextField(
-                  value = numberOfPlayers,
+                  value = numberOfParticipants,
                   singleLine = true,
                   keyboardOptions =
                       KeyboardOptions(
                           keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
                   keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-                  onValueChange = { newNumberOfPlayers ->
-                    numberOfPlayers = newNumberOfPlayers.filter { it.isDigit() }
+                  onValueChange = { newNumberOfParticipants ->
+                    numberOfParticipants = newNumberOfParticipants.filter { it.isDigit() }
                   },
-                  label = { Text(text = "NumberOfPlayers") },
+                  label = { Text(text = "Number Of Participants") },
                   leadingIcon = {
                     IconButton(onClick = { /*TODO*/}) {
                       Icon(imageVector = Icons.Filled.Groups, contentDescription = "Groups")
@@ -298,8 +298,9 @@ fun Add(navController: NavHostController) {
               Button(
                   modifier = Modifier.fillMaxWidth().height(50.dp),
                   enabled =
-                      teamname.isNotEmpty() &&
-                          numberOfPlayers.isNotEmpty() &&
+                      tournamentName.isNotEmpty() &&
+                          tournamentName.isNotBlank() &&
+                          numberOfParticipants.isNotEmpty() &&
                           tiePoints.isNotEmpty() &&
                           victoryPoints.isNotEmpty() &&
                           selectedTournamentType.isNotEmpty(),
@@ -309,8 +310,11 @@ fun Add(navController: NavHostController) {
                   content = { Text(text = "Add") },
                   onClick = {
                     createAddToAllTournaments(
-                        teamname, numberOfPlayers.toInt(), victoryPoints.toInt(), tiePoints.toInt())
-                    navController.navigate("single_tournament_route/$teamname")
+                        tournamentName,
+                        numberOfParticipants.toInt(),
+                        victoryPoints.toInt(),
+                        tiePoints.toInt())
+                    navController.navigate("single_tournament_route/$tournamentName")
                     // Navigiere zum com.example.turnierplaner.tournament.leagueSystem.Tournament
                     // Tab
                   })

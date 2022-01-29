@@ -1,55 +1,38 @@
+/* (C)2022 */
 package com.example.turnierplaner.tournament
- import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.turnierplaner.tournament.leagueSystem.ListResult
-import com.example.turnierplaner.tournament.leagueSystem.Player
-import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
-import com.example.turnierplaner.tournament.leagueSystem.addResultPoints
-import com.example.turnierplaner.tournament.leagueSystem.addResultPointsChange
-import com.example.turnierplaner.tournament.leagueSystem.addResultToResultList
-import com.example.turnierplaner.tournament.leagueSystem.checkIfGamePlayed
-import com.example.turnierplaner.tournament.leagueSystem.createSchedule
-import com.example.turnierplaner.tournament.leagueSystem.getGameResult
-import com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualPlayers
-import com.example.turnierplaner.tournament.leagueSystem.getRow
-import com.example.turnierplaner.tournament.leagueSystem.methodWhichRound
-import com.example.turnierplaner.tournament.leagueSystem.winOrTie
-import junit.framework.Assert.assertFalse
-import junit.framework.Assert.assertTrue
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
 
 /*@RunWith(AndroidJUnit4::class)
- class TournamentSchedule {
-    var competition: TournamentClass? = null
-     var listPlayer: MutableList<Player>? = null
-    var listWithAllGames : ListResult? = null
+class TournamentSchedule {
+   var competition: TournamentClass? = null
+    var listPlayer: MutableList<Player>? = null
+   var listWithAllGames : ListResult? = null
 
 
- @Before
- fun preparation() {
-     listPlayer = mutableListOf<Player>(
-         Player("1", 0, 0, 1, "1"),
-         Player("2", 0, 0, 2, "2"),
-         Player("3", 0, 0, 3, "3"),
-         Player("4", 0, 0, 4, "4"),
-         Player("5", 0, 0, 5, "5"),
-         Player("6", 0, 0, 6, "6"),
-         Player("7", 0, 0, 7, "7"),
-         Player("8", 0, 0, 8, "8"),
-     )
-     //competition = TournamentClass("hello", "1", 10, listPlayer!!, 3, 1)
- }
+@Before
+fun preparation() {
+    listPlayer = mutableListOf<Player>(
+        Player("1", 0, 0, 1, "1"),
+        Player("2", 0, 0, 2, "2"),
+        Player("3", 0, 0, 3, "3"),
+        Player("4", 0, 0, 4, "4"),
+        Player("5", 0, 0, 5, "5"),
+        Player("6", 0, 0, 6, "6"),
+        Player("7", 0, 0, 7, "7"),
+        Player("8", 0, 0, 8, "8"),
+    )
+    //competition = TournamentClass("hello", "1", 10, listPlayer!!, 3, 1)
+}
 
- @After
-    fun afterTest() {
-    listPlayer = null
-    competition = null
-    listWithAllGames = null
-     }
+@After
+   fun afterTest() {
+   listPlayer = null
+   competition = null
+   listWithAllGames = null
+    }
 
- */
+*/
+
+
 
 // @Test
 // fun testingCreateSchedule() {
@@ -262,6 +245,10 @@ import org.junit.runner.RunWith
 //
 //
 // }
+
+
+
+
 
  /*        @Test
          fun checkAddResultPointsChangeTie(){

@@ -43,6 +43,11 @@ sealed class TournamentScreens(val title: String, val route: String) {
 
   object SingleTournament :
       LoginScreens(title = "single_tournament", route = "single_tournament_route/{tournamentName}")
+  object RemoveParticipant :
+      TournamentScreens(
+          title = "remove_participant", route = "remove_participant_route/{tournamentName}")
+  object EditPoints :
+      TournamentScreens(title = "edit_points", route = "edit_points_route/{tournamentName}")
 }
 
 sealed class Schedule(val title: String, val route: String) {

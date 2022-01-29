@@ -1,6 +1,7 @@
 /* (C)2021 */
 package com.example.turnierplaner.navigation
 
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -18,7 +19,10 @@ import com.example.turnierplaner.tournament.leagueSystem.AddResultPoints
 import com.example.turnierplaner.tournament.leagueSystem.ScheduleComposable
 import com.example.turnierplaner.tournament.leagueSystem.SingleTournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.Tournament
+import com.example.turnierplaner.tournament.leagueSystem.deleteParticipantsScreen
+import com.example.turnierplaner.tournament.leagueSystem.editPointsScreen
 
+@ExperimentalMaterialApi
 @ExperimentalComposeUiApi
 fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
 
@@ -44,6 +48,14 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
     }
     composable(route = Schedule.PointsResult.route) { backStackEntry ->
       AddResultPoints(
+          navController = navController, backStackEntry.arguments?.getString("tournamentName"))
+    }
+    composable(route = TournamentScreens.RemoveParticipant.route) { backStackEntry ->
+      deleteParticipantsScreen(
+          navController = navController, backStackEntry.arguments?.getString("tournamentName"))
+    }
+    composable(route = TournamentScreens.EditPoints.route) { backStackEntry ->
+      editPointsScreen(
           navController = navController, backStackEntry.arguments?.getString("tournamentName"))
     }
     /*composable(route = Schedule.ChangeResult.route){backStackEntry ->

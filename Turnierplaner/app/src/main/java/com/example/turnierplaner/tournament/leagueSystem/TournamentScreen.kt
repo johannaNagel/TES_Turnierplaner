@@ -37,7 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
-import com.example.turnierplaner.tournament.tournamentDB.getTeamsFromDb
+import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.refreshActivate
 import com.google.firebase.auth.FirebaseAuth
@@ -49,7 +49,6 @@ import java.util.UUID
 var allTournament = mutableListOf<TournamentClass>()
 var changeState by mutableStateOf(0)
 var showRefreshPopUp = mutableStateOf(false)
-
 
 @Composable
 fun Tournament(navController: NavHostController) {
@@ -73,13 +72,13 @@ fun Tournament(navController: NavHostController) {
                 IconButton(
                     modifier = Modifier.clickable { changeState++ },
                     onClick = {
-                      getTeamsFromDb()
+                      getParticipantsFromDb()
                       navController.navigate(BottomBarScreens.Tournament.route)
                     },
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.Refresh,
-                      contentDescription = "Update Tournamanet List",
+                      contentDescription = "Update Tournament List",
                   )
                 }
               })
@@ -92,8 +91,8 @@ fun Tournament(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
               for (tournament in allTournament) {
-                for (player in tournament.players) {
-                  if (player.id == FirebaseAuth.getInstance().currentUser?.uid.toString()) {
+                for (participant in tournament.participants) {
+                  if (participant.id == FirebaseAuth.getInstance().currentUser?.uid.toString()) {
                     Button(
                         modifier = Modifier.fillMaxWidth().height(50.dp),
                         content = { Text(text = tournament.name) },
@@ -163,21 +162,34 @@ fun RefreshPopUp() {
       })
 }
 
-fun createAddToAllTournaments(name: String, numberOfTeams: Int, pointsVict: Int, pointsTie: Int) {
+fun createAddToAllTournaments(
+    name: String,
+    numberOfParticipants: Int,
+    pointsVict: Int,
+    pointsTie: Int
+) {
 
   val id = UUID.randomUUID().toString()
 
-  // create a list of players
-  val players = mutableListOf<Player>()
+  // create a list of participants
+  val participants = mutableListOf<Participant>()
   val random = Random()
   random.nextInt(100)
 
-  // fill the tourney with empty rows depending on how many player were set
-  for (idx in 1..numberOfTeams) {
-    players.add(Player("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
+  // fill the tourney with empty rows depending on how many participants were set
+  for (idx in 1..numberOfParticipants) {
+    participants.add(
+        Participant("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
   }
-    val tourney = TournamentClass(name, id, numberOfTeams, pointsVict, pointsTie,  players, createScheduleTournament(players))
-
+  val tourney =
+      TournamentClass(
+          name,
+          id,
+          numberOfParticipants,
+          pointsVict,
+          pointsTie,
+          participants,
+          createScheduleTournament(participants))
 
   allTournament.add(tourney)
   pushLocalToDb()
@@ -186,40 +198,49 @@ fun createAddToAllTournaments(name: String, numberOfTeams: Int, pointsVict: Int,
 // If DB has new Tourney, then we need to use the ID already assigned
 fun createAddToAllTournaments(
     name: String,
-    numberOfTeams: Int,
+    numberOfParticipants: Int,
     id: String,
     pointsVict: Int,
     pointsTie: Int
 ) {
 
-  // create a list of players
-  val players = mutableListOf<Player>()
+  // create a list of participant
+  val participants = mutableListOf<Participant>()
   val random = Random()
   random.nextInt(100)
 
-  // fill the tourney with empty rows depending on how many player were set
-  for (idx in 1..numberOfTeams) {
-    players.add(Player("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
+  // fill the tourney with empty rows depending on how many participants were set
+  for (idx in 1..numberOfParticipants) {
+    participants.add(
+        Participant("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
   }
 
-    val tourney = TournamentClass(name, id, numberOfTeams,  pointsVict, pointsTie, players,
-        createScheduleTournament(players))
+  val tourney =
+      TournamentClass(
+          name,
+          id,
+          numberOfParticipants,
+          pointsVict,
+          pointsTie,
+          participants,
+          createScheduleTournament(participants))
 
   allTournament.add(tourney)
   pushLocalToDb()
 }
 
-fun findTournament(name: String?): TournamentClass {
+fun findTournament(tournamentName: String?): TournamentClass {
 
   var tourney = TournamentClass("", UUID.randomUUID().toString(), 0, 0, 0, mutableListOf(), null)
 
   for (s in allTournament) {
 
-    if (s.name == name) {
+    if (s.name == tournamentName) {
 
       tourney = s
     }
   }
+
   return tourney
 }
 
@@ -228,31 +249,46 @@ fun getAllTournaments(): List<TournamentClass> {
   return allTournament
 }
 
-fun addPlayerToTournament(tournamentName: String?, playerName: String) {
+fun addParticipantToTournament(tournamentName: String?, participantName: String) {
 
   val tourney = findTournament(tournamentName)
 
-  for (idx in 1..tourney.numberOfPlayers) {
+  for (idx in 1..tourney.numberOfParticipants) {
 
-    if (tourney.players[idx - 1].name == "") {
+    if (tourney.participants[idx - 1].name == "") {
 
-      tourney.players[idx - 1].name = playerName
+      tourney.participants[idx - 1].name = participantName
       return
     }
   }
-  tourney.numberOfPlayers = tourney.numberOfPlayers + 1
-  // Every Player which is added have to have a UID, currently the UID from the Loged-In User is
+  tourney.numberOfParticipants = tourney.numberOfParticipants + 1
+  // Every Participant which is added have to have a UID, currently the UID from the Loged-In User
+  // is
   // assigned
-  tourney.players.add(
-      Player(
-          playerName,
+  tourney.participants.add(
+      Participant(
+          participantName,
           0,
           0,
-          tourney.numberOfPlayers,
+          tourney.numberOfParticipants,
           FirebaseAuth.getInstance().currentUser?.uid.toString()))
 }
 
-data class Player(
+fun tournamentContainsPlayer(tournamentName: String?, participantName: String): Boolean {
+
+  val tourney = findTournament(tournamentName)
+
+  for (participant in tourney.participants) {
+
+    if (participant.name == participantName) {
+
+      return true
+    }
+  }
+  return false
+}
+
+data class Participant(
     var name: String,
     var games: Int,
     var points: Int,
@@ -266,12 +302,11 @@ data class TournamentClass(
     var name: String,
     // To avoid storing in firebase database
     @get:Exclude var id: String,
-    var numberOfPlayers: Int,
+    var numberOfParticipants: Int,
     var pointsVictory: Int,
     var pointsTie: Int,
-    var players: MutableList<Player>,
+    var participants: MutableList<Participant>,
     var schedule: MutableList<MutableList<Result>>?
 ) {
   constructor() : this("", "", 0, 0, 0, mutableListOf(), null)
 }
-
