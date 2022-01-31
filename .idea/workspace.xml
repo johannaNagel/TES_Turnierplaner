@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dad43421-fcdd-4f69-b574-c758d1d850a3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Turnierplaner/.idea/deploymentTargetDropDown.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Turnierplaner/app/src/main/java/com/example/turnierplaner/tournament/tournamentDB/Database.kt" beforeDir="false" afterPath="$PROJECT_DIR$/Turnierplaner/app/src/main/java/com/example/turnierplaner/tournament/tournamentDB/Database.kt" afterDir="false" />
-    </list>
+    <list default="true" id="dad43421-fcdd-4f69-b574-c758d1d850a3" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,6 +21,8 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="cidr.known.project.marker" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/Turnierplaner" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />

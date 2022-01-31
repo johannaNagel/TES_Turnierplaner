@@ -56,7 +56,6 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 var roundNumber = 1
-var listResult: ListResult? = null
 var rememberTournamentRound = ""
 private val showChangeDialog = mutableStateOf(false)
 var change = false
@@ -271,16 +270,20 @@ fun changeOpponent1(list: MutableList<Result>, row: Int, roundNumber: Int): Muta
   for (k in 2..roundNumber) {
     val listNewRound = MutableList(row) { Result() }
     for (i in 0 until row) {
-      if (i == 0) {
-        listNewRound[i].participant1 = list1[i].participant1
-        listNewRound[i + 1].participant1 = list1[i].participant2
-      } else if (i == row - 1) {
-        listNewRound[i].participant2 = list1[i].participant1
-        listNewRound[i - 1].participant2 = list1[i].participant2
-      } else {
-        listNewRound[i + 1].participant1 = list1[i].participant1
-        listNewRound[i - 1].participant2 = list1[i].participant2
-      }
+        when (i) {
+            0 -> {
+                listNewRound[i].participant1 = list1[i].participant1
+                listNewRound[i + 1].participant1 = list1[i].participant2
+            }
+            row - 1 -> {
+                listNewRound[i].participant2 = list1[i].participant1
+                listNewRound[i - 1].participant2 = list1[i].participant2
+            }
+            else -> {
+                listNewRound[i + 1].participant1 = list1[i].participant1
+                listNewRound[i - 1].participant2 = list1[i].participant2
+            }
+        }
     }
     list1 = listNewRound
   }
@@ -475,27 +478,27 @@ fun addResultPoints(
     participant2name: String
 ): TournamentClass {
   for (i in tourney.participants) {
-    if (i.name.equals(participant1name)) {
-      if (winner.equals("winner1")) {
+    if (i.name == participant1name) {
+      if (winner == "winner1") {
         i.points = i.points + tourney.pointsVictory
         i.games++
-      } else if (winner.equals("winner2")) {
+      } else if (winner == "winner2") {
         i.points = i.points + 0
         i.games++
-      } else if (winner.equals("")) {
+      } else if (winner == "") {
         break
       } else {
         i.points = i.points + tourney.pointsTie
         i.games++
       }
-    } else if (i.name.equals(participant2name)) {
-      if (winner.equals("winner2")) {
+    } else if (i.name == participant2name) {
+      if (winner == "winner2") {
         i.points = i.points + tourney.pointsVictory
         i.games++
-      } else if (winner.equals("winner1")) {
+      } else if (winner == "winner1") {
         i.points = i.points + 0
         i.games++
-      } else if (winner.equals("")) {
+      } else if (winner == "") {
         break
       } else {
         i.points = i.points + tourney.pointsTie
@@ -514,15 +517,16 @@ fun addResultPointsChange(
     Participant2name: String
 ): TournamentClass {
   for (i in tourney.participants) {
-    if (i.name.equals(Participant1name)) {
+    if (i.name == Participant1name) {
       for (k in tourney.schedule!!) {
         for (z in k) {
-          if (z.participant1.name.equals(Participant1name) &&
-              z.participant2.name.equals(Participant2name)) {
+          if (z.participant1.name == Participant1name &&
+              z.participant2.name == Participant2name
+          ) {
             if (z.resultParticipant1.toInt() > z.resultParticipant2.toInt()) {
-              if (winner.equals("winner1")) {} else if (winner.equals("winner2")) {
+              if (winner == "winner1") {} else if (winner == "winner2") {
                 i.points = i.points - tourney.pointsVictory
-              } else if (winner.equals("")) {
+              } else if (winner == "") {
                 i.games = i.games - 1
                 i.points = i.points - tourney.pointsVictory
               } else {
@@ -530,60 +534,78 @@ fun addResultPointsChange(
               }
             } else if (z.resultParticipant1.toInt() < z.resultParticipant2.toInt()) {
 
-              if (winner.equals("winner1")) {
-                i.points = i.points + tourney.pointsVictory
-              } else if (winner.equals("winner2")) {} else if (winner.equals("")) {
-                i.games = i.games - 1
-                i.points = i.points
-              } else {
-                i.points = i.points + tourney.pointsTie
-              }
+                when (winner) {
+                    "winner1" -> {
+                        i.points = i.points + tourney.pointsVictory
+                    }
+                    "winner2" -> {}
+                    "" -> {
+                        i.games = i.games - 1
+                        i.points = i.points
+                    }
+                    else -> {
+                        i.points = i.points + tourney.pointsTie
+                    }
+                }
             } else if (z.resultParticipant1.toInt() == z.resultParticipant2.toInt()) {
 
-              if (winner.equals("winner1")) {
-                i.points = i.points + tourney.pointsVictory - tourney.pointsTie
-              } else if (winner.equals("winner2")) {
-                i.points = i.points - tourney.pointsTie
-              } else if (winner.equals("")) {
-                i.games = i.games - 1
-                i.points = i.points - tourney.pointsVictory
-              }
+                when (winner) {
+                    "winner1" -> {
+                        i.points = i.points + tourney.pointsVictory - tourney.pointsTie
+                    }
+                    "winner2" -> {
+                        i.points = i.points - tourney.pointsTie
+                    }
+                    "" -> {
+                        i.games = i.games - 1
+                        i.points = i.points - tourney.pointsVictory
+                    }
+                }
             }
           }
         }
       }
-    } else if (i.name.equals(Participant2name)) {
+    } else if (i.name == Participant2name) {
       for (k in tourney.schedule!!) {
         for (z in k) {
-          if (z.participant1.name.equals(Participant1name) &&
-              z.participant2.name.equals(Participant2name)) {
+          if (z.participant1.name == Participant1name &&
+              z.participant2.name == Participant2name
+          ) {
             if (z.resultParticipant1.toInt() > z.resultParticipant2.toInt()) {
 
-              if (winner.equals("winner1")) {} else if (winner.equals("winner2")) {
+              if (winner == "winner1") {} else if (winner == "winner2") {
                 i.points = i.points + tourney.pointsVictory
-              } else if (winner.equals("")) {
+              } else if (winner == "") {
                 i.games = i.games - 1
               } else {
                 i.points = i.points + tourney.pointsTie
               }
             } else if (z.resultParticipant1.toInt() < z.resultParticipant2.toInt()) {
 
-              if (winner.equals("winner1")) {
-                i.points = i.points - tourney.pointsVictory
-              } else if (winner.equals("winner2")) {} else if (winner.equals("")) {
-                i.points = i.points - tourney.pointsVictory
-                i.games = i.games - 1
-              }
+                when (winner) {
+                    "winner1" -> {
+                        i.points = i.points - tourney.pointsVictory
+                    }
+                    "winner2" -> {}
+                    "" -> {
+                        i.points = i.points - tourney.pointsVictory
+                        i.games = i.games - 1
+                    }
+                }
             } else if (z.resultParticipant1.toInt() == z.resultParticipant2.toInt()) {
 
-              if (winner.equals("winner1")) {
-                i.points = i.points - tourney.pointsTie
-              } else if (winner.equals("winner2")) {
-                i.points = i.points + tourney.pointsVictory - tourney.pointsTie
-              } else if (winner.equals("")) {
-                i.games = i.games - 1
-                i.points = i.points - tourney.pointsTie
-              }
+                when (winner) {
+                    "winner1" -> {
+                        i.points = i.points - tourney.pointsTie
+                    }
+                    "winner2" -> {
+                        i.points = i.points + tourney.pointsVictory - tourney.pointsTie
+                    }
+                    "" -> {
+                        i.games = i.games - 1
+                        i.points = i.points - tourney.pointsTie
+                    }
+                }
             }
           }
         }
@@ -596,20 +618,20 @@ fun addResultPointsChange(
 /** methods who decide which Participant won the game */
 fun winOrTie(resultGame1: String, resultGame2: String): String {
 
-  if (resultGame1.equals("") || resultGame2.equals("")) {
-    return ""
-  } else if (resultGame1.toInt() > resultGame2.toInt()) {
-    return "winner1"
-  } else if (resultGame1.toInt() < resultGame2.toInt()) {
-    return "winner2"
-  } else {
-    return "tie"
-  }
+    return if (resultGame1 == "" || resultGame2 == "") {
+        ""
+    } else if (resultGame1.toInt() > resultGame2.toInt()) {
+        "winner1"
+    } else if (resultGame1.toInt() < resultGame2.toInt()) {
+        "winner2"
+    } else {
+        "tie"
+    }
 }
 /** method who splits a string */
 fun splitString(games: String, index: Int): String {
   val split = games.split(" vs. ")
-  return split.get(index)
+  return split[index]
 }
 
 /** method who add the object Result to the ResultList */
@@ -622,7 +644,7 @@ fun addResultToResultList(
     tourney: TournamentClass
 ) {
   for (i in tourney.schedule!![(gameRound - 1)]) {
-    if (i.participant1.name.equals(Participant1) && i.participant2.name.equals(Participant2)) {
+    if (i.participant1.name == Participant1 && i.participant2.name == Participant2) {
       i.resultParticipant1 = resultGame1
       i.resultParticipant2 = resultGame2
     }
@@ -657,7 +679,7 @@ data class ListResult(val participants: MutableList<Participant>) {
   init {
     allGames.add(createSchedule(participants, getNumberOfActualParticipants(participants)))
     for (i in 2..roundNumber) {
-      allGames.add(changeOpponent1(allGames.get(0), getRow(roundNumber + 1), i))
+      allGames.add(changeOpponent1(allGames[0], getRow(roundNumber + 1), i))
     }
   }
 }
@@ -668,11 +690,6 @@ fun createScheduleTournament(
   val allGames = mutableListOf<MutableList<Result>>()
   val roundNumber = 0
   allGames.add(createSchedule(participants, 0))
-  if (roundNumber >= 2) {
-    for (i in 2..roundNumber) {
-      allGames.add(changeOpponent1(allGames[0], getRow(roundNumber + 1), i))
-    }
-  }
   return allGames
 }
 
@@ -681,9 +698,9 @@ fun actualizeTournamentSchedule(tourney1: TournamentClass): MutableList<MutableL
   // listCopy(tourney1)
   val participantList = tourney1.participants
   val scheduleNew = mutableListOf<MutableList<Result>>()
-  val roundnumber2 = (getRow(getNumberOfActualParticipants(participantList)) * 2) - 1
+  val roundNumber = (getRow(getNumberOfActualParticipants(participantList)) * 2) - 1
   scheduleNew.add(createSchedule(participantList, getNumberOfActualParticipants(participantList)))
-  for (i in 2..roundnumber2) {
+  for (i in 2..roundNumber) {
     scheduleNew.add(
         changeOpponent1(scheduleNew[0], getRow(getNumberOfActualParticipants(participantList)), i))
   }
@@ -714,8 +731,8 @@ fun checkIfGamePlayed(
   var played = false
   for (i in tourney.schedule!!) {
     for (j in i) {
-      if (j.participant1.name.equals(participant1) && j.participant2.name.equals(participant2)) {
-        played = !(j.resultParticipant1.equals("") && j.resultParticipant2.equals(""))
+      if ((j.participant1.name == participant1) && (j.participant2.name == participant2)) {
+        played = !((j.resultParticipant1 == "") && (j.resultParticipant2 == ""))
       }
     }
   }
@@ -747,23 +764,6 @@ fun methodWhichRound(tourney: TournamentClass): Int {
   return round + 1
 }
 
-/** return the gameresult */
-fun getGameResult(game: String, tourney: TournamentClass): Result {
-  val splitString = game.split(" vs. ")
-  val participant1 = splitString[0]
-  val participant2 = splitString[1]
-  var result = Result()
-  for (i in tourney.schedule!!) {
-    for (j in i) {
-      if (j.participant1.name.equals(participant1) && j.participant2.name.equals(participant2)) {
-        result = j
-        break
-      }
-    }
-  }
-  return result
-}
-
 fun getTournament(tourneyName: String): TournamentClass? {
   if (tournament == null) {
     tournament = findTournament(tourneyName)
@@ -775,27 +775,8 @@ fun setTourn(tourney: TournamentClass) {
   tournament = tourney
 }
 
-fun getListRes(): ListResult? {
-  return listResult
-}
 
-fun setListRes(tournamentName: String) {
-  var tourney = getTournament(tournamentName)
-  listResult = ListResult(tourney!!.participants)
-}
 
-fun listCopy(tournament: TournamentClass): MutableList<MutableList<Result>> {
-  var list = mutableListOf<MutableList<Result>>()
-  var list2 = mutableListOf<Result>()
-  for (i in 0..tournament.schedule!!.size - 1) {
-    list.add(list2)
-    for (j in 0..tournament.schedule!![i].size - 1) {
-      list[i].add(Result())
-      list[i][j].participant1 = tournament.schedule!![i][j].participant1
-      list[i][j].participant2 = tournament.schedule!![i][j].participant2
-      list[i][j].resultParticipant1 = tournament.schedule!![i][j].resultParticipant1
-      list[i][j].resultParticipant2 = tournament.schedule!![i][j].resultParticipant2
-    }
-  }
-  return list
-}
+
+
+
