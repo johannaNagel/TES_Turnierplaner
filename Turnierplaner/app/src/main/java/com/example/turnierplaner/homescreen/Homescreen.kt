@@ -63,6 +63,7 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.LoginScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
+import com.example.turnierplaner.tournament.leagueSystem.allTournamentContainsTournament
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -273,15 +274,6 @@ fun Add(navController: NavHostController) {
                   value = tiePoints,
                   onValueChange = { newTiePoints ->
                     tiePoints = newTiePoints.filter { it.isDigit() }
-                    /*  if (newTiePoints.isEmpty()) {
-                      tiePoints = newTiePoints
-                    } else {
-                      tiePoints =
-                          when (newTiePoints.toIntOrNull()) {
-                            null -> tiePoints // old value
-                            else -> newTiePoints // new value
-                          }
-                    }*/
                   },
                   singleLine = true,
                   label = { Text(text = "Tie points") },
@@ -303,10 +295,8 @@ fun Add(navController: NavHostController) {
                           numberOfParticipants.isNotEmpty() &&
                           tiePoints.isNotEmpty() &&
                           victoryPoints.isNotEmpty() &&
-                          selectedTournamentType.isNotEmpty(),
-                  // victoryPoints.isNotEmpty() &&
-                  // tiePoints.isNotEmpty() &&
-                  // selectedTournamentType.isNotEmpty(),
+                          selectedTournamentType.isNotEmpty() &&
+                          !allTournamentContainsTournament(tournamentName),
                   content = { Text(text = "Add") },
                   onClick = {
                     createAddToAllTournaments(

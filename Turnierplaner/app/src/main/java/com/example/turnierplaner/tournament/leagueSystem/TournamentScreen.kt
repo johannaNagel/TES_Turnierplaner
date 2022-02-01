@@ -274,7 +274,7 @@ fun addParticipantToTournament(tournamentName: String?, participantName: String)
           FirebaseAuth.getInstance().currentUser?.uid.toString()))
 }
 
-fun tournamentContainsPlayer(tournamentName: String?, participantName: String): Boolean {
+fun tournamentContainsParticipant(tournamentName: String?, participantName: String): Boolean {
 
   val tourney = findTournament(tournamentName)
 
@@ -286,6 +286,18 @@ fun tournamentContainsPlayer(tournamentName: String?, participantName: String): 
     }
   }
   return false
+}
+
+fun allTournamentContainsTournament(tournamentName: String?): Boolean {
+
+    for (tournament in allTournament) {
+
+        if (tournament.name == tournamentName) {
+
+            return true
+        }
+    }
+    return false
 }
 
 data class Participant(
