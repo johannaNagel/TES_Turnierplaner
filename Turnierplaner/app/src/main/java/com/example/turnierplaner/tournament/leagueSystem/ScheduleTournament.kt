@@ -67,14 +67,12 @@ var roundNumberInList = 0
 fun ScheduleComposable(navController: NavHostController, tournamentName: String?) {
   setTourn(findTournament(tournamentName))
   actualizeTournamentSchedule(getTournament(tournamentName!!)!!)
-  // setListRes(tournamentName!!)
   var expanded by remember { mutableStateOf(false) }
   var textFieldSize by remember { mutableStateOf(Size.Zero) }
   val suggestions = mutableListOf<String>()
   var selectedTournamentRound by remember { mutableStateOf("") }
-  if (rememberTournamentRound != "") {
-    selectedTournamentRound = rememberTournamentRound
-  }
+  val actualRound = methodWhichRound(getTournament(tournamentName)!!)
+  roundNumber = actualRound
   val numberOfRounds =
       (getRow(getNumberOfActualParticipants(getTournament(tournamentName)!!.participants)) * 2) - 1
 
@@ -89,6 +87,7 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
               backgroundColor = Color.White,
               elevation = 1.dp,
               title = {
+
                 Text(text = "Tournament schedule: ${getTournament(tournamentName)?.name}")
               },
               actions = {
@@ -110,7 +109,6 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
 
         // Tournament type
         val icon = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-        val actualRound = methodWhichRound(getTournament(tournamentName)!!)
         Column() {
           Column() {
             // DropDownMenu for the tournament rounds
@@ -142,7 +140,6 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
                 DropdownMenuItem(
                     onClick = {
                       selectedTournamentRound = label
-                      rememberTournamentRound = selectedTournamentRound
                       expanded = false
                       val splitList = selectedTournamentRound.split(" ")
                       roundNumber = splitList[1].toInt()
@@ -223,23 +220,18 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
               modifier = Modifier.fillMaxSize().padding(24.dp),
               verticalArrangement = Arrangement.spacedBy(18.dp),
               horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(
-                onClick = {
-                  navController.navigate(
-                      "pointsResult_route/${getTournament(tournamentName)?.name}")
-                },
-                enabled = true,
-                // border = BorderStroke( width = 1.dp, brush = SolidColor(Color.Blue)),
-                shape = MaterialTheme.shapes.medium) {
-              Text(text = "Add or Change the game result", color = Color.White)
-            }
-            /*Button(
-                onClick = { navController.navigate("changeResult_route/${tourneyT.name}")},
-                enabled = true,
-                shape = MaterialTheme.shapes.medium
-            ){
-                Text(text = "Change the game result")
-            }*/
+              Button(
+                  onClick = {
+                      navController.navigate(
+                          "pointsResult_route/${getTournament(tournamentName)?.name}"
+                      )
+                  },
+                  enabled = true,
+                  // border = BorderStroke( width = 1.dp, brush = SolidColor(Color.Blue)),
+                  shape = MaterialTheme.shapes.medium
+              ) {
+                  Text(text = "Add or Change the game result", color = Color.White)
+              }
           }
         }
       })
@@ -695,7 +687,6 @@ fun createScheduleTournament(
 
 fun actualizeTournamentSchedule(tourney1: TournamentClass): MutableList<MutableList<Result>> {
   val oldSchedule = tourney1.schedule
-  // listCopy(tourney1)
   val participantList = tourney1.participants
   val scheduleNew = mutableListOf<MutableList<Result>>()
   val roundNumber = (getRow(getNumberOfActualParticipants(participantList)) * 2) - 1
@@ -709,7 +700,7 @@ fun actualizeTournamentSchedule(tourney1: TournamentClass): MutableList<MutableL
       for (j in i) {
         for (k in scheduleNew) {
           for (z in k) {
-            if ((j.participant1 == z.participant1) && (j.participant2 == z.participant2)) {
+            if ((j.participant1.name == z.participant1.name) && (j.participant2.name == z.participant2.name)) {
               z.resultParticipant1 = j.resultParticipant1
               z.resultParticipant2 = j.resultParticipant2
             }
