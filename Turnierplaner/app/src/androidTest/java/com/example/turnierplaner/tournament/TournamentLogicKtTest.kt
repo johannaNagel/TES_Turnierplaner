@@ -2,6 +2,8 @@
 package com.example.turnierplaner.tournament
 
 import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
+import com.example.turnierplaner.tournament.leagueSystem.addParticipantToTournament
+import com.example.turnierplaner.tournament.leagueSystem.containsParticipant
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.example.turnierplaner.tournament.leagueSystem.getAllTournaments
@@ -34,20 +36,16 @@ class TournamentLogicKtTest : TestCase() {
     assertEquals("Test", findTournament("Test").name)
   }
 
-  // WIRD BEI TESTS DER DB BEREITS MITGETESTET
+  @Test
+  fun testRemoveParticipant(){
 
-  /*@Test
-  fun testDeleteTournament() {
+    createAddToAllTournaments("Test", 10, 0, 0)
 
-    createAddToAllTournaments("Test", 10)
+    addParticipantToTournament("Test", "TestParticipant")
 
-    var tourney: List<TournamentClass> = getAllTournaments()
+    assertTrue(containsParticipant("Test", "TestParticipant"))
 
-    //Ich habe eine weitere Methode implementiert, die nun local und von der DB gleichzeitig löscht
-    removeTournament(findTournament("Test"))
-
-    assertFalse(tourney.isEmpty())
-  }*/
+  }
 
   @After
   override fun tearDown() {

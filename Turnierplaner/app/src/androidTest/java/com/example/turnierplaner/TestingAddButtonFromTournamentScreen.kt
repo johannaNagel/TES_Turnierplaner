@@ -1,6 +1,8 @@
 /* (C)2021 */
 package com.example.turnierplaner
 
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -19,6 +21,8 @@ class TestingAddButtonFromTournamentScreen {
 
   @get:Rule val composeTestRule = createAndroidComposeRule<Turnierplaner>()
 
+  @ExperimentalComposeUiApi
+  @ExperimentalMaterialApi
   @Before
   fun login() {
     composeTestRule.setContent {

@@ -21,7 +21,7 @@ class TestingAddingToDB {
   private val id = UUID.randomUUID().toString()
   private val numberOfTeams = 1
   private val players = mutableListOf<Participant>()
-  private val tourney = TournamentClass(name, id, numberOfTeams, players, 0, 0)
+  private val tourney = TournamentClass(name, id, numberOfTeams, 0, 0, players, null)
   private val database =
       Firebase.database(
           "https://turnierplaner-86dfe-default-rtdb.europe-west1.firebasedatabase.app/")

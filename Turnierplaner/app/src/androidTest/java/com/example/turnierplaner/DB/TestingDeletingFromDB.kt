@@ -18,7 +18,7 @@ class TestingDeletingFromDB {
   private val id = UUID.randomUUID().toString()
   private val numberOfTeams = 1
   private val players = mutableListOf<Participant>()
-  private val tourney = TournamentClass(name, id, numberOfTeams, players, 0, 0)
+  private val tourney = TournamentClass(name, id, numberOfTeams, 0, 0, players, null)
 
   @Before
   fun initialize() {

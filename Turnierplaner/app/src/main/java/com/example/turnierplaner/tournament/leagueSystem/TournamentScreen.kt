@@ -173,8 +173,6 @@ fun createAddToAllTournaments(
 
   // create a list of participants
   val participants = mutableListOf<Participant>()
-  val random = Random()
-  random.nextInt(100)
 
   // fill the tourney with empty rows depending on how many participants were set
   for (idx in 1..numberOfParticipants) {
@@ -206,8 +204,6 @@ fun createAddToAllTournaments(
 
   // create a list of participant
   val participants = mutableListOf<Participant>()
-  val random = Random()
-  random.nextInt(100)
 
   // fill the tourney with empty rows depending on how many participants were set
   for (idx in 1..numberOfParticipants) {
@@ -272,6 +268,23 @@ fun addParticipantToTournament(tournamentName: String?, participantName: String)
           0,
           tourney.numberOfParticipants,
           FirebaseAuth.getInstance().currentUser?.uid.toString()))
+}
+
+fun containsParticipant(tournamentName: String?, participantName: String): Boolean{
+
+    var tourney: TournamentClass = findTournament("Test")
+    var participants = tourney.participants
+
+    for(participant in participants){
+
+        if(participant.name == participantName){
+
+            return true
+
+        }
+
+    }
+    return false
 }
 
 fun tournamentContainsPlayer(tournamentName: String?, participantName: String): Boolean {

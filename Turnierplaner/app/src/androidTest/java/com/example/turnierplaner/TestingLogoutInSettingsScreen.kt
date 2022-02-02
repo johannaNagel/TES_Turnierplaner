@@ -2,6 +2,8 @@
 package com.example.turnierplaner
 
 import androidx.activity.compose.setContent
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -24,6 +26,8 @@ class TestingLogoutInSettingsScreen {
 
   @get:Rule val composeTestRule = createAndroidComposeRule<Turnierplaner>()
 
+  @ExperimentalComposeUiApi
+  @ExperimentalMaterialApi
   @Before
   fun Login() {
     composeTestRule.setContent {

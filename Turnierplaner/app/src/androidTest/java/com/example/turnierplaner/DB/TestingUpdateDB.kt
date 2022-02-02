@@ -3,7 +3,7 @@ package com.example.turnierplaner.DB
 
 import com.example.turnierplaner.tournament.leagueSystem.Participant
 import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
-import com.example.turnierplaner.tournament.leagueSystem.addPlayerToTournament
+import com.example.turnierplaner.tournament.leagueSystem.addParticipantToTournament
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
@@ -21,7 +21,7 @@ class TestingUpdateDB {
   private val id = UUID.randomUUID().toString()
   private val numberOfTeams = 5
   private val players = mutableListOf<Participant>()
-  private val tourney = TournamentClass(name, id, numberOfTeams, players, 0, 0)
+  private val tourney = TournamentClass(name, id, numberOfTeams, 0, 0, players, null)
 
   @Before
   fun initialize() {
@@ -31,7 +31,7 @@ class TestingUpdateDB {
 
   @Test
   fun testAddPlayerToTournament() {
-    addPlayerToTournament(tourney.name, "TestPlayer1")
+    addParticipantToTournament(tourney.name, "TestPlayer1")
     pushLocalToDb()
     Thread.sleep(5005)
     assertEquals("TestPlayer1", findTournament(tourney.name).participants[0].name)

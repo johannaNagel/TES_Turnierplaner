@@ -1,6 +1,8 @@
 /* (C)2021 */
 package com.example.turnierplaner.tournament
 
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -25,12 +27,14 @@ class TournamentScreenKtTest : TestCase() {
 
   @get:Rule val composeTestRule = createAndroidComposeRule<Turnierplaner>()
 
+  @ExperimentalComposeUiApi
+  @ExperimentalMaterialApi
   @Before
   fun login() {
     composeTestRule.setContent {
       navController = rememberNavController()
       SetupNavGraph(navController = navController)
-      createAddToAllTournaments("Test", 10)
+      // createAddToAllTournaments("Test", 10, )
       navController.navigate("single_tournament_route/Test")
     }
   }
