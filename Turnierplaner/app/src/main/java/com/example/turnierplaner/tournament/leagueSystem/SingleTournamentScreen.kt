@@ -300,19 +300,27 @@ fun DeleteTournamentPopUp(navController: NavController, tourney: TournamentClass
       })
 }
 
-fun sortTournamentByPoints(tournamentName: String?) {
+fun sortTournamentByPoints(tournamentName: String?): MutableList<Participant> {
 
-  val tourney = findTournament(tournamentName)
-  val participants = tourney.participants
+    val tourney = findTournament(tournamentName)
+    var participants = listCopy(tourney)
 
-  participants.sortByDescending { it.points }
+    participants.sortByDescending { it.points }
 
-  tourney.participants[0].rank = 1
+    participants[0].rank = 1
 
-  for (idx in 1 until tourney.numberOfParticipants) {
+    for (idx in 1 until tourney.numberOfParticipants) {
 
-    tourney.participants[idx].rank = idx + 1
-  }
+        participants[idx].rank = idx + 1
+    }
+    for (i in 0 until tourney.numberOfParticipants) {
+        for( j in 0 until tourney.numberOfParticipants) {
+            if (participants[i].name == tourney.participants[j].name) {
+                tourney.participants[i].rank = participants[j].rank
+            }
+        }
+    }
+    return participants
 }
 
 @Composable
@@ -545,4 +553,18 @@ fun DropdownMenu(
       }
     }
   }
+}
+
+fun listCopy(tournament: TournamentClass): MutableList<Participant> {
+    var list = mutableListOf<Participant>()
+    for (i in 0..tournament.participants.size - 1) {
+        var participant = Participant("", 0, 0, 0, "")
+        list.add(participant)
+        list[i].games = tournament.participants[i].games
+        list[i].rank = tournament.participants[i].rank
+        list[i].id = tournament.participants[i].id
+        list[i].name = tournament.participants[i].name
+        list[i].points = tournament.participants[i].points
+    }
+    return list
 }

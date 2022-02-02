@@ -784,18 +784,3 @@ fun setListRes(tournamentName: String) {
   listResult = ListResult(tourney!!.participants)
 }
 
-fun listCopy(tournament: TournamentClass): MutableList<MutableList<Result>> {
-  var list = mutableListOf<MutableList<Result>>()
-  var list2 = mutableListOf<Result>()
-  for (i in 0..tournament.schedule!!.size - 1) {
-    list.add(list2)
-    for (j in 0..tournament.schedule!![i].size - 1) {
-      list[i].add(Result())
-      list[i][j].participant1 = tournament.schedule!![i][j].participant1
-      list[i][j].participant2 = tournament.schedule!![i][j].participant2
-      list[i][j].resultParticipant1 = tournament.schedule!![i][j].resultParticipant1
-      list[i][j].resultParticipant2 = tournament.schedule!![i][j].resultParticipant2
-    }
-  }
-  return list
-}
