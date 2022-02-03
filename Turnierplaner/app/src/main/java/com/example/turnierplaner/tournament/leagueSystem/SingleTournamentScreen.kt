@@ -66,8 +66,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
-import com.example.turnierplaner.tournament.Participant
-import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.removeTournament
@@ -284,7 +282,7 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
 }
 
 @Composable
-fun DeleteTournamentPopUp(navController: NavController, tourney: Tournament) {
+fun DeleteTournamentPopUp(navController: NavController, tourney: TournamentClass) {
 
   AlertDialog(
       onDismissRequest = { showDeleteDialog.value = false },
@@ -302,27 +300,19 @@ fun DeleteTournamentPopUp(navController: NavController, tourney: Tournament) {
       })
 }
 
-fun sortTournamentByPoints(tournamentName: String?): MutableList<Participant> {
+fun sortTournamentByPoints(tournamentName: String?) {
 
   val tourney = findTournament(tournamentName)
-  var participants = listCopy(tourney)
+  val participants = tourney.participants
 
   participants.sortByDescending { it.points }
 
-  participants[0].rank = 1
+  tourney.participants[0].rank = 1
 
   for (idx in 1 until tourney.numberOfParticipants) {
 
-    participants[idx].rank = idx + 1
+    tourney.participants[idx].rank = idx + 1
   }
-  for (i in 0 until tourney.numberOfParticipants) {
-    for (j in 0 until tourney.numberOfParticipants) {
-      if (participants[i].name == tourney.participants[j].name) {
-        tourney.participants[i].rank = participants[j].rank
-      }
-    }
-  }
-  return participants
 }
 
 @Composable
@@ -557,7 +547,7 @@ fun DropdownMenu(
   }
 }
 
-fun listCopy(tournament: Tournament): MutableList<Participant> {
+fun listCopy(tournament: TournamentClass): MutableList<Participant> {
   var list = mutableListOf<Participant>()
   for (i in 0..tournament.participants.size - 1) {
     var participant = Participant("", 0, 0, 0, "")

@@ -1,9 +1,8 @@
 /* (C)2022 */
 package com.example.turnierplaner.DB
 
-import com.example.turnierplaner.tournament.Participant
-import com.example.turnierplaner.tournament.Tournament
-import com.example.turnierplaner.tournament.leagueSystem.TournamentScreen
+import com.example.turnierplaner.tournament.leagueSystem.Participant
+import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb

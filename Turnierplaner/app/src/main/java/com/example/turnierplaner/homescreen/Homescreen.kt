@@ -148,5 +148,333 @@ fun Home(navController: NavHostController) {
       })
 }
 
+@ExperimentalComposeUiApi
+@Composable
+fun Add(navController: NavHostController) {
+  Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text(text = "Add") }
+  var tournamentName by remember { mutableStateOf("") }
+  var numberOfParticipants by remember { mutableStateOf("") }
+  var victoryPoints by remember { mutableStateOf("") }
+  var tiePoints by remember { mutableStateOf("") }
+  var expanded by remember { mutableStateOf(false) }
+  val suggestions = listOf("League", "KnockOut-System", "Double KnockOut-System")
+  var selectedTournamentType by remember { mutableStateOf("") }
+  val selectedItem = remember { mutableStateOf("home") }
+  var textfieldSize by remember { mutableStateOf(Size.Zero) }
+  val keyboardController = LocalSoftwareKeyboardController.current
+
+  Scaffold(
+      topBar = {
+        Column(modifier = Modifier.fillMaxWidth()) {
+          TopAppBar(
+              backgroundColor = Color.White,
+              elevation = 1.dp,
+              title = { Text(text = "Adding New Tournament") },
+          )
+        }
+      },
+      content = {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            content = {
+              OutlinedTextField(
+                  value = tournamentName,
+                  singleLine = true,
+                  onValueChange = { newTournament -> tournamentName = newTournament },
+                  label = { Text(text = "Tournament Name") },
+                  keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                  keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                  leadingIcon = {
+                    IconButton(onClick = { /*TODO*/}) {
+                      Icon(
+                          imageVector = Icons.Filled.SportsFootball,
+                          contentDescription = "FootballIcon")
+                    }
+                  })
+
+              OutlinedTextField(
+                  value = numberOfParticipants,
+                  singleLine = true,
+                  keyboardOptions =
+                      KeyboardOptions(
+                          keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                  keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                  onValueChange = { newNumberOfParticipants ->
+                    numberOfParticipants = newNumberOfParticipants.filter { it.isDigit() }
+                  },
+                  label = { Text(text = "Number Of Participants") },
+                  leadingIcon = {
+                    IconButton(onClick = { /*TODO*/}) {
+                      Icon(imageVector = Icons.Filled.Groups, contentDescription = "Groups")
+                    }
+                  })
+
+              // Tournament type
+              val icon =
+                  if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
+
+              Column() {
+                OutlinedTextField(
+                    value = selectedTournamentType,
+                    readOnly = true,
+                    modifier =
+                        Modifier.onGloballyPositioned { coordinates ->
+                          // This value is used to assign to the DropDown the same width
+                          textfieldSize = coordinates.size.toSize()
+                        },
+                    onValueChange = { selectedTournamentType = it },
+                    label = { Text("Tournament Type") },
+                    leadingIcon = {
+                      IconButton(onClick = { /*TODO*/}) {
+                        Icon(
+                            imageVector = Icons.Filled.FormatListNumbered,
+                            contentDescription = "TournamentList")
+                      }
+                    },
+                    trailingIcon = {
+                      Icon(icon, "Arrow", Modifier.clickable { expanded = !expanded })
+                    })
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier =
+                        Modifier.width(with(LocalDensity.current) { textfieldSize.width.toDp() }),
+                ) {
+                  suggestions.forEach { label ->
+                    DropdownMenuItem(
+                        onClick = {
+                          selectedTournamentType = label
+                          expanded = false
+                        }) { Text(text = label) }
+                  }
+                }
+              }
+
+              OutlinedTextField(
+                  value = victoryPoints,
+                  onValueChange = { newVictoryPoints ->
+                    victoryPoints = newVictoryPoints.filter { it.isDigit() }
+                  },
+                  singleLine = true,
+                  label = { Text(text = "Victory points") },
+                  keyboardOptions =
+                      KeyboardOptions(
+                          keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                  keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                  leadingIcon = {
+                    IconButton(onClick = { /*TODO*/}) {
+                      Icon(imageVector = Icons.Filled.Star, contentDescription = "VictoryStar")
+                    }
+                  })
+
+              OutlinedTextField(
+                  value = tiePoints,
+                  onValueChange = { newTiePoints ->
+                    tiePoints = newTiePoints.filter { it.isDigit() }
+                  },
+                  singleLine = true,
+                  label = { Text(text = "Tie points") },
+                  keyboardOptions =
+                      KeyboardOptions(
+                          keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                  keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                  leadingIcon = {
+                    IconButton(onClick = { /*TODO*/}) {
+                      Icon(imageVector = Icons.Filled.StarHalf, contentDescription = "TieStar")
+                    }
+                  })
+
+              Button(
+                  modifier = Modifier.fillMaxWidth().height(50.dp),
+                  enabled =
+                      tournamentName.isNotEmpty() &&
+                          tournamentName.isNotBlank() &&
+                          numberOfParticipants.isNotEmpty() &&
+                          tiePoints.isNotEmpty() &&
+                          victoryPoints.isNotEmpty() &&
+                          selectedTournamentType.isNotEmpty() &&
+                          !allTournamentContainsTournament(tournamentName),
+                  content = { Text(text = "Add") },
+                  onClick = {
+                    createAddToAllTournaments(
+                        tournamentName,
+                        numberOfParticipants.toInt(),
+                        victoryPoints.toInt(),
+                        tiePoints.toInt())
+                    navController.navigate("single_tournament_route/$tournamentName")
+                    // Navigiere zum com.example.turnierplaner.tournament.leagueSystem.Tournament
+                    // Tab
+                  })
+            })
+      },
+      bottomBar = {
+        BottomAppBar(
+            content = {
+              BottomNavigation() {
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Home, "") },
+                    label = { Text(text = "Home") },
+                    selected = selectedItem.value == "Home",
+                    onClick = {
+                      navController.navigate(BottomBarScreens.Home.route)
+                      selectedItem.value = "Home"
+                    },
+                    alwaysShowLabel = false)
+
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.List, "") },
+                    label = {
+                      Text(text = "com.example.turnierplaner.tournament.leagueSystem.Tournament")
+                    },
+                    selected =
+                        selectedItem.value ==
+                            "com.example.turnierplaner.tournament.leagueSystem.Tournament",
+                    onClick = {
+                      navController.navigate(BottomBarScreens.Tournament.route)
+                      selectedItem.value =
+                          "com.example.turnierplaner.tournament.leagueSystem.Tournament"
+                    },
+                    alwaysShowLabel = false)
+
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Add, "") },
+                    label = { Text(text = "Add") },
+                    selected = selectedItem.value == "Add",
+                    onClick = { selectedItem.value = "Add" },
+                    alwaysShowLabel = false)
+
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Settings, "") },
+                    label = { Text(text = "Settings") },
+                    selected = selectedItem.value == "Settings",
+                    onClick = {
+                      navController.navigate(BottomBarScreens.Setting.route)
+                      selectedItem.value = "Settings"
+                    },
+                    alwaysShowLabel = false)
+              }
+            })
+      })
+}
+
+@Composable
+fun Setting(navController: NavHostController) {
+
+  val result = remember { mutableStateOf("") }
+  val selectedItem = remember { mutableStateOf("home") }
+
+  Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Text(text = "Setting")
+  }
+
+  Scaffold(
+      topBar = {
+        Column(modifier = Modifier.fillMaxWidth()) {
+          TopAppBar(
+              backgroundColor = Color.White,
+              elevation = 1.dp,
+              title = { Text(text = "Settings") },
+              actions = {
+                val context = LocalContext.current
+                IconButton(
+                    onClick = {
+                      if (FirebaseAuth.getInstance().currentUser != null) {
+                        Firebase.auth.signOut()
+                        val gso =
+                            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+                        val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                        googleSignInClient.signOut()
+                        showMessage(context, message = "User Loged out successfully")
+                        val handler = Handler(Looper.getMainLooper())
+                        handler.postDelayed(
+                            { navController.navigate(LoginScreens.Login.route) }, 1000)
+                      } else {
+                        showMessage(context, message = "No User to Log out")
+                      }
+                    },
+                ) {
+                  Icon(
+                      imageVector = Icons.Rounded.ExitToApp,
+                      contentDescription = "Button for Logout",
+                  )
+                }
+              })
+        }
+      },
+      content = { Text("Settings need to implement") },
+      bottomBar = {
+        BottomAppBar(
+            content = {
+              BottomNavigation() {
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Home, "") },
+                    label = { Text(text = "Home") },
+                    selected = selectedItem.value == "Home",
+                    onClick = {
+                      navController.navigate(BottomBarScreens.Home.route)
+                      selectedItem.value = "Home"
+                    },
+                    alwaysShowLabel = false)
+
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.List, "") },
+                    label = { Text(text = "Tournament") },
+                    selected = selectedItem.value == "Tournament",
+                    onClick = {
+                      navController.navigate(BottomBarScreens.Tournament.route)
+                      selectedItem.value = "Tournament"
+                    },
+                    alwaysShowLabel = false)
+
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Add, "") },
+                    label = { Text(text = "Add") },
+                    selected = selectedItem.value == "Add",
+                    onClick = {
+                      navController.navigate(BottomBarScreens.Add.route)
+                      selectedItem.value = "Add"
+                    },
+                    alwaysShowLabel = false)
+
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Settings, "") },
+                    label = { Text(text = "Settings") },
+                    selected = selectedItem.value == "Settings",
+                    onClick = { selectedItem.value = "Settings" },
+                    alwaysShowLabel = false)
+              }
+            })
+      })
+}
+
+@Composable
+fun Profile(navController: NavHostController) {
+  Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Text(text = "Profile")
+  }
+
+  // Firebase USEr viewmodel
+}
+
+/*
+@Composable
+fun HomeScreen(navController: NavHostController) {
+
+  val listItems =
+      listOf(Screens.Home, Screens.Tournament, Screens.Add, Screens.Profile, Screens.Setting)
 
 
+  TurnierplanerTheme {
+    // A surface container using the 'background' color from the theme
+    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+      Scaffold(
+          bottomBar = {
+            BottomNavigationScreen(navController = navController, items = listItems)
+          }) {
+      }
+    }
+  }
+}
+ */

@@ -37,22 +37,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
-import com.example.turnierplaner.tournament.Participant
-import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.refreshActivate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.Exclude
+import java.util.Random
 import java.util.UUID
 
 // List with all Tournaments
-var allTournament = mutableListOf<Tournament>()
+var allTournament = mutableListOf<TournamentClass>()
 var changeState by mutableStateOf(0)
 var showRefreshPopUp = mutableStateOf(false)
 
 @Composable
-fun TournamentScreen(navController: NavHostController) {
+fun Tournament(navController: NavHostController) {
   refreshActivate = true
 
   // val result = remember { mutableStateOf("") }
@@ -174,6 +173,8 @@ fun createAddToAllTournaments(
 
   // create a list of participants
   val participants = mutableListOf<Participant>()
+  val random = Random()
+  random.nextInt(100)
 
   // fill the tourney with empty rows depending on how many participants were set
   for (idx in 1..numberOfParticipants) {
@@ -181,7 +182,7 @@ fun createAddToAllTournaments(
         Participant("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
   }
   val tourney =
-      Tournament(
+      TournamentClass(
           name,
           id,
           numberOfParticipants,
@@ -205,6 +206,8 @@ fun createAddToAllTournaments(
 
   // create a list of participant
   val participants = mutableListOf<Participant>()
+  val random = Random()
+  random.nextInt(100)
 
   // fill the tourney with empty rows depending on how many participants were set
   for (idx in 1..numberOfParticipants) {
@@ -213,7 +216,7 @@ fun createAddToAllTournaments(
   }
 
   val tourney =
-      Tournament(
+      TournamentClass(
           name,
           id,
           numberOfParticipants,
@@ -226,9 +229,9 @@ fun createAddToAllTournaments(
   pushLocalToDb()
 }
 
-fun findTournament(tournamentName: String?): Tournament {
+fun findTournament(tournamentName: String?): TournamentClass {
 
-  var tourney = Tournament("", UUID.randomUUID().toString(), 0, 0, 0, mutableListOf(), null)
+  var tourney = TournamentClass("", UUID.randomUUID().toString(), 0, 0, 0, mutableListOf(), null)
 
   for (s in allTournament) {
 
@@ -241,7 +244,7 @@ fun findTournament(tournamentName: String?): Tournament {
   return tourney
 }
 
-fun getAllTournaments(): List<Tournament> {
+fun getAllTournaments(): List<TournamentClass> {
 
   return allTournament
 }
@@ -271,22 +274,7 @@ fun addParticipantToTournament(tournamentName: String?, participantName: String)
           FirebaseAuth.getInstance().currentUser?.uid.toString()))
 }
 
-fun containsParticipant(tournamentName: String?, participantName: String): Boolean {
-
-  var tourney: Tournament = findTournament("Test")
-  var participants = tourney.participants
-
-  for (participant in participants) {
-
-    if (participant.name == participantName) {
-
-      return true
-    }
-  }
-  return false
-}
-
-fun tournamentContainsPlayer(tournamentName: String?, participantName: String): Boolean {
+fun tournamentContainsParticipant(tournamentName: String?, participantName: String): Boolean {
 
   val tourney = findTournament(tournamentName)
 
@@ -300,5 +288,37 @@ fun tournamentContainsPlayer(tournamentName: String?, participantName: String): 
   return false
 }
 
+fun allTournamentContainsTournament(tournamentName: String?): Boolean {
 
+  for (tournament in allTournament) {
 
+    if (tournament.name == tournamentName) {
+
+      return true
+    }
+  }
+  return false
+}
+
+data class Participant(
+    var name: String,
+    var games: Int,
+    var points: Int,
+    var rank: Int,
+    var id: String,
+) {
+  constructor() : this("", 0, 0, 0, "")
+}
+
+data class TournamentClass(
+    var name: String,
+    // To avoid storing in firebase database
+    @get:Exclude var id: String,
+    var numberOfParticipants: Int,
+    var pointsVictory: Int,
+    var pointsTie: Int,
+    var participants: MutableList<Participant>,
+    var schedule: MutableList<MutableList<Result>>?
+) {
+  constructor() : this("", "", 0, 0, 0, mutableListOf(), null)
+}
