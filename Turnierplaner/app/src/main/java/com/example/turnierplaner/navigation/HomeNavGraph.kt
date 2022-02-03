@@ -13,12 +13,11 @@ import com.example.turnierplaner.Schedule
 import com.example.turnierplaner.TournamentScreens
 import com.example.turnierplaner.homescreen.Add
 import com.example.turnierplaner.homescreen.Home
-import com.example.turnierplaner.homescreen.Profile
 import com.example.turnierplaner.homescreen.Setting
 import com.example.turnierplaner.tournament.leagueSystem.AddResultPoints
 import com.example.turnierplaner.tournament.leagueSystem.ScheduleComposable
 import com.example.turnierplaner.tournament.leagueSystem.SingleTournamentScreen
-import com.example.turnierplaner.tournament.leagueSystem.Tournament
+import com.example.turnierplaner.tournament.leagueSystem.TournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.deleteParticipantsScreen
 import com.example.turnierplaner.tournament.leagueSystem.editPointsScreen
 
@@ -30,12 +29,10 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
     composable(route = BottomBarScreens.Home.route) { Home(navController = navController) }
 
     composable(route = BottomBarScreens.Tournament.route) {
-      Tournament(navController = navController)
+      TournamentScreen(navController = navController)
     }
 
     composable(route = BottomBarScreens.Add.route) { Add(navController = navController) }
-
-    composable(route = BottomBarScreens.Profile.route) { Profile(navController = navController) }
 
     composable(route = BottomBarScreens.Setting.route) { Setting(navController = navController) }
 
@@ -58,6 +55,5 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
       editPointsScreen(
           navController = navController, backStackEntry.arguments?.getString("tournamentName"))
     }
-
   }
 }

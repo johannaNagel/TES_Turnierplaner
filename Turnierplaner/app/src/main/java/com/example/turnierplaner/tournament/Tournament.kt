@@ -1,16 +1,17 @@
-/* (C)2021 */
 package com.example.turnierplaner.tournament
 
-import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
+import com.example.turnierplaner.tournament.leagueSystem.Result
+import com.google.firebase.database.Exclude
 
-class Tournament : AppCompatActivity() {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
-    setContent {
-      // com.example.turnierplaner.tournament.DemoScrollableTable_RowAndColumn()
-    }
-  }
+data class Tournament(
+    var name: String,
+    // To avoid storing in firebase database
+    @get:Exclude var id: String,
+    var numberOfParticipants: Int,
+    var pointsVictory: Int,
+    var pointsTie: Int,
+    var participants: MutableList<Participant>,
+    var schedule: MutableList<MutableList<Result>>?
+) {
+    constructor() : this("", "", 0, 0, 0, mutableListOf(), null)
 }

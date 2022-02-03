@@ -18,6 +18,9 @@ android {
         versionName("1.0")
 
         testInstrumentationRunner("androidx.test.runner.AndroidJUnitRunner")
+        testHandleProfiling = true
+        testFunctionalTest = true
+
         vectorDrawables { useSupportLibrary(true) }
     }
 
@@ -42,6 +45,34 @@ android {
         kotlinCompilerVersion('1.5.21')
     }
     packagingOptions { resources { excludes += '/META-INF/{AL2.0,LGPL2.1}' } }
+
+    // Encapsulates options for running tests.
+    testOptions {
+        // Changes the directory where Gradle saves test reports. By default,
+        // Gradle saves test reports in the
+        // path_to_your_project/module_name/build/outputs/reports/ directory.
+        // '$rootDir' sets the path relative to the root directory of the
+        // current project.
+        reportDir("$rootDir/test-reports")
+        // Changes the directory where Gradle saves test results. By default,
+        // Gradle saves test results in the
+        // path_to_your_project/module_name/build/outputs/test-results/ directory.
+        // '$rootDir' sets the path relative to the root directory of the
+        // current project.
+        resultsDir("$rootDir/test-results")
+
+        // Always show the result of every unit test, even if it passes.
+        unitTests {
+
+            returnDefaultValues(true)
+
+            all {
+                testLogging {
+                    events('passed', 'skipped', 'failed', 'standardOut', 'standardError')
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -68,6 +99,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:28.2.0"))
     implementation('com.google.firebase:firebase-auth:21.0.1')
     implementation('com.google.firebase:firebase-auth-ktx:21.0.1')
+    implementation('com.google.firebase:firebase-core:9.6.1')
+    implementation ('com.google.gms:google-services:4.3.10')
+
 
     // errorprone Dependency
     errorprone("com.google.errorprone:error_prone_core:2.9.0")
@@ -125,3 +159,8 @@ spotless {
 }
 
 tasks.withType(JavaCompile) { options.errorprone.disableWarningsInGeneratedCode.set(true) }
+
+/* eslint-disable no-alert, no-console */
+apply plugin: ("com.android.application")
+apply plugin: ("com.google.gms.google-services")
+/* eslint-disable no-alert, no-console */

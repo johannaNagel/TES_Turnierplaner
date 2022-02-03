@@ -15,3 +15,4 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     composable(route = LoginScreens.Login.route) { LoginScreen(navController = navController) }
   }
 }
+

@@ -1,5 +1,5 @@
 /* (C)2021 */
-package com.example.turnierplaner
+package com.example.turnierplaner.Login
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -10,6 +10,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.turnierplaner.BottomBarScreens
+import com.example.turnierplaner.Turnierplaner
 import com.example.turnierplaner.navigation.SetupNavGraph
 import org.junit.Before
 import org.junit.Rule

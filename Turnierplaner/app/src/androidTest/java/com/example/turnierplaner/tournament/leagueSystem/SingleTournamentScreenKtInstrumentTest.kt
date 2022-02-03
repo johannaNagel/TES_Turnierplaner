@@ -1,5 +1,5 @@
 /* (C)2021 */
-package com.example.turnierplaner.tournament
+package com.example.turnierplaner.tournament.leagueSystem
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -13,7 +13,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.turnierplaner.Turnierplaner
 import com.example.turnierplaner.navigation.SetupNavGraph
-import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Rule
@@ -21,7 +20,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class TournamentScreenKtTest : TestCase() {
+class SingleTournamentScreenKtInstrumentTest : TestCase() {
 
   lateinit var navController: NavHostController
 

@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.turnierplaner.navigation.SetupNavGraph
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.ui.theme.TurnierplanerTheme
+import com.google.firebase.FirebaseApp
 
 class Turnierplaner : ComponentActivity() {
 
@@ -20,6 +21,9 @@ class Turnierplaner : ComponentActivity() {
   @ExperimentalComposeUiApi
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
+    FirebaseApp.initializeApp(this)
+
     setContent {
       TurnierplanerTheme {
         navController = rememberNavController()
@@ -34,3 +38,4 @@ class Turnierplaner : ComponentActivity() {
     getParticipantsFromDb()
   }
 }
+

@@ -53,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavHostController
+import com.example.turnierplaner.tournament.Participant
+import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 var roundNumber = 1
@@ -60,7 +62,7 @@ var listResult: ListResult? = null
 var rememberTournamentRound = ""
 private val showChangeDialog = mutableStateOf(false)
 var change = false
-var tournament: TournamentClass? = null
+var tournament: Tournament? = null
 var roundNumberInList = 0
 
 /** Composable method who shows the schedule of the tournament */
@@ -469,11 +471,11 @@ fun ChangeTournamentPopUp() {
 
 /** methods who adds the points and games to the tournamentClass */
 fun addResultPoints(
-    tourney: TournamentClass,
+    tourney: Tournament,
     winner: String,
     participant1name: String,
     participant2name: String
-): TournamentClass {
+): Tournament {
   for (i in tourney.participants) {
     if (i.name.equals(participant1name)) {
       if (winner.equals("winner1")) {
@@ -508,11 +510,11 @@ fun addResultPoints(
 
 /** methods who adds the changed points and games to the tournamentClass */
 fun addResultPointsChange(
-    tourney: TournamentClass,
+    tourney: Tournament,
     winner: String,
     Participant1name: String,
     Participant2name: String
-): TournamentClass {
+): Tournament {
   for (i in tourney.participants) {
     if (i.name.equals(Participant1name)) {
       for (k in tourney.schedule!!) {
@@ -619,7 +621,7 @@ fun addResultToResultList(
     resultGame1: String,
     resultGame2: String,
     gameRound: Int,
-    tourney: TournamentClass
+    tourney: Tournament
 ) {
   for (i in tourney.schedule!![(gameRound - 1)]) {
     if (i.participant1.name.equals(Participant1) && i.participant2.name.equals(Participant2)) {
@@ -676,7 +678,7 @@ fun createScheduleTournament(
   return allGames
 }
 
-fun actualizeTournamentSchedule(tourney1: TournamentClass): MutableList<MutableList<Result>> {
+fun actualizeTournamentSchedule(tourney1: Tournament): MutableList<MutableList<Result>> {
   val oldSchedule = tourney1.schedule
   // listCopy(tourney1)
   val participantList = tourney1.participants
@@ -709,7 +711,7 @@ fun actualizeTournamentSchedule(tourney1: TournamentClass): MutableList<MutableL
 fun checkIfGamePlayed(
     participant1: String,
     participant2: String,
-    tourney: TournamentClass
+    tourney: Tournament
 ): Boolean {
   var played = false
   for (i in tourney.schedule!!) {
@@ -723,7 +725,7 @@ fun checkIfGamePlayed(
 }
 
 /** fill the mutableList with games */
-fun fillGameString(tourney: TournamentClass): MutableList<String> {
+fun fillGameString(tourney: Tournament): MutableList<String> {
   val suggestionsGame = mutableListOf<String>()
   for (i in 0 until tourney.schedule!![roundNumber - 1].size) {
     val k = tourney.schedule!![roundNumber - 1][i].participant1.name
@@ -734,7 +736,7 @@ fun fillGameString(tourney: TournamentClass): MutableList<String> {
 }
 
 /** return the actual round */
-fun methodWhichRound(tourney: TournamentClass): Int {
+fun methodWhichRound(tourney: Tournament): Int {
   var round = 0
   for (i in tourney.schedule!!) {
     for (j in i) {
@@ -748,7 +750,7 @@ fun methodWhichRound(tourney: TournamentClass): Int {
 }
 
 /** return the gameresult */
-fun getGameResult(game: String, tourney: TournamentClass): Result {
+fun getGameResult(game: String, tourney: Tournament): Result {
   val splitString = game.split(" vs. ")
   val participant1 = splitString[0]
   val participant2 = splitString[1]
@@ -764,14 +766,14 @@ fun getGameResult(game: String, tourney: TournamentClass): Result {
   return result
 }
 
-fun getTournament(tourneyName: String): TournamentClass? {
+fun getTournament(tourneyName: String): Tournament? {
   if (tournament == null) {
     tournament = findTournament(tourneyName)
   }
   return tournament
 }
 
-fun setTourn(tourney: TournamentClass) {
+fun setTourn(tourney: Tournament) {
   tournament = tourney
 }
 
@@ -783,4 +785,3 @@ fun setListRes(tournamentName: String) {
   var tourney = getTournament(tournamentName)
   listResult = ListResult(tourney!!.participants)
 }
-

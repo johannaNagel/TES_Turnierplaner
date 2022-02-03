@@ -66,6 +66,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
+import com.example.turnierplaner.tournament.Participant
+import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.removeTournament
@@ -282,7 +284,7 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
 }
 
 @Composable
-fun DeleteTournamentPopUp(navController: NavController, tourney: TournamentClass) {
+fun DeleteTournamentPopUp(navController: NavController, tourney: Tournament) {
 
   AlertDialog(
       onDismissRequest = { showDeleteDialog.value = false },
@@ -302,25 +304,25 @@ fun DeleteTournamentPopUp(navController: NavController, tourney: TournamentClass
 
 fun sortTournamentByPoints(tournamentName: String?): MutableList<Participant> {
 
-    val tourney = findTournament(tournamentName)
-    var participants = listCopy(tourney)
+  val tourney = findTournament(tournamentName)
+  var participants = listCopy(tourney)
 
-    participants.sortByDescending { it.points }
+  participants.sortByDescending { it.points }
 
-    participants[0].rank = 1
+  participants[0].rank = 1
 
-    for (idx in 1 until tourney.numberOfParticipants) {
+  for (idx in 1 until tourney.numberOfParticipants) {
 
-        participants[idx].rank = idx + 1
+    participants[idx].rank = idx + 1
+  }
+  for (i in 0 until tourney.numberOfParticipants) {
+    for (j in 0 until tourney.numberOfParticipants) {
+      if (participants[i].name == tourney.participants[j].name) {
+        tourney.participants[i].rank = participants[j].rank
+      }
     }
-    for (i in 0 until tourney.numberOfParticipants) {
-        for( j in 0 until tourney.numberOfParticipants) {
-            if (participants[i].name == tourney.participants[j].name) {
-                tourney.participants[i].rank = participants[j].rank
-            }
-        }
-    }
-    return participants
+  }
+  return participants
 }
 
 @Composable
@@ -555,16 +557,16 @@ fun DropdownMenu(
   }
 }
 
-fun listCopy(tournament: TournamentClass): MutableList<Participant> {
-    var list = mutableListOf<Participant>()
-    for (i in 0..tournament.participants.size - 1) {
-        var participant = Participant("", 0, 0, 0, "")
-        list.add(participant)
-        list[i].games = tournament.participants[i].games
-        list[i].rank = tournament.participants[i].rank
-        list[i].id = tournament.participants[i].id
-        list[i].name = tournament.participants[i].name
-        list[i].points = tournament.participants[i].points
-    }
-    return list
+fun listCopy(tournament: Tournament): MutableList<Participant> {
+  var list = mutableListOf<Participant>()
+  for (i in 0..tournament.participants.size - 1) {
+    var participant = Participant("", 0, 0, 0, "")
+    list.add(participant)
+    list[i].games = tournament.participants[i].games
+    list[i].rank = tournament.participants[i].rank
+    list[i].id = tournament.participants[i].id
+    list[i].name = tournament.participants[i].name
+    list[i].points = tournament.participants[i].points
+  }
+  return list
 }

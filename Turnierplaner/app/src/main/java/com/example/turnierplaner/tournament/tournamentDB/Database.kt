@@ -1,9 +1,10 @@
 /* (C)2022 */
 package com.example.turnierplaner.tournament.tournamentDB
 
-import com.example.turnierplaner.tournament.leagueSystem.Participant
+import com.example.turnierplaner.tournament.Participant
+import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.Result
-import com.example.turnierplaner.tournament.leagueSystem.TournamentClass
+import com.example.turnierplaner.tournament.leagueSystem.TournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.changeState
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
@@ -29,7 +30,7 @@ fun pushLocalToDb() {
   changeState++
 }
 
-fun removeTournament(tourney: TournamentClass) {
+fun removeTournament(tourney: Tournament) {
   database.getReference("Tournaments").child(tourney.id).removeValue()
   val tourney = findTournament(tourney.name)
   allTournament.remove(tourney)
@@ -47,19 +48,19 @@ fun getParticipantsFromDb() {
               val items: Iterator<DataSnapshot> = snapshot.children.iterator()
               while (items.hasNext()) {
                 val item: DataSnapshot = items.next()
-                val name: String = item.getValue(TournamentClass::class.java)!!.name
+                val name: String = item.getValue(Tournament::class.java)!!.name
                 val id: String? = item.key
                 val numberOfParticipants: Int =
-                    item.getValue(TournamentClass::class.java)!!.numberOfParticipants
+                    item.getValue(Tournament::class.java)!!.numberOfParticipants
                 val participants: MutableList<Participant> =
-                    item.getValue(TournamentClass::class.java)!!.participants
-                val pointsVic: Int = item.getValue(TournamentClass::class.java)!!.pointsVictory
-                val pointsTie: Int = item.getValue(TournamentClass::class.java)!!.pointsTie
+                    item.getValue(Tournament::class.java)!!.participants
+                val pointsVic: Int = item.getValue(Tournament::class.java)!!.pointsVictory
+                val pointsTie: Int = item.getValue(Tournament::class.java)!!.pointsTie
                 val schedule: MutableList<MutableList<Result>>? =
-                    item.getValue(TournamentClass::class.java)!!.schedule
+                    item.getValue(Tournament::class.java)!!.schedule
                 if (id != null) {
                   val tourney =
-                      TournamentClass(
+                      Tournament(
                           name,
                           id,
                           numberOfParticipants,
@@ -88,7 +89,7 @@ fun addEventListenerDb() {
           object : ChildEventListener {
 
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-              val tourney = snapshot.getValue(TournamentClass::class.java)
+              val tourney = snapshot.getValue(Tournament::class.java)
               if (tourney != null) {
                 tourney.id = snapshot.key.toString()
                 createAddToAllTournaments(
@@ -107,7 +108,7 @@ fun addEventListenerDb() {
               val id: String = snapshot.key.toString()
               for (s in allTournament) {
                 if (s.id == id) {
-                  val tourney = snapshot.getValue(TournamentClass::class.java)
+                  val tourney = snapshot.getValue(Tournament::class.java)
                   if (tourney != null) {
                     s.name = tourney.name
                     s.numberOfParticipants = tourney.numberOfParticipants
@@ -151,7 +152,7 @@ class QuotesChildEventListener : ChildEventListener {
    * will be null for the first child node of a location.
    */
   override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-    val tourney = snapshot.getValue(TournamentClass::class.java)
+    val tourney = snapshot.getValue(Tournament::class.java)
     if (tourney != null) {
       tourney.id = snapshot.key.toString()
       createAddToAllTournaments(
@@ -177,7 +178,7 @@ class QuotesChildEventListener : ChildEventListener {
     val id: String = snapshot.key.toString()
     for (s in allTournament) {
       if (s.id == id) {
-        val tourney = snapshot.getValue(TournamentClass::class.java)
+        val tourney = snapshot.getValue(Tournament::class.java)
         if (tourney != null) {
           s.name = tourney.name
           s.numberOfParticipants = tourney.numberOfParticipants

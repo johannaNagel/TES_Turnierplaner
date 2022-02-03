@@ -1,25 +1,27 @@
 /* (C)2021 */
-package com.example.turnierplaner
+package com.example.turnierplaner.Login
 
+import android.view.KeyEvent
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.turnierplaner.LoginScreens
+import com.example.turnierplaner.Turnierplaner
 import com.example.turnierplaner.navigation.SetupNavGraph
-import com.google.firebase.auth.FirebaseAuth
-import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class TestingLogoutInLogInScreen {
+class TestingLoginWithGoogle {
 
   lateinit var navController: NavHostController
 
@@ -36,25 +38,5 @@ class TestingLogoutInLogInScreen {
     }
   }
 
-  @Test
-  fun testEnabledLogoutButton() {
-    composeTestRule.onNodeWithContentDescription("Button for Logout").assertIsEnabled()
-  }
 
-  @Test
-  fun testSuccessfulLogout() {
-    composeTestRule.onNodeWithContentDescription("Button for Logout").performClick()
-    assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
-  }
-
-  @Test
-  fun clickLogout10Times() {
-    var counter = 1
-    while (counter < 10) {
-      composeTestRule.onNodeWithContentDescription("Button for Logout").performClick()
-      counter += 1
-    }
-    composeTestRule.onNodeWithContentDescription("Button for Logout").assertIsEnabled()
-    assertEquals(FirebaseAuth.getInstance().currentUser == null, true)
-  }
 }
