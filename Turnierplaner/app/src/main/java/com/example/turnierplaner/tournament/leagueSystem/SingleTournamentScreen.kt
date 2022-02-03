@@ -278,6 +278,7 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
               showAddParticipantDialog.value = false
               addParticipantToTournament(tournamentName, participantName)
               pushLocalToDb()
+                getParticipantsFromDb()
             })
       },
   )
@@ -295,7 +296,7 @@ fun DeleteTournamentPopUp(navController: NavController, tourney: Tournament) {
         Button(
             content = { Text("Yes") },
             onClick = {
-              // showDeleteDialog.value = false
+                showDeleteDialog.value = false
               navController.navigate(BottomBarScreens.Tournament.route)
               removeTournament(tourney)
             })
@@ -388,8 +389,16 @@ fun deleteParticipantsScreen(navController: NavController, tournamentName: Strin
                       if (it == DismissValue.DismissedToEnd ||
                           it == DismissValue.DismissedToStart) {
                         unread = !unread
-                        items.remove(item)
-                        findTournament(tournamentName).numberOfParticipants--
+
+                        //Remove player
+                          items.remove(item)
+                          /*
+                       item.name = ""
+                       item.games = 0
+                       item.id = ""
+                       item.points = 0
+                       item.rank = tourney.numberOfParticipants*/
+                          tourney.numberOfParticipants--
                         pushLocalToDb()
                       }
                       it != DismissValue.DismissedToEnd

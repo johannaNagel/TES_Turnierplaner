@@ -91,19 +91,14 @@ fun TournamentScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
-              for (tournament in allTournament) {
-                for (participant in tournament.participants) {
-                  if (participant.id == FirebaseAuth.getInstance().currentUser?.uid.toString()) {
+                for (tournament in allTournament) {
                     Button(
                         modifier = Modifier.fillMaxWidth().height(50.dp),
                         content = { Text(text = tournament.name) },
                         onClick = {
-                          navController.navigate("single_tournament_route/${tournament.name}")
+                            navController.navigate("single_tournament_route/${tournament.name}")
                         })
-                    break
-                  }
                 }
-              }
             })
       },
       bottomBar = {
@@ -156,7 +151,7 @@ fun RefreshPopUp() {
 
   AlertDialog(
       onDismissRequest = { showRefreshPopUp.value = false },
-      title = { Text(text = "Changes were made.") },
+      title = { Text(text = "Changes in a Tournament were made or u was added to a new Tournament") },
       text = { Text("Press Ok do continue.") },
       confirmButton = {
         Button(content = { Text("OK") }, onClick = { showRefreshPopUp.value = false })
@@ -196,39 +191,6 @@ fun createAddToAllTournaments(
   pushLocalToDb()
 }
 
-// If DB has new Tourney, then we need to use the ID already assigned
-fun createAddToAllTournaments(
-    name: String,
-    numberOfParticipants: Int,
-    id: String,
-    pointsVict: Int,
-    pointsTie: Int
-) {
-
-  // create a list of participant
-  val participants = mutableListOf<Participant>()
-  val random = Random()
-  random.nextInt(100)
-
-  // fill the tourney with empty rows depending on how many participants were set
-  for (idx in 1..numberOfParticipants) {
-    participants.add(
-        Participant("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
-  }
-
-  val tourney =
-      Tournament(
-          name,
-          id,
-          numberOfParticipants,
-          pointsVict,
-          pointsTie,
-          participants,
-          createScheduleTournament(participants))
-
-  allTournament.add(tourney)
-  pushLocalToDb()
-}
 
 fun findTournament(tournamentName: String?): Tournament {
 

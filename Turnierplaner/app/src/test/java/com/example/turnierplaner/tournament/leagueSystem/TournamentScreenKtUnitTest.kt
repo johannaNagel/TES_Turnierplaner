@@ -41,13 +41,6 @@ class TournamentScreenKtUnitTest : TestCase() {
     assertEquals("Test", findTournament("Test").name)
   }
 
-  @Test
-  fun testCreateAddToAllTournaments() {
-
-    createAddToAllTournaments("Test", 10, 0, 0)
-
-    assertEquals("Test", findTournament("Test").name)
-  }
 
   @Test fun findTournament() {}
 

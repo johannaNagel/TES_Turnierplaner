@@ -67,7 +67,13 @@ class DatabaseKtUnitTest {
 
   @Test fun getParticipantsFromDb() {}
 
-  @Test fun addEventListenerDb() {}
+  @Test fun findTournamentIndex(id: String){}
 
-  @Test fun updateDb() {}
+  @Test fun containsTournament(){}
+
+  @Test fun findParticipantIndex(){}
+
+
+
+
 }
