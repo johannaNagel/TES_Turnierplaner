@@ -58,6 +58,5 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
       editPointsScreen(
           navController = navController, backStackEntry.arguments?.getString("tournamentName"))
     }
-
   }
 }

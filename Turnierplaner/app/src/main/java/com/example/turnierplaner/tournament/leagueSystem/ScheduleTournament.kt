@@ -87,7 +87,6 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
               backgroundColor = Color.White,
               elevation = 1.dp,
               title = {
-
                 Text(text = "Tournament schedule: ${getTournament(tournamentName)?.name}")
               },
               actions = {
@@ -220,18 +219,16 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
               modifier = Modifier.fillMaxSize().padding(24.dp),
               verticalArrangement = Arrangement.spacedBy(18.dp),
               horizontalAlignment = Alignment.CenterHorizontally) {
-              Button(
-                  onClick = {
-                      navController.navigate(
-                          "pointsResult_route/${getTournament(tournamentName)?.name}"
-                      )
-                  },
-                  enabled = true,
-                  // border = BorderStroke( width = 1.dp, brush = SolidColor(Color.Blue)),
-                  shape = MaterialTheme.shapes.medium
-              ) {
-                  Text(text = "Add or Change the game result", color = Color.White)
-              }
+            Button(
+                onClick = {
+                  navController.navigate(
+                      "pointsResult_route/${getTournament(tournamentName)?.name}")
+                },
+                enabled = true,
+                // border = BorderStroke( width = 1.dp, brush = SolidColor(Color.Blue)),
+                shape = MaterialTheme.shapes.medium) {
+              Text(text = "Add or Change the game result", color = Color.White)
+            }
           }
         }
       })
@@ -262,20 +259,20 @@ fun changeOpponent1(list: MutableList<Result>, row: Int, roundNumber: Int): Muta
   for (k in 2..roundNumber) {
     val listNewRound = MutableList(row) { Result() }
     for (i in 0 until row) {
-        when (i) {
-            0 -> {
-                listNewRound[i].participant1 = list1[i].participant1
-                listNewRound[i + 1].participant1 = list1[i].participant2
-            }
-            row - 1 -> {
-                listNewRound[i].participant2 = list1[i].participant1
-                listNewRound[i - 1].participant2 = list1[i].participant2
-            }
-            else -> {
-                listNewRound[i + 1].participant1 = list1[i].participant1
-                listNewRound[i - 1].participant2 = list1[i].participant2
-            }
+      when (i) {
+        0 -> {
+          listNewRound[i].participant1 = list1[i].participant1
+          listNewRound[i + 1].participant1 = list1[i].participant2
         }
+        row - 1 -> {
+          listNewRound[i].participant2 = list1[i].participant1
+          listNewRound[i - 1].participant2 = list1[i].participant2
+        }
+        else -> {
+          listNewRound[i + 1].participant1 = list1[i].participant1
+          listNewRound[i - 1].participant2 = list1[i].participant2
+        }
+      }
     }
     list1 = listNewRound
   }
@@ -512,9 +509,7 @@ fun addResultPointsChange(
     if (i.name == Participant1name) {
       for (k in tourney.schedule!!) {
         for (z in k) {
-          if (z.participant1.name == Participant1name &&
-              z.participant2.name == Participant2name
-          ) {
+          if (z.participant1.name == Participant1name && z.participant2.name == Participant2name) {
             if (z.resultParticipant1.toInt() > z.resultParticipant2.toInt()) {
               if (winner == "winner1") {} else if (winner == "winner2") {
                 i.points = i.points - tourney.pointsVictory
@@ -526,33 +521,33 @@ fun addResultPointsChange(
               }
             } else if (z.resultParticipant1.toInt() < z.resultParticipant2.toInt()) {
 
-                when (winner) {
-                    "winner1" -> {
-                        i.points = i.points + tourney.pointsVictory
-                    }
-                    "winner2" -> {}
-                    "" -> {
-                        i.games = i.games - 1
-                        i.points = i.points
-                    }
-                    else -> {
-                        i.points = i.points + tourney.pointsTie
-                    }
+              when (winner) {
+                "winner1" -> {
+                  i.points = i.points + tourney.pointsVictory
                 }
+                "winner2" -> {}
+                "" -> {
+                  i.games = i.games - 1
+                  i.points = i.points
+                }
+                else -> {
+                  i.points = i.points + tourney.pointsTie
+                }
+              }
             } else if (z.resultParticipant1.toInt() == z.resultParticipant2.toInt()) {
 
-                when (winner) {
-                    "winner1" -> {
-                        i.points = i.points + tourney.pointsVictory - tourney.pointsTie
-                    }
-                    "winner2" -> {
-                        i.points = i.points - tourney.pointsTie
-                    }
-                    "" -> {
-                        i.games = i.games - 1
-                        i.points = i.points - tourney.pointsVictory
-                    }
+              when (winner) {
+                "winner1" -> {
+                  i.points = i.points + tourney.pointsVictory - tourney.pointsTie
                 }
+                "winner2" -> {
+                  i.points = i.points - tourney.pointsTie
+                }
+                "" -> {
+                  i.games = i.games - 1
+                  i.points = i.points - tourney.pointsVictory
+                }
+              }
             }
           }
         }
@@ -560,9 +555,7 @@ fun addResultPointsChange(
     } else if (i.name == Participant2name) {
       for (k in tourney.schedule!!) {
         for (z in k) {
-          if (z.participant1.name == Participant1name &&
-              z.participant2.name == Participant2name
-          ) {
+          if (z.participant1.name == Participant1name && z.participant2.name == Participant2name) {
             if (z.resultParticipant1.toInt() > z.resultParticipant2.toInt()) {
 
               if (winner == "winner1") {} else if (winner == "winner2") {
@@ -574,30 +567,30 @@ fun addResultPointsChange(
               }
             } else if (z.resultParticipant1.toInt() < z.resultParticipant2.toInt()) {
 
-                when (winner) {
-                    "winner1" -> {
-                        i.points = i.points - tourney.pointsVictory
-                    }
-                    "winner2" -> {}
-                    "" -> {
-                        i.points = i.points - tourney.pointsVictory
-                        i.games = i.games - 1
-                    }
+              when (winner) {
+                "winner1" -> {
+                  i.points = i.points - tourney.pointsVictory
                 }
+                "winner2" -> {}
+                "" -> {
+                  i.points = i.points - tourney.pointsVictory
+                  i.games = i.games - 1
+                }
+              }
             } else if (z.resultParticipant1.toInt() == z.resultParticipant2.toInt()) {
 
-                when (winner) {
-                    "winner1" -> {
-                        i.points = i.points - tourney.pointsTie
-                    }
-                    "winner2" -> {
-                        i.points = i.points + tourney.pointsVictory - tourney.pointsTie
-                    }
-                    "" -> {
-                        i.games = i.games - 1
-                        i.points = i.points - tourney.pointsTie
-                    }
+              when (winner) {
+                "winner1" -> {
+                  i.points = i.points - tourney.pointsTie
                 }
+                "winner2" -> {
+                  i.points = i.points + tourney.pointsVictory - tourney.pointsTie
+                }
+                "" -> {
+                  i.games = i.games - 1
+                  i.points = i.points - tourney.pointsTie
+                }
+              }
             }
           }
         }
@@ -610,15 +603,15 @@ fun addResultPointsChange(
 /** methods who decide which Participant won the game */
 fun winOrTie(resultGame1: String, resultGame2: String): String {
 
-    return if (resultGame1 == "" || resultGame2 == "") {
-        ""
-    } else if (resultGame1.toInt() > resultGame2.toInt()) {
-        "winner1"
-    } else if (resultGame1.toInt() < resultGame2.toInt()) {
-        "winner2"
-    } else {
-        "tie"
-    }
+  return if (resultGame1 == "" || resultGame2 == "") {
+    ""
+  } else if (resultGame1.toInt() > resultGame2.toInt()) {
+    "winner1"
+  } else if (resultGame1.toInt() < resultGame2.toInt()) {
+    "winner2"
+  } else {
+    "tie"
+  }
 }
 /** method who splits a string */
 fun splitString(games: String, index: Int): String {
@@ -700,7 +693,8 @@ fun actualizeTournamentSchedule(tourney1: TournamentClass): MutableList<MutableL
       for (j in i) {
         for (k in scheduleNew) {
           for (z in k) {
-            if ((j.participant1.name == z.participant1.name) && (j.participant2.name == z.participant2.name)) {
+            if ((j.participant1.name == z.participant1.name) &&
+                (j.participant2.name == z.participant2.name)) {
               z.resultParticipant1 = j.resultParticipant1
               z.resultParticipant2 = j.resultParticipant2
             }
@@ -765,9 +759,3 @@ fun getTournament(tourneyName: String): TournamentClass? {
 fun setTourn(tourney: TournamentClass) {
   tournament = tourney
 }
-
-
-
-
-
-

@@ -290,14 +290,14 @@ fun tournamentContainsParticipant(tournamentName: String?, participantName: Stri
 
 fun allTournamentContainsTournament(tournamentName: String?): Boolean {
 
-    for (tournament in allTournament) {
+  for (tournament in allTournament) {
 
-        if (tournament.name == tournamentName) {
+    if (tournament.name == tournamentName) {
 
-            return true
-        }
+      return true
     }
-    return false
+  }
+  return false
 }
 
 data class Participant(

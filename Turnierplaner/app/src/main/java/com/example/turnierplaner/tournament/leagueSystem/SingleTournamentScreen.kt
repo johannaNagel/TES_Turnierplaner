@@ -80,11 +80,10 @@ private val showDeleteDialog = mutableStateOf(false)
 @ExperimentalMaterialApi
 @Composable
 fun SingleTournamentScreen(navController: NavController, tournamentName: String?) {
-var participantList = mutableListOf<Participant>()
-
+  var participantList = mutableListOf<Participant>()
 
   if (findTournament(tournamentName).name != "") {
-     participantList = sortTournamentByPoints(tournamentName)
+    participantList = sortTournamentByPoints(tournamentName)
   }
 
   val tourney = findTournament(tournamentName)
@@ -269,7 +268,8 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
         Button(
             modifier = Modifier.fillMaxWidth().height(50.dp),
             enabled =
-                participantName.isNotEmpty() && participantName.isNotBlank() &&
+                participantName.isNotEmpty() &&
+                    participantName.isNotBlank() &&
                     !tournamentContainsParticipant(tournamentName, participantName),
             content = { Text(text = "Add") },
             onClick = {
@@ -314,13 +314,13 @@ fun sortTournamentByPoints(tournamentName: String?): MutableList<Participant> {
     participants[idx].rank = idx + 1
   }
   for (i in 0 until tourney.numberOfParticipants) {
-      for( j in 0 until tourney.numberOfParticipants) {
-          if (participants[i].name == tourney.participants[j].name) {
-              tourney.participants[i].rank = participants[j].rank
-          }
+    for (j in 0 until tourney.numberOfParticipants) {
+      if (participants[i].name == tourney.participants[j].name) {
+        tourney.participants[i].rank = participants[j].rank
       }
     }
-    return participants
+  }
+  return participants
 }
 
 @Composable
@@ -556,17 +556,15 @@ fun DropdownMenu(
 }
 
 fun listCopy(tournament: TournamentClass): MutableList<Participant> {
-    var list = mutableListOf<Participant>()
-    for (i in 0..tournament.participants.size - 1) {
-        var participant = Participant("", 0, 0, 0, "")
-        list.add(participant)
-        list[i].games = tournament.participants[i].games
-        list[i].rank = tournament.participants[i].rank
-        list[i].id = tournament.participants[i].id
-        list[i].name = tournament.participants[i].name
-        list[i].points = tournament.participants[i].points
-    }
-    return list
+  var list = mutableListOf<Participant>()
+  for (i in 0..tournament.participants.size - 1) {
+    var participant = Participant("", 0, 0, 0, "")
+    list.add(participant)
+    list[i].games = tournament.participants[i].games
+    list[i].rank = tournament.participants[i].rank
+    list[i].id = tournament.participants[i].id
+    list[i].name = tournament.participants[i].name
+    list[i].points = tournament.participants[i].points
+  }
+  return list
 }
-
-
