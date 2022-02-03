@@ -75,6 +75,7 @@ fun getParticipantsFromDb() {
                                     pointsTie,
                                     participants,
                                     schedule)
+                            //states if user is a participant
                             participantInTournament = 0
                             // We want to only load that tournaments, in which the currently logged in user
                             // participates
@@ -118,6 +119,7 @@ fun getParticipantsFromDb() {
                                     }
                                 }
                             }
+                            //If user is kicked out from tournament
                             if (participantInTournament == 0 &&
                                 countDataChange == 1 &&
                                 containsTournament(tourney)) {
@@ -126,6 +128,7 @@ fun getParticipantsFromDb() {
                                     showRefreshPopUp.value = true
                                 }
                             }
+                            //TODO:If tournament is deleted
                         }
                     }
                     countDataChange = 1
