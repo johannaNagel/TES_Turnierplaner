@@ -388,7 +388,6 @@ fun deleteParticipantsScreen(navController: NavController, tournamentName: Strin
                     confirmStateChange = {
                       if (it == DismissValue.DismissedToEnd ||
                           it == DismissValue.DismissedToStart) {
-                        unread = !unread
 
                         //Remove player
                           items.remove(item)
@@ -400,8 +399,9 @@ fun deleteParticipantsScreen(navController: NavController, tournamentName: Strin
                        item.rank = tourney.numberOfParticipants*/
                           tourney.numberOfParticipants--
                         pushLocalToDb()
+                          navController.navigate("remove_participant_route/${tourney.name}")
                       }
-                      it != DismissValue.DismissedToEnd
+                        it != DismissValue.DismissedToEnd
                     })
             SwipeToDismiss(
                 state = dismissState,
