@@ -154,13 +154,15 @@ spotless {
     }
     kotlinGradle {
         target('**/*.gradle')
-        ktlint()
+        //ktlint()
     }
 }
 
 tasks.withType(JavaCompile) { options.errorprone.disableWarningsInGeneratedCode.set(true) }
 
-/* eslint-disable no-alert, no-console */
+/* ktlint-disable no-alert, no-console */
+
 apply plugin: ("com.android.application")
 apply plugin: ("com.google.gms.google-services")
-/* eslint-disable no-alert, no-console */
+
+/* ktlint-disable no-alert, no-console */

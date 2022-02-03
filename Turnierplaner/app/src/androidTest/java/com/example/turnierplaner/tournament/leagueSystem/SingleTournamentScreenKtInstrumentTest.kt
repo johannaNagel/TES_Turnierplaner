@@ -85,4 +85,18 @@ class SingleTournamentScreenKtInstrumentTest : TestCase() {
     composeTestRule.onNodeWithContentDescription("Button to add new Player").performClick()
     composeTestRule.onNodeWithText("Cancel").assertIsDisplayed()
   }
+
+  @Test fun singleTournamentScreen() {}
+
+  @Test fun addParticipantToTournamentPopUP() {}
+
+  @Test fun deleteTournamentPopUp() {}
+
+  @Test fun table() {}
+
+  @Test fun deleteParticipantsScreen() {}
+
+  @Test fun editPointsScreen() {}
+
+  @Test fun dropdownMenu() {}
 }

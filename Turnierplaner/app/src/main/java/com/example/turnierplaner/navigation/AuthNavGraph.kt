@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.turnierplaner.AUTH_GRAPH_ROUTE
-import com.example.turnierplaner.LoginScreens
 import com.example.turnierplaner.googlesignin.ui.login.LoginScreen
+import com.example.turnierplaner.navigation.Screens.LoginScreens
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
 
@@ -15,4 +15,3 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     composable(route = LoginScreens.Login.route) { LoginScreen(navController = navController) }
   }
 }
-

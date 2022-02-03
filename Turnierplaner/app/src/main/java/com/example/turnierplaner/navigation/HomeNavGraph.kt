@@ -9,17 +9,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.HOME_GRAPH_ROUTE
-import com.example.turnierplaner.Schedule
-import com.example.turnierplaner.TournamentScreens
 import com.example.turnierplaner.homescreen.Add
 import com.example.turnierplaner.homescreen.Home
 import com.example.turnierplaner.homescreen.Setting
-import com.example.turnierplaner.tournament.leagueSystem.AddResultPoints
+import com.example.turnierplaner.navigation.Screens.ScheduleScreens
+import com.example.turnierplaner.navigation.Screens.TournamentScreens
 import com.example.turnierplaner.tournament.leagueSystem.ScheduleComposable
 import com.example.turnierplaner.tournament.leagueSystem.SingleTournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.TournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.deleteParticipantsScreen
 import com.example.turnierplaner.tournament.leagueSystem.editPointsScreen
+import com.example.turnierplaner.tournament.leagueSystem.schedule.AddResultPoints
 
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
@@ -39,11 +39,11 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
     composable(route = TournamentScreens.SingleTournament.route) { backStackEntry ->
       SingleTournamentScreen(navController, backStackEntry.arguments?.getString("tournamentName"))
     }
-    composable(route = Schedule.Tournamentschedule.route) { backStackEntry ->
+    composable(route = ScheduleScreens.Tournamentschedule.route) { backStackEntry ->
       ScheduleComposable(
           navController = navController, backStackEntry.arguments?.getString("tournamentName"))
     }
-    composable(route = Schedule.PointsResult.route) { backStackEntry ->
+    composable(route = ScheduleScreens.PointsResult.route) { backStackEntry ->
       AddResultPoints(
           navController = navController, backStackEntry.arguments?.getString("tournamentName"))
     }

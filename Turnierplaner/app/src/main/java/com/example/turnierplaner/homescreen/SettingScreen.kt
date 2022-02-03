@@ -1,3 +1,4 @@
+/* (C)2022 */
 package com.example.turnierplaner.homescreen
 
 import android.os.Handler
@@ -30,8 +31,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
-import com.example.turnierplaner.LoginScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
+import com.example.turnierplaner.navigation.Screens.LoginScreens
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -41,89 +42,89 @@ import com.google.firebase.ktx.Firebase
 @Composable
 fun Setting(navController: NavHostController) {
 
-    val result = remember { mutableStateOf("") }
-    val selectedItem = remember { mutableStateOf("home") }
+  val result = remember { mutableStateOf("") }
+  val selectedItem = remember { mutableStateOf("home") }
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Setting")
-    }
+  Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Text(text = "Setting")
+  }
 
-    Scaffold(
-        topBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                TopAppBar(
-                    backgroundColor = Color.White,
-                    elevation = 1.dp,
-                    title = { Text(text = "Settings") },
-                    actions = {
-                        val context = LocalContext.current
-                        IconButton(
-                            onClick = {
-                                if (FirebaseAuth.getInstance().currentUser != null) {
-                                    Firebase.auth.signOut()
-                                    val gso =
-                                        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
-                                    val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                                    googleSignInClient.signOut()
-                                    showMessage(context, message = "User Loged out successfully")
-                                    val handler = Handler(Looper.getMainLooper())
-                                    handler.postDelayed(
-                                        { navController.navigate(LoginScreens.Login.route) }, 1000)
-                                } else {
-                                    showMessage(context, message = "No User to Log out")
-                                }
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.Rounded.ExitToApp,
-                                contentDescription = "Button for Logout",
-                            )
-                        }
-                    })
-            }
-        },
-        content = { Text("Settings need to implement") },
-        bottomBar = {
-            BottomAppBar(
-                content = {
-                    BottomNavigation() {
-                        BottomNavigationItem(
-                            icon = { Icon(Icons.Filled.Home, "") },
-                            label = { Text(text = "Home") },
-                            selected = selectedItem.value == "Home",
-                            onClick = {
-                                navController.navigate(BottomBarScreens.Home.route)
-                                selectedItem.value = "Home"
-                            },
-                            alwaysShowLabel = false)
+  Scaffold(
+      topBar = {
+        Column(modifier = Modifier.fillMaxWidth()) {
+          TopAppBar(
+              backgroundColor = Color.White,
+              elevation = 1.dp,
+              title = { Text(text = "Settings") },
+              actions = {
+                val context = LocalContext.current
+                IconButton(
+                    onClick = {
+                      if (FirebaseAuth.getInstance().currentUser != null) {
+                        Firebase.auth.signOut()
+                        val gso =
+                            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+                        val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                        googleSignInClient.signOut()
+                        showMessage(context, message = "User Loged out successfully")
+                        val handler = Handler(Looper.getMainLooper())
+                        handler.postDelayed(
+                            { navController.navigate(LoginScreens.Login.route) }, 1000)
+                      } else {
+                        showMessage(context, message = "No User to Log out")
+                      }
+                    },
+                ) {
+                  Icon(
+                      imageVector = Icons.Rounded.ExitToApp,
+                      contentDescription = "Button for Logout",
+                  )
+                }
+              })
+        }
+      },
+      content = { Text("Settings need to implement") },
+      bottomBar = {
+        BottomAppBar(
+            content = {
+              BottomNavigation() {
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Home, "") },
+                    label = { Text(text = "Home") },
+                    selected = selectedItem.value == "Home",
+                    onClick = {
+                      navController.navigate(BottomBarScreens.Home.route)
+                      selectedItem.value = "Home"
+                    },
+                    alwaysShowLabel = false)
 
-                        BottomNavigationItem(
-                            icon = { Icon(Icons.Filled.List, "") },
-                            label = { Text(text = "Tournament") },
-                            selected = selectedItem.value == "Tournament",
-                            onClick = {
-                                navController.navigate(BottomBarScreens.Tournament.route)
-                                selectedItem.value = "Tournament"
-                            },
-                            alwaysShowLabel = false)
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.List, "") },
+                    label = { Text(text = "Tournament") },
+                    selected = selectedItem.value == "Tournament",
+                    onClick = {
+                      navController.navigate(BottomBarScreens.Tournament.route)
+                      selectedItem.value = "Tournament"
+                    },
+                    alwaysShowLabel = false)
 
-                        BottomNavigationItem(
-                            icon = { Icon(Icons.Filled.Add, "") },
-                            label = { Text(text = "Add") },
-                            selected = selectedItem.value == "Add",
-                            onClick = {
-                                navController.navigate(BottomBarScreens.Add.route)
-                                selectedItem.value = "Add"
-                            },
-                            alwaysShowLabel = false)
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Add, "") },
+                    label = { Text(text = "Add") },
+                    selected = selectedItem.value == "Add",
+                    onClick = {
+                      navController.navigate(BottomBarScreens.Add.route)
+                      selectedItem.value = "Add"
+                    },
+                    alwaysShowLabel = false)
 
-                        BottomNavigationItem(
-                            icon = { Icon(Icons.Filled.Settings, "") },
-                            label = { Text(text = "Settings") },
-                            selected = selectedItem.value == "Settings",
-                            onClick = { selectedItem.value = "Settings" },
-                            alwaysShowLabel = false)
-                    }
-                })
-        })
+                BottomNavigationItem(
+                    icon = { Icon(Icons.Filled.Settings, "") },
+                    label = { Text(text = "Settings") },
+                    selected = selectedItem.value == "Settings",
+                    onClick = { selectedItem.value = "Settings" },
+                    alwaysShowLabel = false)
+              }
+            })
+      })
 }

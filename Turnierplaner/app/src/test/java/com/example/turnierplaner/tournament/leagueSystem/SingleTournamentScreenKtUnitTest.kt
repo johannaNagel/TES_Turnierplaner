@@ -2,48 +2,16 @@
 package com.example.turnierplaner.tournament.leagueSystem
 
 import com.example.turnierplaner.tournament.Participant
-import com.example.turnierplaner.tournament.Tournament
-import com.example.turnierplaner.tournament.tournamentDB.removeTournament
-import junit.framework.TestCase
-import org.junit.After
+import junit.framework.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 
-class SingleTournamentScreenKtUnitTest : TestCase() {
+class SingleTournamentScreenKtUnitTest {
 
-  public override fun setUp() {
-    super.setUp()
-  }
+  @Before fun setUp() {}
 
   @Test
-  fun testAddToTournaments() {
-
-    createAddToAllTournaments("Test", 10, 0, 0)
-
-    var tourney: List<Tournament> = getAllTournaments()
-
-    assertFalse(tourney.isEmpty())
-  }
-
-  @Test
-  fun testCreateTournament() {
-
-    createAddToAllTournaments("Test", 10, 0, 0)
-
-    assertEquals("Test", findTournament("Test").name)
-  }
-
-  @Test
-  fun testRemoveParticipant() {
-
-    createAddToAllTournaments("Test", 10, 0, 0)
-
-    addParticipantToTournament("Test", "TestParticipant")
-
-    assertTrue(containsParticipant("Test", "TestParticipant"))
-  }
-
-  @Test
-  fun testSortParticipants() {
+  fun sortTournamentByPoints() {
 
     createAddToAllTournaments("Test", 6, 0, 0)
     createAddToAllTournaments("ExcpectedTest", 6, 0, 0)
@@ -68,9 +36,13 @@ class SingleTournamentScreenKtUnitTest : TestCase() {
     assertTrue(actual.contentEquals(expected))
   }
 
-  @After
-  override fun tearDown() {
-    removeTournament(findTournament("Test"))
-    removeTournament(findTournament("ExcpectedTest"))
+  @Test fun listCopy() {}
+
+  @Test
+  fun testRemoveParticipant() {
+
+    addParticipantToTournament("Test", "TestParticipant")
+
+    assertTrue(tournamentContainsParticipant("Test", "TestParticipant"))
   }
 }

@@ -1,6 +1,7 @@
+/* (C)2022 */
 package com.example.turnierplaner.tournament
 
-import com.example.turnierplaner.tournament.leagueSystem.Result
+import com.example.turnierplaner.tournament.leagueSystem.schedule.Result
 import com.google.firebase.database.Exclude
 
 data class Tournament(
@@ -13,5 +14,5 @@ data class Tournament(
     var participants: MutableList<Participant>,
     var schedule: MutableList<MutableList<Result>>?
 ) {
-    constructor() : this("", "", 0, 0, 0, mutableListOf(), null)
+  constructor() : this("", "", 0, 0, 0, mutableListOf(), null)
 }

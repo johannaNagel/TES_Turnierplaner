@@ -3,12 +3,11 @@ package com.example.turnierplaner.tournament.tournamentDB
 
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
-import com.example.turnierplaner.tournament.leagueSystem.Result
-import com.example.turnierplaner.tournament.leagueSystem.TournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.changeState
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
+import com.example.turnierplaner.tournament.leagueSystem.schedule.Result
 import com.example.turnierplaner.tournament.leagueSystem.showRefreshPopUp
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot

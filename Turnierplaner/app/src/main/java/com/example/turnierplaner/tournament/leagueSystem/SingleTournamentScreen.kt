@@ -66,6 +66,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
+import com.example.turnierplaner.tournament.Participant
+import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.removeTournament
@@ -270,7 +272,7 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
             modifier = Modifier.fillMaxWidth().height(50.dp),
             enabled =
                 participantName.isNotEmpty() &&
-                    !tournamentContainsPlayer(tournamentName, participantName),
+                    !tournamentContainsParticipant(tournamentName, participantName),
             content = { Text(text = "Add") },
             onClick = {
               showAddParticipantDialog.value = false
@@ -282,7 +284,7 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
 }
 
 @Composable
-fun DeleteTournamentPopUp(navController: NavController, tourney: TournamentClass) {
+fun DeleteTournamentPopUp(navController: NavController, tourney: Tournament) {
 
   AlertDialog(
       onDismissRequest = { showDeleteDialog.value = false },
@@ -547,7 +549,7 @@ fun DropdownMenu(
   }
 }
 
-fun listCopy(tournament: TournamentClass): MutableList<Participant> {
+fun listCopy(tournament: Tournament): MutableList<Participant> {
   var list = mutableListOf<Participant>()
   for (i in 0..tournament.participants.size - 1) {
     var participant = Participant("", 0, 0, 0, "")

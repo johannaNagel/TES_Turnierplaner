@@ -1,3 +1,4 @@
+/* (C)2022 */
 package com.example.turnierplaner.tournament
 
 data class Participant(
@@ -7,6 +8,5 @@ data class Participant(
     var rank: Int,
     var id: String,
 ) {
-    constructor() : this("", 0, 0, 0, "")
+  constructor() : this("", 0, 0, 0, "")
 }
-

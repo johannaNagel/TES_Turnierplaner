@@ -38,4 +38,3 @@ class Turnierplaner : ComponentActivity() {
     getParticipantsFromDb()
   }
 }
-
