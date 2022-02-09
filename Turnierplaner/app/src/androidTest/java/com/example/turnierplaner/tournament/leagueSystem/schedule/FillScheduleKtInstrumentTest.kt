@@ -20,6 +20,7 @@ class FillScheduleKtInstrumentTest {
   @Before
   fun setUp() {
     composeTestRule.onNodeWithText("Register and Login with Google").performClick()
+    composeTestRule.onNodeWithText("com.example.turnierplaner.tournament.leagueSystem.Tournament").performClick()
     composeTestRule.onNodeWithText("test jojo").performClick()
     composeTestRule.onNodeWithContentDescription("Button to see the game schedule").performClick()
     composeTestRule.onNodeWithText("Add or Change the game result").performClick()
@@ -34,58 +35,65 @@ class FillScheduleKtInstrumentTest {
   @Test
   fun addResultCompose() {
     composeTestRule.onNodeWithContentDescription("Arrow").performClick()
-    composeTestRule.onNodeWithText("Result Player 1").performTextInput("4")
-    composeTestRule.onNodeWithText("Result Player 2").performTextInput("0")
-    composeTestRule.onNodeWithContentDescription("Add or Change").performClick()
+    composeTestRule.onNodeWithText("1 vs. 2").performClick()
+    composeTestRule.onNodeWithText("Result Participant1").performTextInput("4")
+    composeTestRule.onNodeWithText("Result Participant2").performTextInput("0")
+    composeTestRule.onNodeWithText("Add or Change").performClick()
   }
 
   @Test
   fun noAddChangeClickAllowed() {
     composeTestRule.onNodeWithContentDescription("Arrow").performClick()
-    composeTestRule.onNodeWithText("Result Player 1").performTextInput("")
-    composeTestRule.onNodeWithText("Result Player 2").performTextInput("")
-    composeTestRule.onNodeWithContentDescription("Add or Change").assertHasNoClickAction()
+    composeTestRule.onNodeWithText("1 vs. 2").performClick()
+    composeTestRule.onNodeWithText("Result Participant 1").performTextInput("")
+    composeTestRule.onNodeWithText("Result Participant 2").performTextInput("")
+    composeTestRule.onNodeWithText("Add or Change").assertHasNoClickAction()
   }
 
   @Test
   fun noSelectedGame() {
-    composeTestRule.onNodeWithText("Result Player 1").performTextInput("")
-    composeTestRule.onNodeWithText("Result Player 2").performTextInput("")
-    composeTestRule.onNodeWithContentDescription("Add or Change").assertHasNoClickAction()
+    composeTestRule.onNodeWithText("Result Participant1").performTextInput("")
+    composeTestRule.onNodeWithText("Result Participant2").performTextInput("")
+    composeTestRule.onNodeWithText("Add or Change").assertHasNoClickAction()
   }
 
   @Test
   fun changeResultNoClickAction() {
     composeTestRule.onNodeWithContentDescription("Arrow").performClick()
-    composeTestRule.onNodeWithText("Result Player 1").performTextInput("4")
-    composeTestRule.onNodeWithText("Result Player 2").performTextInput("0")
-    composeTestRule.onNodeWithContentDescription("Add or Change").performClick()
+    composeTestRule.onNodeWithText("1 vs. 2").performClick()
+    composeTestRule.onNodeWithText("Result Participant1").performTextInput("4")
+    composeTestRule.onNodeWithText("Result Participant2").performTextInput("0")
+    composeTestRule.onNodeWithText("Add or Change").performClick()
     composeTestRule.onNodeWithText("Add or Change the game result").performClick()
     composeTestRule.onNodeWithContentDescription("Arrow").performClick()
-    composeTestRule.onNodeWithText("Result Player 1").performTextInput("")
-    composeTestRule.onNodeWithText("Result Player 2").performTextInput("")
-    composeTestRule.onNodeWithContentDescription("Add or Change").assertHasNoClickAction()
+    composeTestRule.onNodeWithText("1 vs. 2").performClick()
+    composeTestRule.onNodeWithText("Result Participant1").performTextInput("")
+    composeTestRule.onNodeWithText("Result Participant2").performTextInput("")
+    composeTestRule.onNodeWithText("Add or Change").assertHasNoClickAction()
   }
 
   @Test
   fun changeResultClickAction() {
     composeTestRule.onNodeWithContentDescription("Arrow").performClick()
-    composeTestRule.onNodeWithText("Result Player 1").performTextInput("4")
-    composeTestRule.onNodeWithText("Result Player 2").performTextInput("0")
-    composeTestRule.onNodeWithContentDescription("Add or Change").performClick()
+    composeTestRule.onNodeWithText("1 vs. 2").performClick()
+    composeTestRule.onNodeWithText("Result Participant1").performTextInput("4")
+    composeTestRule.onNodeWithText("Result Participant2").performTextInput("0")
+    composeTestRule.onNodeWithText("Add or Change").performClick()
     composeTestRule.onNodeWithText("Add or Change the game result").performClick()
     composeTestRule.onNodeWithContentDescription("Arrow").performClick()
-    composeTestRule.onNodeWithText("Result Player 1").performTextInput("1")
-    composeTestRule.onNodeWithText("Result Player 2").performTextInput("0")
-    composeTestRule.onNodeWithContentDescription("Add or Change").assertHasNoClickAction()
+    composeTestRule.onNodeWithText("1 vs. 2").performClick()
+    composeTestRule.onNodeWithText("Result Participant1").performTextInput("1")
+    composeTestRule.onNodeWithText("Result Participant2").performTextInput("0")
+    composeTestRule.onNodeWithText("Add or Change").assertHasNoClickAction()
   }
 
   @Test
   fun testCancel() {
     composeTestRule.onNodeWithText("Cancel").performClick()
     composeTestRule.onNodeWithContentDescription("Arrow").performClick()
-    composeTestRule.onNodeWithText("Result Player 1").performTextInput("4")
-    composeTestRule.onNodeWithText("Result Player 2").performTextInput("0")
+    composeTestRule.onNodeWithText("1 vs. 2").performClick()
+    composeTestRule.onNodeWithText("Result Participant1").performTextInput("4")
+    composeTestRule.onNodeWithText("Result Participant2").performTextInput("0")
     composeTestRule.onNodeWithText("Cancel").performClick()
   }
 
@@ -93,13 +101,14 @@ class FillScheduleKtInstrumentTest {
   fun testCancel2() {
     composeTestRule.onNodeWithText("Cancel").performClick()
     composeTestRule.onNodeWithContentDescription("Arrow").performClick()
-    composeTestRule.onNodeWithText("Result Player 1").performTextInput("4")
-    composeTestRule.onNodeWithText("Result Player 2").performTextInput("0")
+    composeTestRule.onNodeWithText("1 vs. 2").performClick()
+    composeTestRule.onNodeWithText("Result Participant1").performTextInput("4")
+    composeTestRule.onNodeWithText("Result Participant2").performTextInput("0")
     composeTestRule.onNodeWithContentDescription("Add or Change").performClick()
     composeTestRule.onNodeWithText("Add or Change the game result").performClick()
     composeTestRule.onNodeWithContentDescription("Arrow").performClick()
-    composeTestRule.onNodeWithText("Result Player 1").performTextInput("1")
-    composeTestRule.onNodeWithText("Result Player 2").performTextInput("0")
+    composeTestRule.onNodeWithText("Result Participant1").performTextInput("1")
+    composeTestRule.onNodeWithText("Result Participant2").performTextInput("0")
     composeTestRule.onNodeWithText("Cancel").performClick()
   }
 }

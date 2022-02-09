@@ -49,6 +49,7 @@ import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.schedule.ListResult
 import com.example.turnierplaner.tournament.leagueSystem.schedule.Result
+import com.example.turnierplaner.tournament.leagueSystem.schedule.winOrTie
 
 var roundNumber = 1
 var listResult: ListResult? = null
@@ -62,16 +63,16 @@ var roundNumberInList = 0
 fun ScheduleComposable(navController: NavHostController, tournamentName: String?) {
   setTourn(findTournament(tournamentName))
   actualizeTournamentSchedule(getTournament(tournamentName!!)!!)
+
   // setListRes(tournamentName!!)
   var expanded by remember { mutableStateOf(false) }
   var textFieldSize by remember { mutableStateOf(Size.Zero) }
   val suggestions = mutableListOf<String>()
   var selectedTournamentRound by remember { mutableStateOf("") }
-  if (rememberTournamentRound != "") {
-    selectedTournamentRound = rememberTournamentRound
-  }
+    val actualRound = methodWhichRound(getTournament(tournamentName)!!)
+    roundNumber = actualRound
   val numberOfRounds =
-      (getRow(getNumberOfActualParticipants(getTournament(tournamentName)!!.participants)) * 2) - 1
+      (getRow(getNumberOfActualParticipants(getTournament(tournamentName!!)!!.participants)) * 2) - 1
 
   for (i in 0 until numberOfRounds) {
     suggestions.add(i, "round: ${i + 1}")
@@ -137,7 +138,7 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
                 DropdownMenuItem(
                     onClick = {
                       selectedTournamentRound = label
-                      rememberTournamentRound = selectedTournamentRound
+
                       expanded = false
                       val splitList = selectedTournamentRound.split(" ")
                       roundNumber = splitList[1].toInt()
@@ -261,6 +262,7 @@ fun createSchedule(
 
 fun actualizeTournamentSchedule(tourney1: Tournament): MutableList<MutableList<Result>> {
   val oldSchedule = tourney1.schedule
+      //listCopySchedule(tourney1)
   // listCopy(tourney1)
   val participantList = tourney1.participants
   val scheduleNew = mutableListOf<MutableList<Result>>()
@@ -278,6 +280,9 @@ fun actualizeTournamentSchedule(tourney1: Tournament): MutableList<MutableList<R
             if ((j.participant1 == z.participant1) && (j.participant2 == z.participant2)) {
               z.resultParticipant1 = j.resultParticipant1
               z.resultParticipant2 = j.resultParticipant2
+            } else if((j.participant1 == z.participant2) && (j.participant2 == z.participant1 )){
+                z.resultParticipant1 = j.resultParticipant2
+                z.resultParticipant2 = j.resultParticipant1
             }
           }
         }
@@ -294,16 +299,20 @@ fun changeOpponent1(list: MutableList<Result>, row: Int, roundNumber: Int): Muta
   for (k in 2..roundNumber) {
     val listNewRound = MutableList(row) { Result() }
     for (i in 0 until row) {
-      if (i == 0) {
-        listNewRound[i].participant1 = list1[i].participant1
-        listNewRound[i + 1].participant1 = list1[i].participant2
-      } else if (i == row - 1) {
-        listNewRound[i].participant2 = list1[i].participant1
-        listNewRound[i - 1].participant2 = list1[i].participant2
-      } else {
-        listNewRound[i + 1].participant1 = list1[i].participant1
-        listNewRound[i - 1].participant2 = list1[i].participant2
-      }
+        when (i) {
+            0 -> {
+                listNewRound[i].participant1 = list1[i].participant1
+                listNewRound[i + 1].participant1 = list1[i].participant2
+            }
+            row - 1 -> {
+                listNewRound[i].participant2 = list1[i].participant1
+                listNewRound[i - 1].participant2 = list1[i].participant2
+            }
+            else -> {
+                listNewRound[i + 1].participant1 = list1[i].participant1
+                listNewRound[i - 1].participant2 = list1[i].participant2
+            }
+        }
     }
     list1 = listNewRound
   }
@@ -324,7 +333,7 @@ fun getRow(numberOfActualParticipants: Int): Int {
 /** method who splits a string */
 fun splitString(games: String, index: Int): String {
   val split = games.split(" vs. ")
-  return split.get(index)
+  return split[index]
 }
 
 /** return the Number of actual Participants */
@@ -412,4 +421,107 @@ fun getListRes(): ListResult? {
 fun setListRes(tournamentName: String) {
   var tourney = getTournament(tournamentName)
   listResult = ListResult(tourney!!.participants)
+}
+
+
+
+
+
+fun checkIfGamePlayed(tourney: Tournament, deleteParticipantName: String): MutableList<Result> {
+    var listResult = mutableListOf<Result>()
+    for (idx in tourney.schedule!!) {
+        for (idx2 in idx) {
+            if (idx2.participant1.name == deleteParticipantName && idx2.resultParticipant1 != "") {
+                listResult.add(idx2)
+            }else if(idx2.participant2.name == deleteParticipantName && idx2.resultParticipant2 != "")  {
+                listResult.add(idx2)
+            }
+        }
+    }
+    return listResult
+}
+
+fun removePointsGames(tourney: Tournament, deleteParticipantName: String) {
+    val resultWinnerTie = returnStringWinnerTie(tourney, deleteParticipantName)
+    for(idx in 0 until resultWinnerTie.size) {
+        val list = resultWinnerTie[idx].split(" ")
+
+        for (participant in tourney.participants) {
+            if (list[0] == deleteParticipantName) {
+                if (participant.name == list[1]) {
+                    participant.games = participant.games - 1
+                    if(list[2] == "true") {
+                        participant.points = participant.points - tourney.pointsTie
+                    }
+                }
+            }else {
+                if (participant.name == list[0]) {
+                    participant.games = participant.games-1
+                    if(list[2] == "false") {
+                        participant.points = participant.points - tourney.pointsVictory
+                    } else{
+                        participant.points = participant.points - tourney.pointsTie
+                    }
+                }
+            }
+
+        }
+
+    }
+
+}
+
+
+
+
+
+
+
+
+fun returnStringWinnerTie(tourney: Tournament, deleteParticipantName: String ):MutableList<String> {
+     val listResultGame = checkIfGamePlayed(tourney, deleteParticipantName)
+    val stringResultWinnerTie= mutableListOf<String>()
+    var booleanTie = false
+    for( result in listResultGame){
+        when {
+            result.resultParticipant1 < result.resultParticipant2 -> {
+                val resultString = "${result.participant2.name} ${result.participant1.name} $booleanTie"
+                stringResultWinnerTie.add(resultString)
+            }
+            result.resultParticipant1 > result.resultParticipant2 -> {
+                val resultString = "${result.participant1.name} ${result.participant2.name} $booleanTie"
+                stringResultWinnerTie.add(resultString)
+            }
+            else -> {
+                booleanTie = true
+                val resultString = "${result.participant1.name} ${result.participant2.name} $booleanTie"
+                stringResultWinnerTie.add(resultString)
+            }
+        }
+    }
+    return stringResultWinnerTie
+
+}
+
+fun listCopySchedule(tourn: Tournament): MutableList<MutableList<Result>> {
+    var newSchedule = mutableListOf<MutableList<Result>>()
+    var count = 0
+    if(tourn.schedule != null) {
+        for (i in tourn.schedule!!) {
+            var listSchedule = mutableListOf<Result>()
+            newSchedule.add(listSchedule)
+            for (j in i) {
+                val result = Result(
+                    j.participant1,
+                    j.participant2,
+                    j.resultParticipant1,
+                    j.resultParticipant2
+                )
+                newSchedule[count].add(result)
+
+            }
+            count++
+        }
+    }
+    return newSchedule
 }

@@ -31,26 +31,26 @@ class AddScreenKtInstrumentTest {
   @Test fun add() {}
 
   @Test
-  fun correctTeamname() {
-    composeTestRule.onNodeWithText("Teamname").performTextInput("hello")
-    composeTestRule.onNodeWithText("Teamname").assertIsDisplayed()
-    composeTestRule.onNodeWithText("NumberOfPlayers").performTextInput("10")
+  fun correctParticipantName() {
+    composeTestRule.onNodeWithText("Tournament Name").performTextInput("hello")
+    composeTestRule.onNodeWithText("Tournament Name").assertIsDisplayed()
+    composeTestRule.onNodeWithText("Number Of Participants").performTextInput("10")
   }
 
   @Test
   fun correctInputNumberPlayer() {
-    composeTestRule.onNodeWithText("NumberOfPlayers").performTextInput("10123")
-    composeTestRule.onNodeWithText("NumberOfPlayers").assert(hasText("10123"))
+    composeTestRule.onNodeWithText("Number Of Participants").performTextInput("10123")
+    composeTestRule.onNodeWithText("Number Of Participants").assert(hasText("10123"))
   }
   @Test
   fun wrongInputNumberPlayer() {
-    composeTestRule.onNodeWithText("NumberOfPlayers").performTextInput("101223")
-    composeTestRule.onNodeWithText("NumberOfPlayers").assert(hasText("123"))
+    composeTestRule.onNodeWithText("Number Of Participants").performTextInput("101223")
+    composeTestRule.onNodeWithText("Number Of Participants").assert(!hasText("123"))
   }
   @Test
   fun rightInputNumberPlayer() {
-    composeTestRule.onNodeWithText("NumberOfPlayers").performTextInput("123aa")
-    composeTestRule.onNodeWithText("NumberOfPlayers").assert(hasText("123"))
+    composeTestRule.onNodeWithText("Number Of Participants").performTextInput("123aa")
+    composeTestRule.onNodeWithText("Number Of Participants").assert(hasText("123"))
   }
 
   @Test
@@ -61,7 +61,7 @@ class AddScreenKtInstrumentTest {
   @Test
   fun wrongInputVictoryPoints() {
     composeTestRule.onNodeWithText("Victory points").performTextInput("3")
-    composeTestRule.onNodeWithText("Victory points").assert(hasText("2"))
+    composeTestRule.onNodeWithText("Victory points").assert(!hasText("2"))
   }
   @Test
   fun correctInputVictoryPointsWithLetters() {
@@ -77,7 +77,7 @@ class AddScreenKtInstrumentTest {
   @Test
   fun wrongInputTiePoints() {
     composeTestRule.onNodeWithText("Tie points").performTextInput("1")
-    composeTestRule.onNodeWithText("Tie points").assert(hasText("2"))
+    composeTestRule.onNodeWithText("Tie points").assert(!hasText("2"))
   }
   @Test
   fun correctInputTiePointsWithLetters() {
@@ -87,6 +87,18 @@ class AddScreenKtInstrumentTest {
 
   @Test
   fun dropDownMenu() {
-    composeTestRule.onNodeWithContentDescription("Arrow").assertHasClickAction()
+    composeTestRule.onNodeWithContentDescription("Arrow").performClick()
+    composeTestRule.onNodeWithText("League").performClick()
+  }
+
+  @Test
+  fun all(){
+    composeTestRule.onNodeWithText("Tournament Name").performTextInput("hello")
+    composeTestRule.onNodeWithText("Number Of Participants").performTextInput("10")
+    composeTestRule.onNodeWithContentDescription("Arrow").performClick()
+    composeTestRule.onNodeWithText("League").performClick()
+    composeTestRule.onNodeWithText("Tie points").performTextInput("1")
+    composeTestRule.onNodeWithText("Victory points").performTextInput("3")
+    //composeTestRule.onNodeWithText("Add").performClick()
   }
 }

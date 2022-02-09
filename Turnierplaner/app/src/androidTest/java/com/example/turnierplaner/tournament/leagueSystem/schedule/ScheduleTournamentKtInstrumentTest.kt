@@ -18,6 +18,7 @@ class ScheduleTournamentKtInstrumentTest {
   @Before
   fun setUp() {
     composeTestRule.onNodeWithText("Register and Login with Google").performClick()
+    composeTestRule.onNodeWithText("com.example.turnierplaner.tournament.leagueSystem.Tournament").performClick()
     composeTestRule.onNodeWithText("test jojo").performClick()
   }
 

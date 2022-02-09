@@ -82,11 +82,11 @@ private val showDeleteDialog = mutableStateOf(false)
 @ExperimentalMaterialApi
 @Composable
 fun SingleTournamentScreen(navController: NavController, tournamentName: String?) {
-
+    var participantList = mutableListOf<Participant>()
   // for
   if (findTournament(tournamentName).name != "") {
 
-    sortTournamentByPoints(tournamentName)
+      participantList=  sortTournamentByPoints(tournamentName)
   }
 
   val tourney = findTournament(tournamentName)
@@ -236,7 +236,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
         Table(
             columnCount = 4,
             cellWidth = cellWidth,
-            data = tourney.participants,
+            data = participantList,
             modifier = Modifier.verticalScroll(rememberScrollState()),
             headerCellContent = headerCellTitle,
             cellContent = cellText)
@@ -303,19 +303,27 @@ fun DeleteTournamentPopUp(navController: NavController, tourney: Tournament) {
       })
 }
 
-fun sortTournamentByPoints(tournamentName: String?) {
+fun sortTournamentByPoints(tournamentName: String?): MutableList<Participant> {
 
-  val tourney = findTournament(tournamentName)
-  val participants = tourney.participants
+    val tourney = findTournament(tournamentName)
+    var participants = listCopy(tourney)
 
-  participants.sortByDescending { it.points }
+    participants.sortByDescending { it.points }
 
-  tourney.participants[0].rank = 1
+    participants[0].rank = 1
 
-  for (idx in 1 until tourney.numberOfParticipants) {
+    for (idx in 1 until tourney.numberOfParticipants) {
 
-    tourney.participants[idx].rank = idx + 1
-  }
+        participants[idx].rank = idx + 1
+    }
+    for (i in 0 until tourney.numberOfParticipants) {
+        for( j in 0 until tourney.numberOfParticipants) {
+            if (participants[i].name == tourney.participants[j].name) {
+                tourney.participants[i].rank = participants[j].rank
+            }
+        }
+    }
+    return participants
 }
 
 @Composable
@@ -390,7 +398,9 @@ fun deleteParticipantsScreen(navController: NavController, tournamentName: Strin
                           it == DismissValue.DismissedToStart) {
 
                         //Remove player
+                          removePointsGames(tourney, item.name)
                           items.remove(item)
+
                           /*
                        item.name = ""
                        item.games = 0
