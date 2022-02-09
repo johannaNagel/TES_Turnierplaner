@@ -27,7 +27,7 @@ var loggedInUser: String = FirebaseAuth.getInstance().currentUser?.uid.toString(
 // when count is on 0, allTournaments are initially filled with Tournaments from DB
 // when its 1 allTournaments was already initialized
 var countDataChange = 0
-var participantInTournament = 0
+var participantInTournament = false
 
 fun pushLocalToDb() {
     for (s in allTournament) {
@@ -42,6 +42,55 @@ fun removeTournament(tourney: Tournament) {
     allTournament.remove(tourney)
     changeState++
 }
+
+/*
+This method is used, when a participant gets an invitation.
+This method is used to get a Tournament from DB into the local allTournament list
+Then it is possible to participate in the Tournament
+ */
+fun getTournamentFromDB(Tournamentname: String){
+    var listener: ValueEventListener
+    listener = database.getReference(reference).addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            val items: Iterator<DataSnapshot> = dataSnapshot.children.iterator()
+            while (items.hasNext()) {
+                val item: DataSnapshot = items.next()
+                val name: String = item.getValue(Tournament::class.java)!!.name
+                val id: String? = item.key
+                val numberOfParticipants: Int =
+                    item.getValue(Tournament::class.java)!!.numberOfParticipants
+                val participants: MutableList<Participant> =
+                    item.getValue(Tournament::class.java)!!.participants
+                val pointsVic: Int = item.getValue(Tournament::class.java)!!.pointsVictory
+                val pointsTie: Int = item.getValue(Tournament::class.java)!!.pointsTie
+                val schedule: MutableList<MutableList<Result>>? =
+                    item.getValue(Tournament::class.java)!!.schedule
+                val inviteCode: Int? =  item.getValue(Tournament::class.java)!!.inviteCode
+                if (id != null) {
+                     val tourney =
+                        Tournament(
+                            name,
+                            id,
+                            numberOfParticipants,
+                            pointsVic,
+                            pointsTie,
+                            participants,
+                            schedule,
+                            inviteCode
+                        )
+                    if (tourney.name == Tournamentname){
+                        allTournament.add(tourney)
+                    }
+                }
+            }
+        }
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+    })
+}
+
+
 /*
 This method is triggered when a Change is made to any Tournament in Database
 The method will check if there are changes made to a tourney in which the currently logged in user
@@ -78,13 +127,13 @@ fun getParticipantsFromDb() {
                                     schedule,
                                     inviteCode)
                             //states if user is a participant
-                            participantInTournament = 0
+                            participantInTournament = false
                             // We want to only load that tournaments, in which the currently logged in user
                             // participates
                             // so we check if the participants list contains the currently logged in user
                             for (participant in tourney.participants) {
                                 if (participant.id == loggedInUser) {
-                                    participantInTournament = 1
+                                    participantInTournament = true
                                     // initialize allTournament from DB
                                     if (countDataChange == 0) {
                                         allTournament.add(tourney)
@@ -120,10 +169,9 @@ fun getParticipantsFromDb() {
                                         break
                                     }
                                 }
-
                             }
                             //If user is kicked out from tournament
-                            if (participantInTournament == 0 &&
+                            if (participantInTournament &&
                                 countDataChange == 1 &&
                                 containsTournament(tourney)) {
                                 allTournament.removeAt(findTournamentIndex(tourney.id))
@@ -142,44 +190,6 @@ fun getParticipantsFromDb() {
             })
 }
 
-fun getTournamentFromDB(tournamentName: String?){
-
-    val snapshot: DataSnapshot = database.getReference(reference).get().getResult()
-
-    val items: Iterator<DataSnapshot> = snapshot.children.iterator()
-
-    while (items.hasNext()) {
-
-        val item: DataSnapshot = items.next()
-        val name: String = item.getValue(Tournament::class.java)!!.name
-        val id: String? = item.key
-        val numberOfParticipants: Int =
-            item.getValue(Tournament::class.java)!!.numberOfParticipants
-        val participants: MutableList<Participant> =
-            item.getValue(Tournament::class.java)!!.participants
-        val pointsVic: Int = item.getValue(Tournament::class.java)!!.pointsVictory
-        val pointsTie: Int = item.getValue(Tournament::class.java)!!.pointsTie
-        val schedule: MutableList<MutableList<Result>>? =
-            item.getValue(Tournament::class.java)!!.schedule
-        val inviteCode: Int? =
-            item.getValue(Tournament::class.java)!!.inviteCode
-
-        if(name == tournamentName){
-            if(id != null){
-                allTournament.add(Tournament(
-                    name,
-                    id,
-                    numberOfParticipants,
-                    pointsVic,
-                    pointsTie,
-                    participants,
-                    schedule,
-                    inviteCode))
-            }
-        }
-
-    }
-}
 
 fun findTournamentIndex(id: String): Int {
     var count = 0
