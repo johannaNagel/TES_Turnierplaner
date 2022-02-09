@@ -63,8 +63,6 @@ var roundNumberInList = 0
 fun ScheduleComposable(navController: NavHostController, tournamentName: String?) {
   setTourn(findTournament(tournamentName))
   actualizeTournamentSchedule(getTournament(tournamentName!!)!!)
-
-  // setListRes(tournamentName!!)
   var expanded by remember { mutableStateOf(false) }
   var textFieldSize by remember { mutableStateOf(Size.Zero) }
   val suggestions = mutableListOf<String>()
