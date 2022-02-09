@@ -32,7 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.HOME_GRAPH_ROUTE
 import com.example.turnierplaner.R
 import com.example.turnierplaner.googlesignin.ui.theme.FirebaseAuthComposeTheme
@@ -158,7 +158,7 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
                       // TODO: if user did not loged out previously, he should move to homescreen
                       // automatically
                       // showMessage(context, message = "Loged in already")
-                      navController.navigate(HOME_GRAPH_ROUTE)
+                      navController.navigate(BottomBarScreens.Home.route)
                     }
                   },
                   content = {

@@ -12,7 +12,8 @@ data class Tournament(
     var pointsVictory: Int,
     var pointsTie: Int,
     var participants: MutableList<Participant>,
-    var schedule: MutableList<MutableList<Result>>?
+    var schedule: MutableList<MutableList<Result>>?,
+    var inviteCode: Int?
 ) {
-  constructor() : this("", "", 0, 0, 0, mutableListOf(), null)
+  constructor() : this("", "", 0, 0, 0, mutableListOf(), null, null)
 }

@@ -169,8 +169,8 @@ fun createAddToAllTournaments(
 
   // create a list of participants
   val participants = mutableListOf<Participant>()
-  val random = Random()
-  random.nextInt(100)
+
+  val random = (10000..99999).random()
 
   // fill the tourney with empty rows depending on how many participants were set
   for (idx in 1..numberOfParticipants) {
@@ -185,16 +185,16 @@ fun createAddToAllTournaments(
           pointsVict,
           pointsTie,
           participants,
-          createScheduleTournament(participants))
+          createScheduleTournament(participants),
+      random)
 
   allTournament.add(tourney)
   pushLocalToDb()
 }
 
-
 fun findTournament(tournamentName: String?): Tournament {
 
-  var tourney = Tournament("", UUID.randomUUID().toString(), 0, 0, 0, mutableListOf(), null)
+  var tourney = Tournament("", UUID.randomUUID().toString(), 0, 0, 0, mutableListOf(), null, null)
 
   for (s in allTournament) {
 
