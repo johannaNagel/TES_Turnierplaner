@@ -142,43 +142,46 @@ fun getParticipantsFromDb() {
             })
 }
 
-fun getTournamentFromDB(tournamentName: String?){
-
-    val snapshot: DataSnapshot = database.getReference(reference).get().getResult()
-
-    val items: Iterator<DataSnapshot> = snapshot.children.iterator()
-
-    while (items.hasNext()) {
-
-        val item: DataSnapshot = items.next()
-        val name: String = item.getValue(Tournament::class.java)!!.name
-        val id: String? = item.key
-        val numberOfParticipants: Int =
-            item.getValue(Tournament::class.java)!!.numberOfParticipants
-        val participants: MutableList<Participant> =
-            item.getValue(Tournament::class.java)!!.participants
-        val pointsVic: Int = item.getValue(Tournament::class.java)!!.pointsVictory
-        val pointsTie: Int = item.getValue(Tournament::class.java)!!.pointsTie
-        val schedule: MutableList<MutableList<Result>>? =
-            item.getValue(Tournament::class.java)!!.schedule
-        val inviteCode: Int? =
-            item.getValue(Tournament::class.java)!!.inviteCode
-
-        if(name == tournamentName){
-            if(id != null){
-                allTournament.add(Tournament(
-                    name,
-                    id,
-                    numberOfParticipants,
-                    pointsVic,
-                    pointsTie,
-                    participants,
-                    schedule,
-                    inviteCode))
+fun getTournamentFromDB(Tournamentname: String){
+    var listener: ValueEventListener = database.getReference(reference).addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            val items: Iterator<DataSnapshot> = dataSnapshot.children.iterator()
+            while (items.hasNext()) {
+                val item: DataSnapshot = items.next()
+                val name: String = item.getValue(Tournament::class.java)!!.name
+                val id: String? = item.key
+                val numberOfParticipants: Int =
+                    item.getValue(Tournament::class.java)!!.numberOfParticipants
+                val participants: MutableList<Participant> =
+                    item.getValue(Tournament::class.java)!!.participants
+                val pointsVic: Int = item.getValue(Tournament::class.java)!!.pointsVictory
+                val pointsTie: Int = item.getValue(Tournament::class.java)!!.pointsTie
+                val schedule: MutableList<MutableList<Result>>? =
+                    item.getValue(Tournament::class.java)!!.schedule
+                val inviteCode: Int? =  item.getValue(Tournament::class.java)!!.inviteCode
+                if (id != null) {
+                    val tourney =
+                        Tournament(
+                            name,
+                            id,
+                            numberOfParticipants,
+                            pointsVic,
+                            pointsTie,
+                            participants,
+                            schedule,
+                            inviteCode
+                        )
+                    if (tourney.name == Tournamentname){
+                        allTournament.add(tourney)
+                    }
+                }
             }
         }
-
-    }
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+    })
+    database.getReference(reference).removeEventListener(listener)
 }
 
 fun findTournamentIndex(id: String): Int {

@@ -182,7 +182,7 @@ fun Home(navController: NavHostController) {
 
 fun checkToJoinTournament(context: Context, inviteTournamentName: String, inviteCode: Int): Boolean {
 
-    getParticipantsFromDb()
+    getTournamentFromDB(inviteTournamentName)
     val tourney = findTournament(inviteTournamentName)
 
     if(tourney.name == ""){
