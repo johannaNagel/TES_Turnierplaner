@@ -49,8 +49,7 @@ This method is used to get a Tournament from DB into the local allTournament lis
 Then it is possible to participate in the Tournament
  */
 fun getTournamentFromDB(Tournamentname: String){
-    var listener: ValueEventListener
-    listener = database.getReference(reference).addValueEventListener(object : ValueEventListener {
+    var listener: ValueEventListener = database.getReference(reference).addValueEventListener(object : ValueEventListener {
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val items: Iterator<DataSnapshot> = dataSnapshot.children.iterator()
             while (items.hasNext()) {
@@ -88,6 +87,7 @@ fun getTournamentFromDB(Tournamentname: String){
             TODO("Not yet implemented")
         }
     })
+    database.getReference(reference).removeEventListener(listener)
 }
 
 
