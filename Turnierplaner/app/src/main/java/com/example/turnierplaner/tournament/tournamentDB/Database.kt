@@ -106,7 +106,12 @@ fun getParticipantsFromDb() {
                                     tourney.name != tourneyFromAll.name ||
                                     tourney.pointsVictory != tourneyFromAll.pointsVictory ||
                                     tourney.pointsTie != tourneyFromAll.pointsTie ||
-                                    pointsChanged(tourney.participants, tourneyFromAll.participants)|| participantAdded(tourney.participants, tourneyFromAll.participants)) {
+                                    tourney.participants[
+                                            findParticipantIndex(loggedInUser, tourney.participants)]
+                                        .points !=
+                                    tourneyFromAll.participants[
+                                            findParticipantIndex(loggedInUser, tourney.participants)]
+                                        .points) {
                                     allTournament[findTournamentIndex(tourney.id)] = tourney
                                     if (refreshActivate) {
                                         showRefreshPopUp.value = true
@@ -203,6 +208,19 @@ fun containsTournament(tournament: Tournament): Boolean {
         }
     }
     return false
+}
+
+//If the currently logged-in User is part of the participants list, return the index in the list
+fun findParticipantIndex(uid: String, participants: MutableList<Participant>): Int {
+    var count = 0
+    for (participant in participants) {
+        if (participant.id == uid) {
+            break
+        } else {
+            count++
+        }
+    }
+    return count
 }
 
 fun pointsChanged(participantsFromDB: MutableList<Participant>, participantsFromLocal: MutableList<Participant>): Boolean {
