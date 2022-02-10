@@ -52,7 +52,6 @@ import com.example.turnierplaner.tournament.leagueSystem.schedule.Result
 import com.example.turnierplaner.tournament.leagueSystem.schedule.winOrTie
 
 var roundNumber = 1
-var listResult: ListResult? = null
 var rememberTournamentRound = 0
 var change = false
 var tournament: Tournament? = null
@@ -232,13 +231,7 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
                 shape = MaterialTheme.shapes.medium) {
               Text(text = "Add or Change the game result", color = Color.White)
             }
-            /*Button(
-                onClick = { navController.navigate("changeResult_route/${tourneyT.name}")},
-                enabled = true,
-                shape = MaterialTheme.shapes.medium
-            ){
-                Text(text = "Change the game result")
-            }*/
+
           }
         }
       })
@@ -417,18 +410,6 @@ fun setTourn(tourney: Tournament) {
   tournament = tourney
 }
 
-fun getListRes(): ListResult? {
-  return listResult
-}
-
-fun setListRes(tournamentName: String) {
-  var tourney = getTournament(tournamentName)
-  listResult = ListResult(tourney!!.participants)
-}
-
-
-
-
 
 fun checkIfGamePlayed(tourney: Tournament, deleteParticipantName: String): MutableList<Result> {
     var listResult = mutableListOf<Result>()
@@ -473,13 +454,6 @@ fun removePointsGames(tourney: Tournament, deleteParticipantName: String) {
     }
 
 }
-
-
-
-
-
-
-
 
 fun returnStringWinnerTie(tourney: Tournament, deleteParticipantName: String ):MutableList<String> {
      val listResultGame = checkIfGamePlayed(tourney, deleteParticipantName)

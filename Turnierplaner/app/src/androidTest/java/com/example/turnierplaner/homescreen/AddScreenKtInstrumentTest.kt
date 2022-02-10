@@ -38,6 +38,12 @@ class AddScreenKtInstrumentTest {
   }
 
   @Test
+  fun inputName(){
+    composeTestRule.onNodeWithText("Tournament Name").performTextInput("hellojsahjhasdjjdasjhhjdashjjhdashjhkadskhj")
+    composeTestRule.onNodeWithText("Tournament Name").assert(hasText("hellojsahjhasdjjdasj"))
+  }
+
+  @Test
   fun correctInputNumberPlayer() {
     composeTestRule.onNodeWithText("Number Of Participants").performTextInput("10123")
     composeTestRule.onNodeWithText("Number Of Participants").assert(hasText("10123"))
@@ -60,8 +66,8 @@ class AddScreenKtInstrumentTest {
   }
   @Test
   fun wrongInputVictoryPoints() {
-    composeTestRule.onNodeWithText("Victory points").performTextInput("3")
-    composeTestRule.onNodeWithText("Victory points").assert(!hasText("2"))
+    composeTestRule.onNodeWithText("Victory points").performTextInput("30000")
+    composeTestRule.onNodeWithText("Victory points").assert(hasText("300"))
   }
   @Test
   fun correctInputVictoryPointsWithLetters() {
@@ -76,8 +82,8 @@ class AddScreenKtInstrumentTest {
   }
   @Test
   fun wrongInputTiePoints() {
-    composeTestRule.onNodeWithText("Tie points").performTextInput("1")
-    composeTestRule.onNodeWithText("Tie points").assert(!hasText("2"))
+    composeTestRule.onNodeWithText("Tie points").performTextInput("1900000000")
+    composeTestRule.onNodeWithText("Tie points").assert(hasText("190"))
   }
   @Test
   fun correctInputTiePointsWithLetters() {
@@ -99,6 +105,6 @@ class AddScreenKtInstrumentTest {
     composeTestRule.onNodeWithText("League").performClick()
     composeTestRule.onNodeWithText("Tie points").performTextInput("1")
     composeTestRule.onNodeWithText("Victory points").performTextInput("3")
-    //composeTestRule.onNodeWithText("Add").performClick()
+    composeTestRule.onNodeWithText("Add").performClick()
   }
 }

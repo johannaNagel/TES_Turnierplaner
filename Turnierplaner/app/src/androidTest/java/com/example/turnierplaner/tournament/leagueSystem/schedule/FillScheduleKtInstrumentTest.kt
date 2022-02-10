@@ -28,9 +28,7 @@ class FillScheduleKtInstrumentTest {
 
   @After fun tearDown() {}
 
-  @Test fun addResultPoints() {}
 
-  @Test fun changeTournamentPopUp() {}
 
   @Test
   fun addResultCompose() {
