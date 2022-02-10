@@ -106,7 +106,7 @@ fun getParticipantsFromDb() {
                                     tourney.name != tourneyFromAll.name ||
                                     tourney.pointsVictory != tourneyFromAll.pointsVictory ||
                                     tourney.pointsTie != tourneyFromAll.pointsTie ||
-                                    participantAdded(tourney.participants, tourneyFromAll.participants) || pointsChanged(tourney.participants, tourneyFromAll.participants)) {
+                                    participantAdded(tourney.participants, tourneyFromAll.participants, tourney.numberOfParticipants) || pointsChanged(tourney.participants, tourneyFromAll.participants, tourney.numberOfParticipants)) {
                                     allTournament[findTournamentIndex(tourney.id)] = tourney
                                     if (refreshActivate) {
                                         showRefreshPopUp.value = true
@@ -218,20 +218,24 @@ fun findParticipantIndex(uid: String, participants: MutableList<Participant>): I
     return count
 }
 
-fun pointsChanged(participantsFromDB: MutableList<Participant>, participantsFromLocal: MutableList<Participant>): Boolean {
+fun pointsChanged(participantsFromDB: MutableList<Participant>, participantsFromLocal: MutableList<Participant>, numberOfParticipants: Int): Boolean {
     var pointschanged = false
-    for (i in 0..participantsFromDB.size){
-        if (participantsFromDB[i].points != participantsFromLocal[i].points)
+    for (i in 0 until numberOfParticipants){
+        if (participantsFromDB[i].points != participantsFromLocal[i].points){
             pointschanged = true
+            break
+        }
     }
     return pointschanged
 }
 
-fun participantAdded(participantsFromDB: MutableList<Participant>, participantsFromLocal: MutableList<Participant>): Boolean {
+fun participantAdded(participantsFromDB: MutableList<Participant>, participantsFromLocal: MutableList<Participant>, numberOfParticipants: Int): Boolean {
     var participantadded = false
-    for (i in 0..participantsFromDB.size){
-        if (participantsFromDB[i].name != participantsFromLocal[i].name)
+    for (i in 0 until numberOfParticipants){
+        if (participantsFromDB[i].name != participantsFromLocal[i].name){
             participantadded = true
+            break
+        }
     }
     return participantadded
 }
