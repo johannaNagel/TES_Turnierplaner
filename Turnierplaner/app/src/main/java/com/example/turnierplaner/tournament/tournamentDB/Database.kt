@@ -1,6 +1,9 @@
 /* (C)2022 */
 package com.example.turnierplaner.tournament.tournamentDB
 
+import android.content.Context
+import androidx.navigation.NavHostController
+import com.example.turnierplaner.homescreen.joinTournament
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 
@@ -142,8 +145,10 @@ fun getParticipantsFromDb() {
             })
 }
 
-fun getTournamentFromDB(Tournamentname: String){
-    var listener: ValueEventListener = database.getReference(reference).addValueEventListener(object : ValueEventListener {
+fun getTournamentFromDB(inviteTournamentName: String,navController: NavHostController, context: Context){
+
+    database.getReference(reference).addValueEventListener(object : ValueEventListener {
+
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             val items: Iterator<DataSnapshot> = dataSnapshot.children.iterator()
             while (items.hasNext()) {
@@ -171,8 +176,12 @@ fun getTournamentFromDB(Tournamentname: String){
                             schedule,
                             inviteCode
                         )
-                    if (tourney.name == Tournamentname){
+                    if (tourney.name == inviteTournamentName){
+
                         allTournament.add(tourney)
+                        database.getReference(reference).removeEventListener(this)
+                        joinTournament(inviteTournamentName, navController, context, inviteCode!!)
+                        return
                     }
                 }
             }
@@ -181,7 +190,7 @@ fun getTournamentFromDB(Tournamentname: String){
             TODO("Not yet implemented")
         }
     })
-    database.getReference(reference).removeEventListener(listener)
+
 }
 
 fun findTournamentIndex(id: String): Int {

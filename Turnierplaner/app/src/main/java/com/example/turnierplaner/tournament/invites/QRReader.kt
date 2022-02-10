@@ -55,8 +55,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
-import com.example.turnierplaner.googlesignin.ui.login.showMessage
-import com.example.turnierplaner.homescreen.checkToJoinTournament
 
 @Composable
 fun qrReaderScreen(navController: NavController){

@@ -124,6 +124,7 @@ fun participantJoinTournament(participantName: String, tournamentName: String?){
     // assigned
     tourney.participants.add(participant)
     pushLocalToDb()
+    allTournament.clear()
     getParticipantsFromDb()
 
 }

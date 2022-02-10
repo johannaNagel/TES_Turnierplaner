@@ -41,10 +41,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
+import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
+import com.example.turnierplaner.tournament.tournamentDB.database
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.getTournamentFromDB
+import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
+import com.example.turnierplaner.tournament.tournamentDB.reference
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseReference
+import java.util.UUID
 
 
 @ExperimentalComposeUiApi
@@ -57,8 +64,6 @@ fun Home(navController: NavHostController) {
     var inviteTournamentName by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
-
-
 
   Scaffold(
       topBar = {
@@ -110,14 +115,8 @@ fun Home(navController: NavHostController) {
                           ,
                   content = { Text(text = "Join") },
                   onClick = {
-                      if(
-                      checkToJoinTournament(context,
-                          inviteTournamentName,
-                          inviteCode.toInt()
-                      )){
-                          navController.navigate("select_name_route/${inviteTournamentName}")
-                      }
 
+                      getTournamentFromDB(inviteTournamentName, navController , context)
 
                   })
               Button(
@@ -180,9 +179,11 @@ fun Home(navController: NavHostController) {
       })
 }
 
-fun checkToJoinTournament(context: Context, inviteTournamentName: String, inviteCode: Int): Boolean {
 
-    getTournamentFromDB(inviteTournamentName)
+
+
+fun checkRequirementsToJoin(context: Context, inviteTournamentName: String, inviteCode: Int?): Boolean {
+
     val tourney = findTournament(inviteTournamentName)
 
     if(tourney.name == ""){
@@ -198,6 +199,20 @@ fun checkToJoinTournament(context: Context, inviteTournamentName: String, invite
 
     showMessage(context, message = "Wrong Invite Code or Wrong Tournament Name")
     return false
+
+}
+
+fun joinTournament(inviteTournamentName: String,navController: NavHostController, context: Context, inviteCode: Int){
+
+    if(
+        checkRequirementsToJoin(context,
+            inviteTournamentName,
+            inviteCode
+        )
+    ){
+        navController.navigate("select_name_route/${inviteTournamentName}")
+    }
+
 
 }
 
