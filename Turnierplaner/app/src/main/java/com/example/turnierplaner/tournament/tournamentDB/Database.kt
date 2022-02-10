@@ -18,7 +18,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.example.turnierplaner.tournament.leagueSystem.schedule.Result
 
-// Database
+// Database54736
 val database =
     Firebase.database("https://turnierplaner-86dfe-default-rtdb.europe-west1.firebasedatabase.app/")
 const val reference: String = "Tournaments"
@@ -136,7 +136,7 @@ fun getParticipantsFromDb() {
         })
 }
 
-fun getTournamentFromDB(inviteTournamentName: String,navController: NavHostController, context: Context){
+fun getTournamentFromDB(inviteTournamentName: String,navController: NavHostController, context: Context, inviteCodeLocal: Int){
 
     database.getReference(reference).addValueEventListener(object : ValueEventListener {
 
@@ -171,7 +171,7 @@ fun getTournamentFromDB(inviteTournamentName: String,navController: NavHostContr
 
                         allTournament.add(tourney)
                         database.getReference(reference).removeEventListener(this)
-                        joinTournament(inviteTournamentName, navController, context, inviteCode!!)
+                        joinTournament(inviteTournamentName, navController, context, inviteCodeLocal)
                         return
                     }
                 }

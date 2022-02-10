@@ -106,7 +106,7 @@ fun Home(navController: NavHostController) {
                     content = { Text(text = "Join") },
                     onClick = {
 
-                        getTournamentFromDB(inviteTournamentName, navController , context)
+                        getTournamentFromDB(inviteTournamentName, navController , context, inviteCode.toInt())
 
                     })
                 Button(
@@ -173,6 +173,7 @@ fun Home(navController: NavHostController) {
 
 
 fun checkRequirementsToJoin(context: Context, inviteTournamentName: String, inviteCode: Int?): Boolean {
+
 
     val tourney = findTournament(inviteTournamentName)
 
