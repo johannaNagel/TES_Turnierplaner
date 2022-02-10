@@ -265,7 +265,7 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
             singleLine = true,
             value = participantName,
-            onValueChange = { newParticipantname -> participantName = newParticipantname },
+            onValueChange = { if(it.length <= 20) participantName = it },
             label = { Text(text = "Participant Name") },
         )
         Button(

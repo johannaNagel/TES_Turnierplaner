@@ -72,6 +72,9 @@ fun Add(navController: NavHostController) {
   val selectedItem = remember { mutableStateOf("home") }
   var textfieldSize by remember { mutableStateOf(Size.Zero) }
   val keyboardController = LocalSoftwareKeyboardController.current
+  val maxSize = 20
+  val maxParti = 2
+  val maxPoints = 3
 
   Scaffold(
       topBar = {
@@ -92,7 +95,8 @@ fun Add(navController: NavHostController) {
               OutlinedTextField(
                   value = tournamentName,
                   singleLine = true,
-                  onValueChange = { newTournament -> tournamentName = newTournament },
+                  onValueChange = {
+                      if(it.length <= maxSize) tournamentName = it },
                   label = { Text(text = "Tournament Name") },
                   keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                   keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
@@ -111,7 +115,8 @@ fun Add(navController: NavHostController) {
                       KeyboardOptions(
                           keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
                   keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-                  onValueChange = { newNumberOfParticipants ->
+                  onValueChange = {
+                          newNumberOfParticipants -> if(newNumberOfParticipants.length <= maxParti)
                     numberOfParticipants = newNumberOfParticipants.filter { it.isDigit() }
                   },
                   label = { Text(text = "Number Of Participants") },
@@ -164,7 +169,7 @@ fun Add(navController: NavHostController) {
 
               OutlinedTextField(
                   value = victoryPoints,
-                  onValueChange = { newVictoryPoints ->
+                  onValueChange = { newVictoryPoints ->if(newVictoryPoints.length <= maxPoints)
                     victoryPoints = newVictoryPoints.filter { it.isDigit() }
                   },
                   singleLine = true,
@@ -181,7 +186,7 @@ fun Add(navController: NavHostController) {
 
               OutlinedTextField(
                   value = tiePoints,
-                  onValueChange = { newTiePoints ->
+                  onValueChange = { newTiePoints -> if(newTiePoints.length <= maxPoints)
                     tiePoints = newTiePoints.filter { it.isDigit() }
                   },
                   singleLine = true,
@@ -202,8 +207,11 @@ fun Add(navController: NavHostController) {
                       tournamentName.isNotEmpty() &&
                           tournamentName.isNotBlank() &&
                           numberOfParticipants.isNotEmpty() &&
+                          maxPossibleParticipants(numberOfParticipants.toInt()) &&
                           tiePoints.isNotEmpty() &&
                           victoryPoints.isNotEmpty() &&
+                          maxPoints(tiePoints.toInt()) &&
+                          maxPoints(victoryPoints.toInt()) &&
                           selectedTournamentType.isNotEmpty() &&
                           !allTournamentContainsTournament(tournamentName),
                   content = { Text(text = "Add") },
@@ -267,4 +275,12 @@ fun Add(navController: NavHostController) {
               }
             })
       })
+}
+
+fun maxPossibleParticipants(numberOfParticipantsMax: Int): Boolean {
+    return numberOfParticipantsMax <= 100
+}
+
+fun maxPoints(points: Int): Boolean {
+    return points <= 1000000
 }

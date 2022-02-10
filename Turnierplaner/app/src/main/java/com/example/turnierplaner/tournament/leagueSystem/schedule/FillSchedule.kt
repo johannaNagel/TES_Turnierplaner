@@ -66,6 +66,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
   val suggestionsGame = fillGameString(getTournament(tournamentName!!)!!)
   val tourney = findTournament(tournamentName)
   val keyboardController = LocalSoftwareKeyboardController.current
+  val maxPoints = 3
 
   if (showChangeDialog.value) {
     ChangeTournamentPopUp()
@@ -123,7 +124,8 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
           }
           OutlinedTextField(
               value = resParticipant1,
-              onValueChange = { newResParticipant1 ->
+              singleLine = true,
+              onValueChange = { newResParticipant1 ->  if(newResParticipant1.length <= maxPoints)
                 resParticipant1 = newResParticipant1.filter { it.isDigit() }
               },
               label = { Text(text = "Result Participant1") },
@@ -133,7 +135,8 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
           )
           OutlinedTextField(
               value = resParticipant2,
-              onValueChange = { newResParticipant2 ->
+              singleLine = true,
+              onValueChange = { newResParticipant2 -> if(newResParticipant2.length <= maxPoints)
                 resParticipant2 = newResParticipant2.filter { it.isDigit() }
               },
               label = { Text(text = "Result Participant2") },
@@ -164,7 +167,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
                       splitString(selectedTournamentRound, 1),
                       resParticipant1,
                       resParticipant2,
-                      roundNumber,
+                      roundNumber!!,
                       getTournament(tournamentName)!!)
 
                   pushLocalToDb()
@@ -180,7 +183,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
                       splitString(selectedTournamentRound, 1),
                       resParticipant1,
                       resParticipant2,
-                      roundNumber,
+                      roundNumber!!,
                       getTournament(tournamentName)!!)
 
                   change = false
@@ -391,4 +394,8 @@ fun checkIfGamePlayed(participant1: String, participant2: String, tourney: Tourn
     }
   }
   return played
+}
+
+fun maxResult(result: Int): Boolean {
+    return result <= 1000000
 }
