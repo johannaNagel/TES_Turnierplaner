@@ -75,6 +75,11 @@ fun Home(navController: NavHostController) {
                     singleLine = true,
                     onValueChange = { newInviteTournament ->
                         inviteTournamentName = newInviteTournament
+                        if(inviteTournamentName.length > 20){
+                            inviteTournamentName = ""
+                            showMessage(context, message = "Tournament name to long.")
+                        }
+
                     },
                     label = { Text(text = "Tournament Name") },
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
