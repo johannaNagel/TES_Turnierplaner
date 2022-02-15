@@ -272,6 +272,7 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
             modifier = Modifier.fillMaxWidth().height(50.dp),
             enabled =
                 participantName.isNotEmpty() &&
+                        !participantName.contains(" ") &&
                     !tournamentContainsParticipant(tournamentName, participantName),
             content = { Text(text = "Add") },
             onClick = {
