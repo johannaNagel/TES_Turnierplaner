@@ -43,7 +43,6 @@ import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.refreshActivate
 import com.google.firebase.auth.FirebaseAuth
-import java.util.Random
 import java.util.UUID
 
 // List with all Tournaments
@@ -177,6 +176,7 @@ fun createAddToAllTournaments(
     participants.add(
         Participant("", 0, 0, idx, FirebaseAuth.getInstance().currentUser?.uid.toString()))
   }
+
   val tourney =
       Tournament(
           name,
@@ -194,7 +194,7 @@ fun createAddToAllTournaments(
 
 fun findTournament(tournamentName: String?): Tournament {
 
-  var tourney = Tournament("", UUID.randomUUID().toString(), 0, 0, 0, mutableListOf(), null, null)
+  var tourney = Tournament("", UUID.randomUUID().toString(), 0, 0, 0, mutableListOf(), null, 0)
 
   for (s in allTournament) {
 

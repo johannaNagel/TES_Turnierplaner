@@ -65,7 +65,7 @@ fun getParticipantsFromDb() {
                     val pointsTie: Int = item.getValue(Tournament::class.java)!!.pointsTie
                     val schedule: MutableList<MutableList<Result>>? =
                         item.getValue(Tournament::class.java)!!.schedule
-                    val inviteCode: Int? =
+                    val inviteCode: Int =
                         item.getValue(Tournament::class.java)!!.inviteCode
                     if (id != null) {
                         val tourney =
@@ -154,7 +154,7 @@ fun getTournamentFromDB(inviteTournamentName: String,navController: NavHostContr
                 val pointsTie: Int = item.getValue(Tournament::class.java)!!.pointsTie
                 val schedule: MutableList<MutableList<Result>>? =
                     item.getValue(Tournament::class.java)!!.schedule
-                val inviteCode: Int? =  item.getValue(Tournament::class.java)!!.inviteCode
+                val inviteCode: Int =  item.getValue(Tournament::class.java)!!.inviteCode
                 if (id != null) {
                     val tourney =
                         Tournament(
