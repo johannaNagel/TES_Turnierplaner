@@ -209,5 +209,4 @@ fun joinTournament(inviteTournamentName: String,navController: NavHostController
         navController.navigate("select_name_route/${inviteTournamentName}")
     }
 
-
 }

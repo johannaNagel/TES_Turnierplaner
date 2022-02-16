@@ -57,8 +57,8 @@ fun inviteScreen(navController: NavController, tournamentName: String?){
         content = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-                val encodedContent = AESEncryption.encrypt("${tourney.inviteCode}/$tournamentName")
-                val bitmap = getQrCodeBitmap(encodedContent)
+                //val encodedContent = AESEncryption.encrypt("${tourney.inviteCode}/$tournamentName")
+                val bitmap = getQrCodeBitmap("${tourney.inviteCode}/$tournamentName")
 
                 Image(
                     bitmap = bitmap.asImageBitmap(),

@@ -136,7 +136,7 @@ fun getParticipantsFromDb() {
         })
 }
 
-fun getTournamentFromDB(inviteTournamentName: String,navController: NavHostController, context: Context, inviteCodeLocal: Int){
+fun getTournamentFromDB(inviteTournamentName: String, navController: NavHostController, context: Context, inviteCodeLocal: Int){
 
     database.getReference(reference).addValueEventListener(object : ValueEventListener {
 
