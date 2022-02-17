@@ -103,7 +103,12 @@ fun Add(navController: NavHostController) {
                       if(allTournamentContainsTournament(tournamentName) ){
                           showMessage(context, "same Tournament Name, please change")
                       }
-                      if(it.length <= maxSize) tournamentName = it },
+                      if(it.length <= maxSize){
+                          tournamentName = it
+                      } else{
+                          showMessage(context, "Tournament Name is to long, please change")
+                      }
+                            },
                   label = { Text(text = "Tournament Name") },
                   keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                   keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
