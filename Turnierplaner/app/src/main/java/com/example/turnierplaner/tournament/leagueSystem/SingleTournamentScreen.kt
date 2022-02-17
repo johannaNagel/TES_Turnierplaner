@@ -57,6 +57,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -66,6 +67,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
+import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
@@ -248,6 +250,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
 fun AddParticipantToTournamentPopUP(tournamentName: String?) {
   var participantName by remember { mutableStateOf("") }
   val tourney = findTournament(tournamentName)
+  val context = LocalContext.current
 
   AlertDialog(
       modifier = Modifier.size(250.dp, 225.dp),
@@ -266,7 +269,10 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
             singleLine = true,
             value = participantName,
-            onValueChange = { if(it.length <= 20) participantName = it },
+            onValueChange = { if(it.length <= 20) participantName = it
+            if(tournamentContainsParticipant(tournamentName, participantName) ){
+                showMessage(context, "Name is assigned, please change")
+            }},
             label = { Text(text = "Participant Name") },
         )
         Button(

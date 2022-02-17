@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavHostController
+import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.change
 import com.example.turnierplaner.tournament.leagueSystem.fillGameString
@@ -67,6 +69,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
   val tourney = findTournament(tournamentName)
   val keyboardController = LocalSoftwareKeyboardController.current
   val maxPoints = 3
+  val context = LocalContext.current
 
   if (showChangeDialog.value) {
     ChangeTournamentPopUp()
@@ -125,8 +128,12 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
           OutlinedTextField(
               value = resParticipant1,
               singleLine = true,
-              onValueChange = { newResParticipant1 ->  if(newResParticipant1.length <= maxPoints)
-                resParticipant1 = newResParticipant1.filter { it.isDigit() }
+              onValueChange = { newResParticipant1 ->  if(newResParticipant1.length <= maxPoints){
+                  resParticipant1 = newResParticipant1.filter { it.isDigit() }
+              }else {
+                  showMessage(context, "the Result is to long")
+              }
+
               },
               label = { Text(text = "Result Participant1") },
               keyboardOptions =
@@ -136,8 +143,12 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
           OutlinedTextField(
               value = resParticipant2,
               singleLine = true,
-              onValueChange = { newResParticipant2 -> if(newResParticipant2.length <= maxPoints)
-                resParticipant2 = newResParticipant2.filter { it.isDigit() }
+              onValueChange = { newResParticipant2 ->
+                  if(newResParticipant2.length <= maxPoints){
+                    resParticipant2 = newResParticipant2.filter { it.isDigit() }
+                  }else {
+                        showMessage(context, "the Result is to long")
+                  }
               },
               label = { Text(text = "Result Participant2") },
               keyboardOptions =
