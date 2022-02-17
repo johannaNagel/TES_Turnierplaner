@@ -1,6 +1,8 @@
-/* (C)2022 */
 package com.example.turnierplaner.tournament.tournamentDB
 
+import android.content.Context
+import androidx.navigation.NavHostController
+import com.example.turnierplaner.homescreen.joinTournament
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 
@@ -16,7 +18,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.example.turnierplaner.tournament.leagueSystem.schedule.Result
 
-// Database
+// Database54736
 val database =
     Firebase.database("https://turnierplaner-86dfe-default-rtdb.europe-west1.firebasedatabase.app/")
 const val reference: String = "Tournaments"
@@ -47,96 +49,139 @@ The method will check if there are changes made to a tourney in which the curren
 participates, if so, a pop up will shown which notify about the change tht were made
  */
 fun getParticipantsFromDb() {
-    database
-        .getReference(reference)
-        .addValueEventListener(
-            object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val items: Iterator<DataSnapshot> = snapshot.children.iterator()
-                    while (items.hasNext()) {
-                        val item: DataSnapshot = items.next()
-                        val name: String = item.getValue(Tournament::class.java)!!.name
-                        val id: String? = item.key
-                        val numberOfParticipants: Int =
-                            item.getValue(Tournament::class.java)!!.numberOfParticipants
-                        val participants: MutableList<Participant> =
-                            item.getValue(Tournament::class.java)!!.participants
-                        val pointsVic: Int = item.getValue(Tournament::class.java)!!.pointsVictory
-                        val pointsTie: Int = item.getValue(Tournament::class.java)!!.pointsTie
-                        val schedule: MutableList<MutableList<Result>>? =
-                            item.getValue(Tournament::class.java)!!.schedule
-                        if (id != null) {
-                            val tourney =
-                                Tournament(
-                                    name,
-                                    id,
-                                    numberOfParticipants,
-                                    pointsVic,
-                                    pointsTie,
-                                    participants,
-                                    schedule)
-                            //states if user is a participant
-                            participantInTournament = 0
-                            // We want to only load that tournaments, in which the currently logged in user
-                            // participates
-                            // so we check if the participants list contains the currently logged in user
-                            for (participant in tourney.participants) {
-                                if (participant.id == loggedInUser) {
-                                    participantInTournament = 1
-                                    // initialize allTournament from DB
-                                    if (countDataChange == 0) {
-                                        allTournament.add(tourney)
-                                        break
+    database.getReference(reference).addValueEventListener(
+        object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val items: Iterator<DataSnapshot> = snapshot.children.iterator()
+                while (items.hasNext()) {
+                    val item: DataSnapshot = items.next()
+                    val name: String = item.getValue(Tournament::class.java)!!.name
+                    val id: String? = item.key
+                    val numberOfParticipants: Int =
+                        item.getValue(Tournament::class.java)!!.numberOfParticipants
+                    val participants: MutableList<Participant> =
+                        item.getValue(Tournament::class.java)!!.participants
+                    val pointsVic: Int = item.getValue(Tournament::class.java)!!.pointsVictory
+                    val pointsTie: Int = item.getValue(Tournament::class.java)!!.pointsTie
+                    val schedule: MutableList<MutableList<Result>>? =
+                        item.getValue(Tournament::class.java)!!.schedule
+                    val inviteCode: Int =
+                        item.getValue(Tournament::class.java)!!.inviteCode
+                    if (id != null) {
+                        val tourney =
+                            Tournament(
+                                name,
+                                id,
+                                numberOfParticipants,
+                                pointsVic,
+                                pointsTie,
+                                participants,
+                                schedule,
+                                inviteCode)
+                        //states if user is a participant
+                        participantInTournament = 0
+                        // We want to only load that tournaments, in which the currently logged in user
+                        // participates
+                        // so we check if the participants list contains the currently logged in user
+                        for (participant in tourney.participants) {
+                            if (participant.id == loggedInUser) {
+                                participantInTournament = 1
+                                // initialize allTournament from DB
+                                if (countDataChange == 0) {
+                                    allTournament.add(tourney)
+                                    break
+                                }
+                                // check if this tourney was newly added
+                                if (countDataChange == 1 && findTournament(tourney.name).name == "") {
+                                    allTournament.add(tourney)
+                                    if (refreshActivate) {
+                                        showRefreshPopUp.value = true
                                     }
-                                    // check if this tourney was newly added
-                                    if (countDataChange == 1 && findTournament(tourney.name).name == "") {
-                                        allTournament.add(tourney)
-                                        if (refreshActivate) {
-                                            showRefreshPopUp.value = true
-                                        }
-                                        break
+                                    break
+                                }
+                                // In the next if conditions we check if changes where made to a Tournament,
+                                // in which the current user participates
+                                val tourneyFromAll: Tournament = findTournament(tourney.name)
+                                if (tourney.numberOfParticipants != tourneyFromAll.numberOfParticipants ||
+                                    tourney.name != tourneyFromAll.name ||
+                                    tourney.pointsVictory != tourneyFromAll.pointsVictory ||
+                                    tourney.pointsTie != tourneyFromAll.pointsTie ||
+                                    participantAdded(tourney.participants, tourneyFromAll.participants, tourney.numberOfParticipants) || pointsChanged(tourney.participants, tourneyFromAll.participants, tourney.numberOfParticipants)) {
+                                    allTournament[findTournamentIndex(tourney.id)] = tourney
+                                    if (refreshActivate) {
+                                        showRefreshPopUp.value = true
                                     }
-                                    // In the next if conditions we check if changes where made to a Tournament,
-                                    // in which the current user participates
-                                    // TODO: Es soll kein PopUp angezeigt werden, wenn neue Spielernamen
-                                    // hinzugefügt werden? -> Zu viele Benachrichtigungen
-                                    val tourneyFromAll: Tournament = findTournament(tourney.name)
-                                    if (tourney.numberOfParticipants != tourneyFromAll.numberOfParticipants ||
-                                        tourney.name != tourneyFromAll.name ||
-                                        tourney.pointsVictory != tourneyFromAll.pointsVictory ||
-                                        tourney.pointsTie != tourneyFromAll.pointsTie ||
-                                        tourney.participants[
-                                                findParticipantIndex(loggedInUser, tourney.participants)]
-                                            .points !=
-                                        tourneyFromAll.participants[
-                                                findParticipantIndex(loggedInUser, tourney.participants)]
-                                            .points) {
-                                        allTournament[findTournamentIndex(tourney.id)] = tourney
-                                        if (refreshActivate) {
-                                            showRefreshPopUp.value = true
-                                        }
-                                        break
-                                    }
+                                    break
                                 }
                             }
-                            //If user is kicked out from tournament
-                            if (participantInTournament == 0 &&
-                                countDataChange == 1 &&
-                                containsTournament(tourney)) {
-                                allTournament.removeAt(findTournamentIndex(tourney.id))
-                                if (refreshActivate) {
-                                    showRefreshPopUp.value = true
-                                }
-                            }
-                            //TODO:If tournament is deleted
+
                         }
+                        //If user is kicked out from tournament
+                        if (participantInTournament == 0 &&
+                            countDataChange == 1 &&
+                            containsTournament(tourney)) {
+                            allTournament.removeAt(findTournamentIndex(tourney.id))
+                            if (refreshActivate) {
+                                showRefreshPopUp.value = true
+                            }
+                        }
+                        //TODO:If tournament is deleted
                     }
-                    countDataChange = 1
                 }
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                countDataChange = 1
+            }
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+}
+
+fun getTournamentFromDB(inviteTournamentName: String, navController: NavHostController, context: Context, inviteCodeLocal: Int){
+
+    database.getReference(reference).addValueEventListener(object : ValueEventListener {
+
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            val items: Iterator<DataSnapshot> = dataSnapshot.children.iterator()
+            while (items.hasNext()) {
+                val item: DataSnapshot = items.next()
+                val name: String = item.getValue(Tournament::class.java)!!.name
+                val id: String? = item.key
+                val numberOfParticipants: Int =
+                    item.getValue(Tournament::class.java)!!.numberOfParticipants
+                val participants: MutableList<Participant> =
+                    item.getValue(Tournament::class.java)!!.participants
+                val pointsVic: Int = item.getValue(Tournament::class.java)!!.pointsVictory
+                val pointsTie: Int = item.getValue(Tournament::class.java)!!.pointsTie
+                val schedule: MutableList<MutableList<Result>>? =
+                    item.getValue(Tournament::class.java)!!.schedule
+                val inviteCode: Int =  item.getValue(Tournament::class.java)!!.inviteCode
+                if (id != null) {
+                    val tourney =
+                        Tournament(
+                            name,
+                            id,
+                            numberOfParticipants,
+                            pointsVic,
+                            pointsTie,
+                            participants,
+                            schedule,
+                            inviteCode
+                        )
+                    if (tourney.name == inviteTournamentName){
+
+                        allTournament.add(tourney)
+                        database.getReference(reference).removeEventListener(this)
+                        joinTournament(inviteTournamentName, navController, context, inviteCodeLocal)
+                        return
+                    }
                 }
-            })
+            }
+        }
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+    })
+
 }
 
 fun findTournamentIndex(id: String): Int {
@@ -160,6 +205,7 @@ fun containsTournament(tournament: Tournament): Boolean {
     return false
 }
 
+//If the currently logged-in User is part of the participants list, return the index in the list
 fun findParticipantIndex(uid: String, participants: MutableList<Participant>): Int {
     var count = 0
     for (participant in participants) {
@@ -170,4 +216,26 @@ fun findParticipantIndex(uid: String, participants: MutableList<Participant>): I
         }
     }
     return count
+}
+
+fun pointsChanged(participantsFromDB: MutableList<Participant>, participantsFromLocal: MutableList<Participant>, numberOfParticipants: Int): Boolean {
+    var pointschanged = false
+    for (i in 0 until numberOfParticipants){
+        if (participantsFromDB[i].points != participantsFromLocal[i].points){
+            pointschanged = true
+            break
+        }
+    }
+    return pointschanged
+}
+
+fun participantAdded(participantsFromDB: MutableList<Participant>, participantsFromLocal: MutableList<Participant>, numberOfParticipants: Int): Boolean {
+    var participantadded = false
+    for (i in 0 until numberOfParticipants){
+        if (participantsFromDB[i].name != participantsFromLocal[i].name){
+            participantadded = true
+            break
+        }
+    }
+    return participantadded
 }

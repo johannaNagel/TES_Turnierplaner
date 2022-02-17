@@ -14,6 +14,9 @@ import com.example.turnierplaner.homescreen.Home
 import com.example.turnierplaner.homescreen.Setting
 import com.example.turnierplaner.navigation.Screens.ScheduleScreens
 import com.example.turnierplaner.navigation.Screens.TournamentScreens
+import com.example.turnierplaner.tournament.invites.inviteScreen
+import com.example.turnierplaner.tournament.invites.qrReaderScreen
+import com.example.turnierplaner.tournament.invites.selectNameScreen
 import com.example.turnierplaner.tournament.leagueSystem.ScheduleComposable
 import com.example.turnierplaner.tournament.leagueSystem.SingleTournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.TournamentScreen
@@ -55,5 +58,19 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
       editPointsScreen(
           navController = navController, backStackEntry.arguments?.getString("tournamentName"))
     }
+
+    composable(route = InviteScreens.Invite.route) { backStackEntry ->
+      inviteScreen(navController = navController,
+        backStackEntry.arguments?.getString("tournamentName"))
+    }
+    composable(route = InviteScreens.SelectName.route) {
+        backStackEntry ->
+      selectNameScreen(navController = navController,
+        backStackEntry.arguments?.getString("tournamentName"))
+    }
+    composable(route = InviteScreens.QRReader.route) {
+       qrReaderScreen(navController = navController)
+    }
   }
+
 }

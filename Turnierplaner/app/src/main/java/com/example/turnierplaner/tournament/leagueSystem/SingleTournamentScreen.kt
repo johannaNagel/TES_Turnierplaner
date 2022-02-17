@@ -106,6 +106,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
   var selectedIndex by remember { mutableStateOf(0) }
   val items =
       listOf(
+          "Invite Participants",
           "Remove Participants",
           "Edit Point System",
       )
@@ -364,10 +365,6 @@ fun deleteParticipantsScreen(navController: NavController, tournamentName: Strin
 
   val tourney = findTournament(tournamentName)
   val items = tourney.participants
-  var expanded by remember { mutableStateOf(false) }
-  var selectedTournamentType by remember { mutableStateOf("") }
-  var textfieldSize by remember { mutableStateOf(Size.Zero) }
-  val suggestions = listOf("Leauge", "KnockOut-System", "Double KnockOut-System")
 
   Scaffold(
       topBar = {
@@ -535,11 +532,12 @@ fun DropdownMenu(
                   Modifier.fillMaxWidth()
                       .background(color = Color.White, shape = RoundedCornerShape(16.dp)),
               onClick = {
-                if (s == "Remove Participants") {
-                  navController.navigate("remove_participant_route/${tourney.name}")
-                } else {
-                  navController.navigate("edit_points_route/${tourney.name}")
-                }
+                  when(s){
+                      "Remove Participants" -> navController.navigate("remove_participant_route/${tourney.name}")
+                      "Invite Participants" -> navController.navigate("invite_route/${tourney.name}")
+                      "Edit Point System" -> navController.navigate("edit_points_route/${tourney.name}")
+                  }
+
               }) {
             Text(
                 text = s,
@@ -551,11 +549,11 @@ fun DropdownMenu(
           DropdownMenuItem(
               modifier = Modifier.fillMaxWidth(),
               onClick = {
-                if (s == "Remove Participants") {
-                  navController.navigate("remove_participant_route/${tourney.name}")
-                } else {
-                  navController.navigate("edit_points_route/${tourney.name}")
-                }
+                  when(s){
+                      "Remove Participants" -> navController.navigate("remove_participant_route/${tourney.name}")
+                      "Invite Participants" -> navController.navigate("invite_route/${tourney.name}")
+                      "Edit Point System" -> navController.navigate("edit_points_route/${tourney.name}")
+                  }
               }) {
             Text(
                 text = s,
