@@ -57,7 +57,9 @@ fun selectNameScreen(navController: NavController, tournamentName: String?){
                     value = participantName,
                     singleLine = true,
                     onValueChange = { newParticipantName->
-                        participantName = newParticipantName
+
+                        if(newParticipantName.length <= 20) participantName = newParticipantName
+
                     },
                     label = { Text(text = "Select Name for Tournament") },
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),

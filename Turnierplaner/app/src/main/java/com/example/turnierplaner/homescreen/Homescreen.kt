@@ -174,9 +174,6 @@ fun Home(navController: NavHostController) {
         })
 }
 
-
-
-
 fun checkRequirementsToJoin(context: Context, inviteTournamentName: String, inviteCode: Int?): Boolean {
 
 
