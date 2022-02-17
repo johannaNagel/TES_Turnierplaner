@@ -47,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
@@ -55,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
+import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.leagueSystem.allTournamentContainsTournament
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 
@@ -75,8 +77,10 @@ fun Add(navController: NavHostController) {
   val maxSize = 20
   val maxParti = 2
   val maxPoints = 3
+  val context = LocalContext.current
 
-  Scaffold(
+
+    Scaffold(
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
@@ -96,6 +100,9 @@ fun Add(navController: NavHostController) {
                   value = tournamentName,
                   singleLine = true,
                   onValueChange = {
+                      if(allTournamentContainsTournament(tournamentName) ){
+                          showMessage(context, "same Tournament Name, please change")
+                      }
                       if(it.length <= maxSize) tournamentName = it },
                   label = { Text(text = "Tournament Name") },
                   keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -116,8 +123,11 @@ fun Add(navController: NavHostController) {
                           keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
                   keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                   onValueChange = {
-                          newNumberOfParticipants -> if(newNumberOfParticipants.length <= maxParti)
-                    numberOfParticipants = newNumberOfParticipants.filter { it.isDigit() }
+                    newNumberOfParticipants -> if(newNumberOfParticipants.length <= maxParti) {
+                    numberOfParticipants = newNumberOfParticipants.filter { it.isDigit() }}
+                      else {
+                      showMessage(context, "to many participants, max is 99")
+                  }
                   },
                   label = { Text(text = "Number Of Participants") },
                   leadingIcon = {
@@ -169,8 +179,11 @@ fun Add(navController: NavHostController) {
 
               OutlinedTextField(
                   value = victoryPoints,
-                  onValueChange = { newVictoryPoints ->if(newVictoryPoints.length <= maxPoints)
+                  onValueChange = { newVictoryPoints ->if(newVictoryPoints.length <= maxPoints) {
                     victoryPoints = newVictoryPoints.filter { it.isDigit() }
+                    }else{
+                      showMessage(context, "to many Vitcory Points, max is 999")
+                    }
                   },
                   singleLine = true,
                   label = { Text(text = "Victory points") },
@@ -186,8 +199,11 @@ fun Add(navController: NavHostController) {
 
               OutlinedTextField(
                   value = tiePoints,
-                  onValueChange = { newTiePoints -> if(newTiePoints.length <= maxPoints)
-                    tiePoints = newTiePoints.filter { it.isDigit() }
+                  onValueChange = { newTiePoints -> if(newTiePoints.length <= maxPoints){
+                        tiePoints = newTiePoints.filter { it.isDigit() }
+                    }else{
+                      showMessage(context, "to many Tie Points, max is 999")
+                    }
                   },
                   singleLine = true,
                   label = { Text(text = "Tie points") },
