@@ -78,6 +78,10 @@ fun Add(navController: NavHostController) {
   val maxParti = 2
   val maxPoints = 3
   val context = LocalContext.current
+  var boolNameShowMessage = true
+  var boolNumberPartiMessage = true
+  var boolVicPointMessage = true 
+  var boolTiePointMessage = true
 
 
     Scaffold(
@@ -100,15 +104,18 @@ fun Add(navController: NavHostController) {
                   value = tournamentName,
                   singleLine = true,
                   onValueChange = {
-                      if(allTournamentContainsTournament(tournamentName) ){
-                          showMessage(context, "same Tournament Name, please change")
-                      }
-                      if(it.length <= maxSize){
+                      if(it.length <= maxSize) {
                           tournamentName = it
-                      } else{
-                          showMessage(context, "Tournament Name is to long, please change")
+                          boolNameShowMessage = true
                       }
-                            },
+                      if(allTournamentContainsTournament(tournamentName) ){
+                          showMessage(context, "same Tournament Name")
+                      }
+                      if ((it.length > maxSize) && boolNameShowMessage){
+                          boolNameShowMessage = false
+                          showMessage(context, "Tournament Name is to long")
+                      }
+                  },
                   label = { Text(text = "Tournament Name") },
                   keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                   keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
@@ -128,11 +135,14 @@ fun Add(navController: NavHostController) {
                           keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
                   keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                   onValueChange = {
-                    newNumberOfParticipants -> if(newNumberOfParticipants.length <= maxParti) {
-                    numberOfParticipants = newNumberOfParticipants.filter { it.isDigit() }}
-                      else {
-                      showMessage(context, "to many participants, max is 99")
-                  }
+                    newNumberOfParticipants ->
+                      if(newNumberOfParticipants.length <= maxParti) {
+                            numberOfParticipants = newNumberOfParticipants.filter { it.isDigit() }
+                          boolNumberPartiMessage = true
+                      } else if(boolNumberPartiMessage ){
+                        boolNumberPartiMessage = false
+                        showMessage(context, "to many participants, max is 99")
+                      }
                   },
                   label = { Text(text = "Number Of Participants") },
                   leadingIcon = {
@@ -186,7 +196,9 @@ fun Add(navController: NavHostController) {
                   value = victoryPoints,
                   onValueChange = { newVictoryPoints ->if(newVictoryPoints.length <= maxPoints) {
                     victoryPoints = newVictoryPoints.filter { it.isDigit() }
-                    }else{
+                    boolVicPointMessage = true
+                    }else if(boolVicPointMessage){
+                        boolVicPointMessage = false
                       showMessage(context, "to many Vitcory Points, max is 999")
                     }
                   },
@@ -206,7 +218,9 @@ fun Add(navController: NavHostController) {
                   value = tiePoints,
                   onValueChange = { newTiePoints -> if(newTiePoints.length <= maxPoints){
                         tiePoints = newTiePoints.filter { it.isDigit() }
-                    }else{
+                      boolTiePointMessage = true
+                    }else if(boolTiePointMessage){
+                      boolTiePointMessage = false
                       showMessage(context, "to many Tie Points, max is 999")
                     }
                   },

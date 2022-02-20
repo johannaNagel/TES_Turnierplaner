@@ -48,9 +48,9 @@ import com.example.turnierplaner.googlesignin.ui.theme.FirebaseAuthComposeTheme
 import com.example.turnierplaner.googlesignin.util.LoadingState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.common.api.ApiException
 
 @Composable
 fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: NavHostController) {
