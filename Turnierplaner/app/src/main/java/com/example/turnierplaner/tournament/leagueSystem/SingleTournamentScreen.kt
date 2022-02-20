@@ -251,6 +251,7 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
   var participantName by remember { mutableStateOf("") }
   val tourney = findTournament(tournamentName)
   val context = LocalContext.current
+  var boolParticipNameMessage = true
 
   AlertDialog(
       modifier = Modifier.size(250.dp, 225.dp),
@@ -269,9 +270,17 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
             singleLine = true,
             value = participantName,
-            onValueChange = { if(it.length <= 20) participantName = it
+            onValueChange = {
+            if(it.length <= 20) {
+                participantName = it
+                boolParticipNameMessage = true
+            }
+            else if(boolParticipNameMessage) {
+                boolParticipNameMessage = false
+                showMessage(context, "Name is to long")
+            }
             if(tournamentContainsParticipant(tournamentName, participantName) ){
-                showMessage(context, "Name is assigned, please change")
+                showMessage(context, "Name is assigned")
             }},
             label = { Text(text = "Participant Name") },
         )
