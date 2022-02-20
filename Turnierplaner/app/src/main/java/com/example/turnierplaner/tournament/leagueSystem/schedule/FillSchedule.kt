@@ -70,6 +70,8 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
   val keyboardController = LocalSoftwareKeyboardController.current
   val maxPoints = 3
   val context = LocalContext.current
+  var boolResult1Message  = true
+  var boolResult2Message = true
 
   if (showChangeDialog.value) {
     ChangeTournamentPopUp()
@@ -128,12 +130,14 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
           OutlinedTextField(
               value = resParticipant1,
               singleLine = true,
-              onValueChange = { newResParticipant1 ->  if(newResParticipant1.length <= maxPoints){
-                  resParticipant1 = newResParticipant1.filter { it.isDigit() }
-              }else {
-                  showMessage(context, "the Result is to long")
-              }
-
+              onValueChange = { newResParticipant1 ->
+                  if(newResParticipant1.length <= maxPoints){
+                     resParticipant1 = newResParticipant1.filter { it.isDigit() }
+                     boolResult1Message = true
+                 }else if(boolResult1Message){
+                    boolResult1Message = false
+                    showMessage(context, "the Result is to long")
+                }
               },
               label = { Text(text = "Result Participant1") },
               keyboardOptions =
@@ -146,8 +150,10 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
               onValueChange = { newResParticipant2 ->
                   if(newResParticipant2.length <= maxPoints){
                     resParticipant2 = newResParticipant2.filter { it.isDigit() }
-                  }else {
-                        showMessage(context, "the Result is to long")
+                    boolResult2Message = true
+                  }else if(boolResult2Message){
+                      boolResult2Message = false
+                      showMessage(context, "the Result is to long")
                   }
               },
               label = { Text(text = "Result Participant2") },

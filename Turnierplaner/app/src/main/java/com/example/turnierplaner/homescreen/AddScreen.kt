@@ -80,7 +80,7 @@ fun Add(navController: NavHostController) {
   val context = LocalContext.current
   var boolNameShowMessage = true
   var boolNumberPartiMessage = true
-  var boolVicPointMessage = true 
+  var boolVicPointMessage = true
   var boolTiePointMessage = true
 
 
