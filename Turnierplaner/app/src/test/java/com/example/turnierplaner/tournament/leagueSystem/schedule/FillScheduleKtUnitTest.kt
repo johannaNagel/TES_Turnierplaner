@@ -27,7 +27,7 @@ class FillScheduleKtUnitTest {
       Participant("7", 0, 0, 7, "7"),
       Participant("8", 0, 0, 8, "8"),
     )
-    competition = Tournament("hello", "1", 10, 3, 1, listParticipant!!,  null)
+    competition = Tournament("hello", "1", 10, 3, 1, listParticipant!!,  null, 0)
   }
 
   @After fun tearDown() {

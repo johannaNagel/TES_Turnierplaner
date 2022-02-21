@@ -73,7 +73,7 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
       rememberTournamentRound = actualRound
       setNumberOfRound(actualRound)
   } else{
-      setNumberOfRound(rememberTournamentRound)
+     setNumberOfRound(rememberTournamentRound)
   }
   for (i in 0 until numberOfRounds) {
     suggestions.add(i, "round: ${i + 1}")
@@ -234,7 +234,8 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
 
           }
         }
-      })
+      }
+  )
 }
 
 /** creates a game schedule for the first round */
@@ -357,16 +358,7 @@ fun createScheduleTournament(
   return allGames
 }
 
-/** fill the mutableList with games */
-fun fillGameString(tourney: Tournament): MutableList<String> {
-  val suggestionsGame = mutableListOf<String>()
-  for (i in 0 until tourney.schedule!![getNumberOfRound() - 1].size) {
-    val k = tourney.schedule!![getNumberOfRound() - 1][i].participant1.name
-    val dummy = tourney.schedule!![getNumberOfRound() - 1][i].participant2.name
-    suggestionsGame.add(i, "$k vs. $dummy")
-  }
-  return suggestionsGame
-}
+
 
 /** return the actual round */
 fun methodWhichRound(tourney: Tournament): Int {

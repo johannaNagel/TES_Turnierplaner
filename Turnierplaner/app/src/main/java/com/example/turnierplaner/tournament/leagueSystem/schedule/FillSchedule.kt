@@ -47,8 +47,8 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.change
-import com.example.turnierplaner.tournament.leagueSystem.fillGameString
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
+import com.example.turnierplaner.tournament.leagueSystem.getNumberOfRound
 import com.example.turnierplaner.tournament.leagueSystem.getTournament
 import com.example.turnierplaner.tournament.leagueSystem.roundNumber
 import com.example.turnierplaner.tournament.leagueSystem.splitString
@@ -415,4 +415,17 @@ fun checkIfGamePlayed(participant1: String, participant2: String, tourney: Tourn
 
 fun maxResult(result: Int): Boolean {
     return result <= 1000000
+}
+
+/** fill the mutableList with games */
+fun fillGameString(tourney: Tournament): MutableList<String> {
+    val suggestionsGame = mutableListOf<String>()
+    for (i in 0 until tourney.schedule!![getNumberOfRound() - 1].size) {
+        val k = tourney.schedule!![getNumberOfRound() - 1][i].participant1.name
+        val dummy = tourney.schedule!![getNumberOfRound() - 1][i].participant2.name
+        if((k != "") && (dummy != "")) {
+            suggestionsGame.add("$k vs. $dummy")
+        }
+    }
+    return suggestionsGame
 }
