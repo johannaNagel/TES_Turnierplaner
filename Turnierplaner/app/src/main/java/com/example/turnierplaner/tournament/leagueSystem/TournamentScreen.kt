@@ -251,6 +251,18 @@ fun tournamentContainsParticipant(tournamentName: String?, participantName: Stri
   return false
 }
 
+fun tournamentContainsParticipant(tournament: Tournament, participantName: String): Boolean {
+
+    for (participant in tournament.participants) {
+
+        if (participant.name == participantName) {
+
+            return true
+        }
+    }
+    return false
+}
+
 fun allTournamentContainsTournament(tournamentName: String?): Boolean {
 
   for (tournament in allTournament) {

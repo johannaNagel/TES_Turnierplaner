@@ -28,18 +28,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.Participant
+import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
-import com.example.turnierplaner.tournament.leagueSystem.allTournamentContainsTournament
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.example.turnierplaner.tournament.leagueSystem.tournamentContainsParticipant
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
-import com.example.turnierplaner.tournament.tournamentDB.getTournamentFromDB
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.google.firebase.auth.FirebaseAuth
 
 @ExperimentalComposeUiApi
 @Composable
-fun selectNameScreen(navController: NavController, tournamentName: String?){
+fun selectNameScreen(navController: NavController, tournamentName: String?, tournament: Tournament){
 
     var participantName by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -52,7 +51,8 @@ fun selectNameScreen(navController: NavController, tournamentName: String?){
                     .fillMaxSize()
                     .padding(24.dp),
                 verticalArrangement = Arrangement.spacedBy(18.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,){
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ){
                 OutlinedTextField(
                     value = participantName,
                     singleLine = true,
@@ -77,8 +77,8 @@ fun selectNameScreen(navController: NavController, tournamentName: String?){
                     content = { Text(text = "Select Name") },
                     onClick = {
 
-                        if(checkIfNameIsUnique(context,participantName,tournamentName)){
-                            participantJoinTournament(participantName, tournamentName)
+                        if(checkIfNameIsUnique(context,participantName,tournament)){
+                            participantJoinTournament(participantName, tournament)
                             navController.navigate("single_tournament_route/${tournamentName}")
                         }
 
@@ -88,9 +88,13 @@ fun selectNameScreen(navController: NavController, tournamentName: String?){
         })
 }
 
-fun checkIfNameIsUnique(context: Context, participantName: String, tournamentName: String?): Boolean {
+fun checkIfNameIsUnique(
+    context: Context,
+    participantName: String,
+    tournament: Tournament
+): Boolean {
 
-    if(tournamentContainsParticipant(tournamentName, participantName)){
+    if(tournamentContainsParticipant(tournament, participantName)){
 
         showMessage(context, message = "Name is already taken.")
         return false
@@ -102,29 +106,30 @@ fun checkIfNameIsUnique(context: Context, participantName: String, tournamentNam
 
 }
 
-fun participantJoinTournament(participantName: String, tournamentName: String?){
+fun participantJoinTournament(participantName: String, tournament: Tournament){
 
-    val tourney = findTournament(tournamentName)
     val id = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
-    val participant = Participant(participantName, 0, 0, tourney.numberOfParticipants,  id)
+    val participant = Participant(participantName, 0, 0, tournament.numberOfParticipants,  id)
 
-    for (idx in 1..tourney.numberOfParticipants) {
+    for (idx in 1..tournament.numberOfParticipants) {
 
-        if (tourney.participants[idx - 1].name == "") {
+        if (tournament.participants[idx - 1].name == "") {
 
-            tourney.participants[idx - 1].name = participantName
-            tourney.participants[idx - 1].id = id
+            tournament.participants[idx - 1].name = participantName
+            tournament.participants[idx - 1].id = id
             pushLocalToDb()
             getParticipantsFromDb()
             return
         }
     }
-    tourney.numberOfParticipants = tourney.numberOfParticipants + 1
+    tournament.numberOfParticipants = tournament.numberOfParticipants + 1
     // Every Participant which is added have to have a UID, currently the UID from the Loged-In User
     // is
     // assigned
-    tourney.participants.add(participant)
+    tournament.participants.add(participant)
+    allTournament.add(tournament)
     pushLocalToDb()
     getParticipantsFromDb()
 }
+

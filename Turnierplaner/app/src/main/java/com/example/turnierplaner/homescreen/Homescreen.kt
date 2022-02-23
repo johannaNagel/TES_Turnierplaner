@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
+import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.example.turnierplaner.tournament.tournamentDB.getTournamentFromDB
 
@@ -174,10 +175,12 @@ fun Home(navController: NavHostController) {
         })
 }
 
-fun checkRequirementsToJoin(context: Context, inviteTournamentName: String, inviteCode: Int?): Boolean {
-
-
-    val tourney = findTournament(inviteTournamentName)
+fun checkRequirementsToJoin(
+    context: Context,
+    inviteTournamentName: String,
+    inviteCode: Int?,
+    tourney: Tournament
+): Boolean {
 
     if(tourney.name == ""){
         showMessage(context, message = "Tournament does not exist.")
@@ -195,12 +198,19 @@ fun checkRequirementsToJoin(context: Context, inviteTournamentName: String, invi
 
 }
 
-fun joinTournament(inviteTournamentName: String,navController: NavHostController, context: Context, inviteCode: Int){
+fun joinTournament(
+    inviteTournamentName: String,
+    navController: NavHostController,
+    context: Context,
+    inviteCode: Int,
+    tourney: Tournament
+){
 
     if(
         checkRequirementsToJoin(context,
             inviteTournamentName,
-            inviteCode
+            inviteCode,
+            tourney
         )
     ){
         navController.navigate("select_name_route/${inviteTournamentName}")
