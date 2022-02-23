@@ -50,6 +50,7 @@ import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.schedule.ListResult
 import com.example.turnierplaner.tournament.leagueSystem.schedule.Result
 import com.example.turnierplaner.tournament.leagueSystem.schedule.winOrTie
+import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 var roundNumber = 1
 var rememberTournamentRound = 0
@@ -287,6 +288,7 @@ fun actualizeTournamentSchedule(tourney1: Tournament): MutableList<MutableList<R
     }
   }
   tourney1.schedule = scheduleNew
+  pushLocalToDb()
   return tourney1.schedule!!
 }
 

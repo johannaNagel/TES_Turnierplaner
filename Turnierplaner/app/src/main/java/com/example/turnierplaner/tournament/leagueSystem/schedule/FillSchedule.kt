@@ -396,6 +396,9 @@ fun addResultToResultList(
     if (i.participant1.name.equals(Participant1) && i.participant2.name.equals(Participant2)) {
       i.resultParticipant1 = resultGame1
       i.resultParticipant2 = resultGame2
+    } else if(i.participant1.name.equals(Participant2) && i.participant2.name.equals(Participant1)){
+        i.resultParticipant1 = resultGame2
+        i.resultParticipant2 = resultGame2
     }
   }
 }
@@ -407,6 +410,8 @@ fun checkIfGamePlayed(participant1: String, participant2: String, tourney: Tourn
     for (j in i) {
       if (j.participant1.name.equals(participant1) && j.participant2.name.equals(participant2)) {
         played = !(j.resultParticipant1.equals("") && j.resultParticipant2.equals(""))
+      } else if(j.participant1.name.equals(participant2) && j.participant2.name.equals(participant1)){
+          played = !(j.resultParticipant1.equals("") && j.resultParticipant2.equals(""))
       }
     }
   }
