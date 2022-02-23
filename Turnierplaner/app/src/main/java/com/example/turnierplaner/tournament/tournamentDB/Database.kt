@@ -106,6 +106,7 @@ fun getParticipantsFromDb() {
                                 val tourneyFromAll: Tournament = findTournament(tourney.name)
                                 if (tourney.numberOfParticipants != tourneyFromAll.numberOfParticipants) {
                                     message = "Number of participants has changed in tournament:" + tourney.name + "."
+                                    allTournament[findTournamentIndex(tourney.id)] = tourney
                                     if (refreshActivate) {
                                         showRefreshPopUp.value = true
                                     }
@@ -113,6 +114,7 @@ fun getParticipantsFromDb() {
                                 }
                                 if(tourney.name != tourneyFromAll.name) {
                                     message = "Name of tournament:" + tourney.name + "has changed."
+                                    allTournament[findTournamentIndex(tourney.id)] = tourney
                                     if (refreshActivate) {
                                         showRefreshPopUp.value = true
                                     }
@@ -120,6 +122,7 @@ fun getParticipantsFromDb() {
                                 }
                                 if(tourney.pointsVictory != tourneyFromAll.pointsVictory){
                                     message = "Points for victory has changed in tournament:" + tourney.name + "."
+                                    allTournament[findTournamentIndex(tourney.id)] = tourney
                                     if (refreshActivate) {
                                         showRefreshPopUp.value = true
                                     }
@@ -127,6 +130,7 @@ fun getParticipantsFromDb() {
                                 }
                                 if(tourney.pointsTie != tourneyFromAll.pointsTie){
                                     message = "Points for tie has changed in tournament:" + tourney.name + "."
+                                    allTournament[findTournamentIndex(tourney.id)] = tourney
                                     if (refreshActivate) {
                                         showRefreshPopUp.value = true
                                     }
@@ -134,6 +138,7 @@ fun getParticipantsFromDb() {
                                 }
                                 if(participantAdded(tourney.participants, tourneyFromAll.participants, tourney.numberOfParticipants)){
                                     message = "A new participant was added in tournament:" + tourney.name + "."
+                                    allTournament[findTournamentIndex(tourney.id)] = tourney
                                     if (refreshActivate) {
                                         showRefreshPopUp.value = true
                                     }
@@ -141,6 +146,7 @@ fun getParticipantsFromDb() {
                                 }
                                 if(pointsChanged(tourney.participants, tourneyFromAll.participants, tourney.numberOfParticipants)) {
                                     message = "An update in Schedule was made in tournament:" + tourney.name + "."
+                                    allTournament[findTournamentIndex(tourney.id)] = tourney
                                     if (refreshActivate) {
                                         showRefreshPopUp.value = true
                                     }
