@@ -3,10 +3,6 @@ package com.example.turnierplaner.tournament.leagueSystem.schedule
 
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
-import com.example.turnierplaner.tournament.leagueSystem.changeOpponent1
-import com.example.turnierplaner.tournament.leagueSystem.createSchedule
-import com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants
-import com.example.turnierplaner.tournament.leagueSystem.getRow
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Before
@@ -182,7 +178,7 @@ class FillScheduleKtUnitTest {
   @Test fun addResultToResultList() {
     val scheduleRound1 =
       createSchedule(listParticipant!!, getNumberOfActualParticipants(listParticipant!!))
-    val numberOfRounds = (getRow(getNumberOfActualParticipants(listParticipant!!))*2)-1
+    val numberOfRounds = (getRow(getNumberOfActualParticipants(listParticipant!!)) *2)-1
     competition!!.schedule = mutableListOf<MutableList<Result>>()
     competition!!.schedule!!.add(scheduleRound1)
     val row = getRow(getNumberOfActualParticipants(listParticipant!!))
@@ -201,7 +197,7 @@ class FillScheduleKtUnitTest {
   fun checkAddResultToListEmpty() {
     val scheduleRound1 =
       createSchedule(competition!!.participants, getNumberOfActualParticipants(competition!!.participants))
-    val numberOfRounds = (getRow(getNumberOfActualParticipants(competition!!.participants))*2)-1
+    val numberOfRounds = (getRow(getNumberOfActualParticipants(competition!!.participants)) *2)-1
     competition!!.schedule = mutableListOf<MutableList<Result>>()
     competition!!.schedule!!.add(scheduleRound1)
     val row = getRow(getNumberOfActualParticipants(competition!!.participants))

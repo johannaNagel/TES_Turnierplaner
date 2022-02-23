@@ -1,5 +1,5 @@
 /* (C)2022 */
-package com.example.turnierplaner.tournament.leagueSystem
+package com.example.turnierplaner.tournament.leagueSystem.schedule
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -47,9 +47,8 @@ import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
-import com.example.turnierplaner.tournament.leagueSystem.schedule.ListResult
-import com.example.turnierplaner.tournament.leagueSystem.schedule.Result
-import com.example.turnierplaner.tournament.leagueSystem.schedule.winOrTie
+import com.example.turnierplaner.tournament.leagueSystem.Table
+import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 var roundNumber = 1
@@ -87,7 +86,7 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
               backgroundColor = Color.White,
               elevation = 1.dp,
               title = {
-                Text(text = "Tournament schedule: ${getTournament(tournamentName)?.name}")
+                Text(text = "Schedule: ${getTournament(tournamentName)?.name}")
               },
               actions = {
                 IconButton(
@@ -268,7 +267,8 @@ fun actualizeTournamentSchedule(tourney1: Tournament): MutableList<MutableList<R
   scheduleNew.add(createSchedule(participantList, getNumberOfActualParticipants(participantList)))
   for (i in 2..roundNumber2) {
     scheduleNew.add(
-        changeOpponent1(scheduleNew[0], getRow(getNumberOfActualParticipants(participantList)), i))
+        changeOpponent1(scheduleNew[0], getRow(getNumberOfActualParticipants(participantList)), i)
+    )
   }
   if (oldSchedule != null) {
     for (i in oldSchedule) {

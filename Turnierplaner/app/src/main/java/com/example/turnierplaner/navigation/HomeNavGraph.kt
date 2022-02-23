@@ -17,7 +17,7 @@ import com.example.turnierplaner.navigation.Screens.TournamentScreens
 import com.example.turnierplaner.tournament.invites.inviteScreen
 import com.example.turnierplaner.tournament.invites.qrReaderScreen
 import com.example.turnierplaner.tournament.invites.selectNameScreen
-import com.example.turnierplaner.tournament.leagueSystem.ScheduleComposable
+import com.example.turnierplaner.tournament.leagueSystem.schedule.ScheduleComposable
 import com.example.turnierplaner.tournament.leagueSystem.SingleTournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.TournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.deleteParticipantsScreen

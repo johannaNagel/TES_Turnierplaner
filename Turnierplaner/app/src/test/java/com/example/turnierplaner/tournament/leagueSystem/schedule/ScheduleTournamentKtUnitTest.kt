@@ -8,7 +8,6 @@ import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import kotlin.Result as Result
 
 class ScheduleTournamentKtUnitTest {
   var competition: Tournament? = null
@@ -35,10 +34,10 @@ class ScheduleTournamentKtUnitTest {
 
   @Test fun createSchedule() {
     val playerNumber =
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(
+      getNumberOfActualParticipants(
         listParticipant!!
       )
-    val scheduleRound1 = com.example.turnierplaner.tournament.leagueSystem.createSchedule(
+    val scheduleRound1 = createSchedule(
       listParticipant!!,
       playerNumber
     )
@@ -52,8 +51,8 @@ class ScheduleTournamentKtUnitTest {
 
     competition!!.participants.add(Participant("9", 0, 0, 9, "9"))
     val playerNumber =
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(competition!!.participants)
-    val scheduleRound1 = com.example.turnierplaner.tournament.leagueSystem.createSchedule(
+      getNumberOfActualParticipants(competition!!.participants)
+    val scheduleRound1 = createSchedule(
       competition!!.participants,
       playerNumber
     )
@@ -70,19 +69,19 @@ class ScheduleTournamentKtUnitTest {
 
   @Test fun changeOpponent1() {
     val scheduleRound1 =
-      com.example.turnierplaner.tournament.leagueSystem.createSchedule(
+      createSchedule(
         listParticipant!!,
-        com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(
+        getNumberOfActualParticipants(
           listParticipant!!
         )
       )
-    val numberOfRounds = (com.example.turnierplaner.tournament.leagueSystem.getRow(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(
+    val numberOfRounds = (getRow(
+      getNumberOfActualParticipants(
         listParticipant!!
       )
     ) *2)-1
-    val row = com.example.turnierplaner.tournament.leagueSystem.getRow(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(
+    val row = getRow(
+      getNumberOfActualParticipants(
         listParticipant!!
       )
     )
@@ -90,7 +89,7 @@ class ScheduleTournamentKtUnitTest {
     competition!!.schedule!!.add(scheduleRound1)
     for (i in 2..numberOfRounds) {
       competition!!.schedule!!.add(
-        com.example.turnierplaner.tournament.leagueSystem.changeOpponent1(
+        changeOpponent1(
           scheduleRound1,
           row,
           i
@@ -112,23 +111,23 @@ class ScheduleTournamentKtUnitTest {
   fun rotateScheduleUnEvenNumberOfParticipantRound1() {
     competition!!.participants.add(Participant("9", 0, 0, 9, "9"))
     val scheduleRound1 =
-      com.example.turnierplaner.tournament.leagueSystem.createSchedule(
+      createSchedule(
         competition!!.participants,
-        com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(competition!!.participants)
+        getNumberOfActualParticipants(competition!!.participants)
       )
-    val numberOfRounds = (com.example.turnierplaner.tournament.leagueSystem.getRow(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(
+    val numberOfRounds = (getRow(
+      getNumberOfActualParticipants(
         competition!!.participants
       )
     ) *2)-1
     //competition!!.schedule = mutableListOf<MutableList<Result>>()
-    val row = com.example.turnierplaner.tournament.leagueSystem.getRow(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(competition!!.participants)
+    val row = getRow(
+      getNumberOfActualParticipants(competition!!.participants)
     )
     competition!!.schedule!!.add(scheduleRound1)
     for (i in 2..numberOfRounds - 1) {
       competition!!.schedule!!.add(
-        com.example.turnierplaner.tournament.leagueSystem.changeOpponent1(
+        changeOpponent1(
           scheduleRound1,
           row,
           i
@@ -152,23 +151,23 @@ class ScheduleTournamentKtUnitTest {
   fun rotateScheduleUnEvenNumberOFPlayerRound4() {
     competition!!.participants.add(Participant("9", 0, 0, 9, "9"))
     val scheduleRound1 =
-      com.example.turnierplaner.tournament.leagueSystem.createSchedule(
+      createSchedule(
         competition!!.participants,
-        com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(competition!!.participants)
+        getNumberOfActualParticipants(competition!!.participants)
       )
-    val numberOfRounds = (com.example.turnierplaner.tournament.leagueSystem.getRow(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(
+    val numberOfRounds = (getRow(
+      getNumberOfActualParticipants(
         competition!!.participants
       )
     ) *2)-1
     //competition!!.schedule = mutableListOf<MutableList<Result>>()
     competition!!.schedule!!.add(scheduleRound1)
-    val row = com.example.turnierplaner.tournament.leagueSystem.getRow(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(competition!!.participants)
+    val row = getRow(
+      getNumberOfActualParticipants(competition!!.participants)
     )
     for (i in 2..numberOfRounds) {
       competition!!.schedule!!.add(
-        com.example.turnierplaner.tournament.leagueSystem.changeOpponent1(
+        changeOpponent1(
           scheduleRound1,
           row,
           i
@@ -190,16 +189,16 @@ class ScheduleTournamentKtUnitTest {
   @Test fun getRow() {
     val numberPlayers = 6
     val numberPlayers2 = 7
-    TestCase.assertTrue(com.example.turnierplaner.tournament.leagueSystem.getRow(numberPlayers) == 3)
-    TestCase.assertFalse(com.example.turnierplaner.tournament.leagueSystem.getRow(numberPlayers2) == 3)
-    TestCase.assertTrue(com.example.turnierplaner.tournament.leagueSystem.getRow(numberPlayers2) == 4)
+    TestCase.assertTrue(getRow(numberPlayers) == 3)
+    TestCase.assertFalse(getRow(numberPlayers2) == 3)
+    TestCase.assertTrue(getRow(numberPlayers2) == 4)
   }
 
   @Test fun splitString() {}
 
   @Test fun getNumberOfActualParticipants() {
     TestCase.assertTrue(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(
+      getNumberOfActualParticipants(
         competition!!.participants
       ) == 8
     )
@@ -211,23 +210,23 @@ class ScheduleTournamentKtUnitTest {
 
   @Test fun methodWhichRound() {
     val scheduleRound1 =
-      com.example.turnierplaner.tournament.leagueSystem.createSchedule(
+      createSchedule(
         competition!!.participants,
-        com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(competition!!.participants)
+        getNumberOfActualParticipants(competition!!.participants)
       )
-    val numberOfRounds = (com.example.turnierplaner.tournament.leagueSystem.getRow(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(
+    val numberOfRounds = (getRow(
+      getNumberOfActualParticipants(
         competition!!.participants
       )
     ) *2)-1
    // competition!!.schedule = mutableListOf<MutableList<Result>>()
     competition!!.schedule!!.add(scheduleRound1)
-    val row = com.example.turnierplaner.tournament.leagueSystem.getRow(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(competition!!.participants)
+    val row = getRow(
+      getNumberOfActualParticipants(competition!!.participants)
     )
     for (i in 2..numberOfRounds) {
       competition!!.schedule!!.add(
-        com.example.turnierplaner.tournament.leagueSystem.changeOpponent1(
+        changeOpponent1(
           scheduleRound1,
           row,
           i
@@ -239,7 +238,7 @@ class ScheduleTournamentKtUnitTest {
     addResultToResultList("5", "6", "0", "1", 1, competition!!)
     addResultToResultList("7", "8", "0", "1", 1, competition!!)
     TestCase.assertTrue(
-      com.example.turnierplaner.tournament.leagueSystem.methodWhichRound(
+      methodWhichRound(
         competition!!
       ) == 2
     )
@@ -247,23 +246,23 @@ class ScheduleTournamentKtUnitTest {
   @Test
   fun checkWhichRoundRound1() {
     val scheduleRound1 =
-      com.example.turnierplaner.tournament.leagueSystem.createSchedule(
+      createSchedule(
         competition!!.participants,
-        com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(competition!!.participants)
+        getNumberOfActualParticipants(competition!!.participants)
       )
-    val numberOfRounds = (com.example.turnierplaner.tournament.leagueSystem.getRow(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(
+    val numberOfRounds = (getRow(
+      getNumberOfActualParticipants(
         competition!!.participants
       )
     ) *2)-1
     //competition!!.schedule = mutableListOf<MutableList<Result>>()
     competition!!.schedule!!.add(scheduleRound1)
-    val row = com.example.turnierplaner.tournament.leagueSystem.getRow(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(competition!!.participants)
+    val row = getRow(
+      getNumberOfActualParticipants(competition!!.participants)
     )
     for (i in 2..numberOfRounds) {
       competition!!.schedule!!.add(
-        com.example.turnierplaner.tournament.leagueSystem.changeOpponent1(
+        changeOpponent1(
           scheduleRound1,
           row,
           i
@@ -275,7 +274,7 @@ class ScheduleTournamentKtUnitTest {
     addResultToResultList("5", "6", "0", "1", 1, competition!!)
     addResultToResultList("7", "8", "", "", 1, competition!!)
     TestCase.assertTrue(
-      com.example.turnierplaner.tournament.leagueSystem.methodWhichRound(
+      methodWhichRound(
         competition!!
       ) == 1
     )
@@ -305,23 +304,23 @@ class ScheduleTournamentKtUnitTest {
   fun checkGamePlayed() {
     competition!!.participants.add(Participant("9", 0, 0, 9, "9"))
     val scheduleRound1 =
-      com.example.turnierplaner.tournament.leagueSystem.createSchedule(
+      createSchedule(
         competition!!.participants,
-        com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(competition!!.participants)
+        getNumberOfActualParticipants(competition!!.participants)
       )
-    val numberOfRounds = (com.example.turnierplaner.tournament.leagueSystem.getRow(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(
+    val numberOfRounds = (getRow(
+      getNumberOfActualParticipants(
         competition!!.participants
       )
     ) *2)-1
     //competition!!.schedule = mutableListOf<MutableList<Result>>()
     competition!!.schedule!!.add(scheduleRound1)
-    val row = com.example.turnierplaner.tournament.leagueSystem.getRow(
-      com.example.turnierplaner.tournament.leagueSystem.getNumberOfActualParticipants(competition!!.participants)
+    val row = getRow(
+      getNumberOfActualParticipants(competition!!.participants)
     )
     for (i in 2..numberOfRounds) {
       competition!!.schedule!!.add(
-        com.example.turnierplaner.tournament.leagueSystem.changeOpponent1(
+        changeOpponent1(
           scheduleRound1,
           row,
           i

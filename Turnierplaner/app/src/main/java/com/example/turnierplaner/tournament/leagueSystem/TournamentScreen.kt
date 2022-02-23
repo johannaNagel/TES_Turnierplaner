@@ -39,6 +39,7 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
+import com.example.turnierplaner.tournament.leagueSystem.schedule.createScheduleTournament
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.refreshActivate
