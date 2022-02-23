@@ -8,6 +8,7 @@ import com.example.turnierplaner.tournament.Tournament
 
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.changeState
+import com.example.turnierplaner.tournament.leagueSystem.dummyAllTournament
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.example.turnierplaner.tournament.leagueSystem.showRefreshPopUp
 import com.google.firebase.auth.FirebaseAuth

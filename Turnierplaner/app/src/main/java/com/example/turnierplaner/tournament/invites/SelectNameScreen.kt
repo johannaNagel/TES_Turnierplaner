@@ -30,8 +30,11 @@ import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.allTournamentContainsTournament
+import com.example.turnierplaner.tournament.leagueSystem.dummyAllTournament
+import com.example.turnierplaner.tournament.leagueSystem.dummyTournamentContainsParticipant
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.example.turnierplaner.tournament.leagueSystem.tournamentContainsParticipant
+import com.example.turnierplaner.tournament.tournamentDB.findTournamentIndex
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.getTournamentFromDB
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
@@ -90,7 +93,7 @@ fun selectNameScreen(navController: NavController, tournamentName: String?){
 
 fun checkIfNameIsUnique(context: Context, participantName: String, tournamentName: String?): Boolean {
 
-    if(tournamentContainsParticipant(tournamentName, participantName)){
+    if(dummyTournamentContainsParticipant(tournamentName, participantName)){
 
         showMessage(context, message = "Name is already taken.")
         return false
@@ -104,7 +107,15 @@ fun checkIfNameIsUnique(context: Context, participantName: String, tournamentNam
 
 fun participantJoinTournament(participantName: String, tournamentName: String?){
 
-    val tourney = findTournament(tournamentName)
+    //default initialization
+    var tourney = dummyAllTournament[0]
+
+    for (tournament in dummyAllTournament) {
+        if (tournament.name == tournamentName){
+            tourney = tournament
+        }
+    }
+
     val id = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
     val participant = Participant(participantName, 0, 0, tourney.numberOfParticipants,  id)
@@ -115,16 +126,18 @@ fun participantJoinTournament(participantName: String, tournamentName: String?){
 
             tourney.participants[idx - 1].name = participantName
             tourney.participants[idx - 1].id = id
+            allTournament.add(tourney)
             pushLocalToDb()
             getParticipantsFromDb()
             return
         }
     }
-    tourney.numberOfParticipants = tourney.numberOfParticipants + 1
+    allTournament[findTournamentIndex(tourney.id)].numberOfParticipants = tourney.numberOfParticipants + 1
     // Every Participant which is added have to have a UID, currently the UID from the Loged-In User
     // is
     // assigned
-    tourney.participants.add(participant)
+    allTournament[findTournamentIndex(tourney.id)].participants.add(participant)
     pushLocalToDb()
     getParticipantsFromDb()
+    dummyAllTournament.clear()
 }
