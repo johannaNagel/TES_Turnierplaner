@@ -5,10 +5,12 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.homescreen.joinTournament
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
+import com.example.turnierplaner.tournament.leagueSystem.RefreshPopUp
 
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.changeState
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
+import com.example.turnierplaner.tournament.leagueSystem.message
 import com.example.turnierplaner.tournament.leagueSystem.showRefreshPopUp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -102,19 +104,49 @@ fun getParticipantsFromDb() {
                                 // In the next if conditions we check if changes where made to a Tournament,
                                 // in which the current user participates
                                 val tourneyFromAll: Tournament = findTournament(tourney.name)
-                                if (tourney.numberOfParticipants != tourneyFromAll.numberOfParticipants ||
-                                    tourney.name != tourneyFromAll.name ||
-                                    tourney.pointsVictory != tourneyFromAll.pointsVictory ||
-                                    tourney.pointsTie != tourneyFromAll.pointsTie ||
-                                    participantAdded(tourney.participants, tourneyFromAll.participants, tourney.numberOfParticipants) || pointsChanged(tourney.participants, tourneyFromAll.participants, tourney.numberOfParticipants)) {
-                                    allTournament[findTournamentIndex(tourney.id)] = tourney
+                                if (tourney.numberOfParticipants != tourneyFromAll.numberOfParticipants) {
+                                    message = "Number of participants has changed in tournament:" + tourney.name + "."
+                                    if (refreshActivate) {
+                                        showRefreshPopUp.value = true
+                                    }
+                                    break
+                                }
+                                if(tourney.name != tourneyFromAll.name) {
+                                    message = "Name of tournament:" + tourney.name + "has changed."
+                                    if (refreshActivate) {
+                                        showRefreshPopUp.value = true
+                                    }
+                                    break
+                                }
+                                if(tourney.pointsVictory != tourneyFromAll.pointsVictory){
+                                    message = "Points for victory has changed in tournament:" + tourney.name + "."
+                                    if (refreshActivate) {
+                                        showRefreshPopUp.value = true
+                                    }
+                                    break
+                                }
+                                if(tourney.pointsTie != tourneyFromAll.pointsTie){
+                                    message = "Points for tie has changed in tournament:" + tourney.name + "."
+                                    if (refreshActivate) {
+                                        showRefreshPopUp.value = true
+                                    }
+                                    break
+                                }
+                                if(participantAdded(tourney.participants, tourneyFromAll.participants, tourney.numberOfParticipants)){
+                                    message = "A new participant was added in tournament:" + tourney.name + "."
+                                    if (refreshActivate) {
+                                        showRefreshPopUp.value = true
+                                    }
+                                    break
+                                }
+                                if(pointsChanged(tourney.participants, tourneyFromAll.participants, tourney.numberOfParticipants)) {
+                                    message = "An update in Schedule was made in tournament:" + tourney.name + "."
                                     if (refreshActivate) {
                                         showRefreshPopUp.value = true
                                     }
                                     break
                                 }
                             }
-
                         }
                         //If user is kicked out from tournament
                         if (participantInTournament == 0 &&
