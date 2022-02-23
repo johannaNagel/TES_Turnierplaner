@@ -170,9 +170,10 @@ fun getTournamentFromDB(inviteTournamentName: String, navController: NavHostCont
                         )
                     if (tourney.name == inviteTournamentName){
 
-                        //allTournament.add(tourney)
+                        dummyAllTournament.clear()
+                        dummyAllTournament.add(tourney)
                         database.getReference(reference).removeEventListener(this)
-                        joinTournament(inviteTournamentName, navController, context, inviteCodeLocal, tourney)
+                        joinTournament(inviteTournamentName, navController, context, inviteCodeLocal)
                         return
                     }
                 }
