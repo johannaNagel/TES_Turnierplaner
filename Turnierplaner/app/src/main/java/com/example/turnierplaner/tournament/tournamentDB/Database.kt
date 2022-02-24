@@ -8,6 +8,7 @@ import com.example.turnierplaner.tournament.Tournament
 
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.changeState
+import com.example.turnierplaner.tournament.leagueSystem.dummyAllTournament
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.example.turnierplaner.tournament.leagueSystem.showRefreshPopUp
 import com.google.firebase.auth.FirebaseAuth
@@ -169,7 +170,8 @@ fun getTournamentFromDB(inviteTournamentName: String, navController: NavHostCont
                         )
                     if (tourney.name == inviteTournamentName){
 
-                        allTournament.add(tourney)
+                        dummyAllTournament.clear()
+                        dummyAllTournament.add(tourney)
                         database.getReference(reference).removeEventListener(this)
                         joinTournament(inviteTournamentName, navController, context, inviteCodeLocal)
                         return

@@ -48,6 +48,8 @@ import java.util.UUID
 
 // List with all Tournaments
 var allTournament = mutableListOf<Tournament>()
+//This list is needed, to store Tournaments locally, without adding them to allTournament, in case the user exists the App
+var dummyAllTournament = mutableListOf<Tournament>()
 var changeState by mutableStateOf(0)
 var showRefreshPopUp = mutableStateOf(false)
 
@@ -250,6 +252,39 @@ fun tournamentContainsParticipant(tournamentName: String?, participantName: Stri
     }
   }
   return false
+}
+
+fun tournamentContainsParticipant(tournament: Tournament, participantName: String): Boolean {
+
+    for (participant in tournament.participants) {
+
+        if (participant.name == participantName) {
+
+            return true
+        }
+    }
+    return false
+}
+
+fun dummyTournamentContainsParticipant(tournamentName: String?, participantName: String): Boolean {
+
+    //default initialization
+    var tourney = dummyAllTournament[0]
+
+    for (tournament in dummyAllTournament) {
+        if (tournament.name == tournamentName){
+            tourney = tournament
+        }
+    }
+
+    for (participant in tourney.participants) {
+
+        if (participant.name == participantName) {
+
+            return true
+        }
+    }
+    return false
 }
 
 fun allTournamentContainsTournament(tournamentName: String?): Boolean {
