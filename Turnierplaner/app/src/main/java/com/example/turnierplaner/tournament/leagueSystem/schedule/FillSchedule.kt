@@ -180,7 +180,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
                       splitString(selectedTournamentRound, 1),
                       resParticipant1,
                       resParticipant2,
-                      roundNumber,
+                      getNumberOfRound(),
                       getTournament(tournamentName)!!)
 
                   pushLocalToDb()
@@ -197,7 +197,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
                       splitString(selectedTournamentRound, 1),
                       resParticipant1,
                       resParticipant2,
-                      roundNumber,
+                      getNumberOfRound(),
                       getTournament(tournamentName)!!)
 
                   change = false

@@ -55,7 +55,9 @@ var roundNumber = 1
 var rememberTournamentRound = 0
 var change = false
 var tournament: Tournament? = null
-var roundNumberInList = 0
+var roundNumberInList = -1
+var boolBackButton = false
+var boolRoundNumberInList = true
 
 /** Composable method who shows the schedule of the tournament */
 @Composable
@@ -68,13 +70,7 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
   var selectedTournamentRound by remember { mutableStateOf("") }
   val numberOfRounds =
       (getRow(getNumberOfActualParticipants(getTournament(tournamentName)!!.participants)) * 2) - 1
-  val actualRound = methodWhichRound(getTournament(tournamentName)!!)
-  if(rememberTournamentRound == 0){
-      rememberTournamentRound = actualRound
-      setNumberOfRound(actualRound)
-  } else{
-     setNumberOfRound(rememberTournamentRound)
-  }
+
   for (i in 0 until numberOfRounds) {
     suggestions.add(i, "round: ${i + 1}")
   }
@@ -91,7 +87,12 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
               actions = {
                 IconButton(
                     onClick = {
+
+                      setNumberOfRound(1)
                       rememberTournamentRound = 0
+                      boolBackButton = true
+                      roundNumberInList = -1
+                      boolRoundNumberInList = true
                       navController.navigate(
                           "single_tournament_route/${getTournament(tournamentName)?.name}")
                     },
@@ -105,10 +106,9 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
         }
       },
       content = {
-
         // Tournament type
         val icon = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-
+          actualizeRoundNumber(tournamentName)
         Column() {
           Column() {
             // DropDownMenu for the tournament rounds
@@ -121,7 +121,7 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
                       textFieldSize = coordinates.size.toSize()
                     },
                 onValueChange = { selectedTournamentRound = it },
-                label = { Text("round Number $rememberTournamentRound") },
+                label = { Text("round Number ${getRememberRoundTournament()}") },
                 leadingIcon = {
                   IconButton(onClick = { /*TODO*/}) {
                     Icon(
@@ -143,7 +143,7 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
                       expanded = false
                       val splitList = selectedTournamentRound.split(" ")
                         setNumberOfRound(splitList[1].toInt())
-                        rememberTournamentRound = getNumberOfRound()
+                         setRememberRoundTournament(getNumberOfRound())
                         roundNumberInList =
                           if (getNumberOfRound() > 0) {
                               getNumberOfRound() - 1
@@ -367,7 +367,8 @@ fun methodWhichRound(tourney: Tournament): Int {
   var round = 0
   for (i in tourney.schedule!!) {
     for (j in i) {
-      if ((j.resultParticipant1 == "") && (j.resultParticipant2 == "")) {
+      if (((j.resultParticipant1 == "") && (j.resultParticipant2 == ""))
+          && (j.participant1.name != "" && j.participant2.name != "" )) {
         round = tourney.schedule!!.indexOf(i)
         return round + 1
       }
@@ -376,7 +377,7 @@ fun methodWhichRound(tourney: Tournament): Int {
   return round + 1
 }
 
-/** return the gameresult */
+/** return the game result */
 fun getGameResult(game: String, tourney: Tournament): Result {
   val splitString = game.split(" vs. ")
   val participant1 = splitString[0]
@@ -384,7 +385,7 @@ fun getGameResult(game: String, tourney: Tournament): Result {
   var result = Result()
   for (i in tourney.schedule!!) {
     for (j in i) {
-      if (j.participant1.name.equals(participant1) && j.participant2.name.equals(participant2)) {
+      if (j.participant1.name == participant1 && j.participant2.name == participant2) {
         result = j
         break
       }
@@ -406,7 +407,7 @@ fun setTourn(tourney: Tournament) {
 
 
 fun checkIfGamePlayed(tourney: Tournament, deleteParticipantName: String): MutableList<Result> {
-    var listResult = mutableListOf<Result>()
+    val listResult = mutableListOf<Result>()
     for (idx in tourney.schedule!!) {
         for (idx2 in idx) {
             if (idx2.participant1.name == deleteParticipantName && idx2.resultParticipant1 != "") {
@@ -422,7 +423,7 @@ fun checkIfGamePlayed(tourney: Tournament, deleteParticipantName: String): Mutab
 fun removePointsGames(tourney: Tournament, deleteParticipantName: String) {
     val resultWinnerTie = returnStringWinnerTie(tourney, deleteParticipantName)
     for(idx in 0 until resultWinnerTie.size) {
-        val list = resultWinnerTie[idx].split(" ")
+        val list = resultWinnerTie[idx].split("/")
 
         for (participant in tourney.participants) {
             if (list[0] == deleteParticipantName) {
@@ -434,7 +435,7 @@ fun removePointsGames(tourney: Tournament, deleteParticipantName: String) {
                 }
             }else {
                 if (participant.name == list[0]) {
-                    participant.games = participant.games-1
+                    participant.games = participant.games - 1
                     if(list[2] == "false") {
                         participant.points = participant.points - tourney.pointsVictory
                     } else{
@@ -456,16 +457,16 @@ fun returnStringWinnerTie(tourney: Tournament, deleteParticipantName: String ):M
     for( result in listResultGame){
         when {
             result.resultParticipant1 < result.resultParticipant2 -> {
-                val resultString = "${result.participant2.name} ${result.participant1.name} $booleanTie"
+                val resultString = "${result.participant2.name}/${result.participant1.name}/$booleanTie"
                 stringResultWinnerTie.add(resultString)
             }
             result.resultParticipant1 > result.resultParticipant2 -> {
-                val resultString = "${result.participant1.name} ${result.participant2.name} $booleanTie"
+                val resultString = "${result.participant1.name}/${result.participant2.name}/$booleanTie"
                 stringResultWinnerTie.add(resultString)
             }
             else -> {
                 booleanTie = true
-                val resultString = "${result.participant1.name} ${result.participant2.name} $booleanTie"
+                val resultString = "${result.participant1.name}/${result.participant2.name}/$booleanTie"
                 stringResultWinnerTie.add(resultString)
             }
         }
@@ -475,11 +476,11 @@ fun returnStringWinnerTie(tourney: Tournament, deleteParticipantName: String ):M
 }
 
 fun listCopySchedule(tourn: Tournament): MutableList<MutableList<Result>> {
-    var newSchedule = mutableListOf<MutableList<Result>>()
+    val newSchedule = mutableListOf<MutableList<Result>>()
     var count = 0
     if(tourn.schedule != null) {
         for (i in tourn.schedule!!) {
-            var listSchedule = mutableListOf<Result>()
+            val listSchedule = mutableListOf<Result>()
             newSchedule.add(listSchedule)
             for (j in i) {
                 val result = Result(
@@ -503,4 +504,44 @@ fun getNumberOfRound(): Int {
 
 fun setNumberOfRound(round : Int){
     roundNumber = round
+}
+
+fun setRememberRoundTournament(round: Int){
+    rememberTournamentRound = round
+}
+fun getRememberRoundTournament(): Int {
+    return rememberTournamentRound
+}
+
+fun actualizeRoundNumber(tournamentName: String){
+
+    val actualRound = methodWhichRound(getTournament(tournamentName)!!)
+    if(!boolBackButton && rememberTournamentRound == 0) {
+        rememberTournamentRound = actualRound
+        setNumberOfRound(actualRound)
+        if (boolRoundNumberInList) {
+            roundNumberInList = rememberTournamentRound - 1
+            boolRoundNumberInList = false
+        }
+    } else if(boolBackButton){
+        rememberTournamentRound = 1
+        setNumberOfRound(1)
+        roundNumberInList = rememberTournamentRound -1
+    }
+
+
+    /*
+     val actualRound = methodWhichRound(getTournament(tournamentName)!!)
+    if(rememberTournamentRound == 0){
+        rememberTournamentRound = actualRound
+        setNumberOfRound(actualRound)
+        if(roundNumberInList == -1){
+            roundNumberInList =  rememberTournamentRound -1
+        }
+    } else{
+        setNumberOfRound(rememberTournamentRound)
+    }
+     */
+
+
 }

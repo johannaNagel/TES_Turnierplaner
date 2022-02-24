@@ -69,6 +69,8 @@ import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
+import com.example.turnierplaner.tournament.leagueSystem.schedule.boolBackButton
+import com.example.turnierplaner.tournament.leagueSystem.schedule.rememberTournamentRound
 import com.example.turnierplaner.tournament.leagueSystem.schedule.removePointsGames
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
@@ -125,6 +127,8 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
                 IconButton(
                     onClick = {
                       getParticipantsFromDb()
+                      boolBackButton = false
+                      rememberTournamentRound = 0
                       navController.navigate("schedule_route/${tourney.name}")
                       // navController.navigate(BottomBarScreens.Add.route)
                     },
