@@ -52,6 +52,7 @@ var allTournament = mutableListOf<Tournament>()
 var dummyAllTournament = mutableListOf<Tournament>()
 var changeState by mutableStateOf(0)
 var showRefreshPopUp = mutableStateOf(false)
+var message:String = ""
 
 @Composable
 fun TournamentScreen(navController: NavHostController) {
@@ -61,7 +62,7 @@ fun TournamentScreen(navController: NavHostController) {
   val selectedItem = remember { mutableStateOf("tournament") }
 
   if (showRefreshPopUp.value) {
-    RefreshPopUp()
+      RefreshPopUp()
   }
 
   Scaffold(
@@ -151,9 +152,13 @@ fun TournamentScreen(navController: NavHostController) {
 @Composable
 fun RefreshPopUp() {
 
+  if (message == ""){
+      message = "Changes in a Tournament were made or u was added to a new Tournament"
+  }
   AlertDialog(
       onDismissRequest = { showRefreshPopUp.value = false },
-      title = { Text(text = "Changes in a Tournament were made or u was added to a new Tournament") },
+      title = { Text(text = message
+          )},
       text = { Text("Press Ok do continue.") },
       confirmButton = {
         Button(content = { Text("OK") }, onClick = { showRefreshPopUp.value = false })
