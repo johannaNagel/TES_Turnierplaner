@@ -6,6 +6,8 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,8 +21,13 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.DismissDirection
@@ -39,8 +46,19 @@ import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.FormatListNumbered
+import androidx.compose.material.icons.filled.Groups
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.SportsFootball
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.CalendarToday
@@ -53,20 +71,30 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
+import com.example.turnierplaner.homescreen.maxPoints
+import com.example.turnierplaner.homescreen.maxPossibleParticipants
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.schedule.boolBackButton
@@ -75,6 +103,7 @@ import com.example.turnierplaner.tournament.leagueSystem.schedule.removePointsGa
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.removeTournament
+import com.google.firebase.auth.FirebaseAuth
 
 /*
 It is not possible to open PopUpMenu from onclick Method
@@ -113,6 +142,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
           "Invite Participants",
           "Remove Participants",
           "Edit Point System",
+          "Edit Participant Name"
       )
   val buttonTitle = items[selectedIndex]
 
@@ -555,6 +585,7 @@ fun DropdownMenu(
                       "Remove Participants" -> navController.navigate("remove_participant_route/${tourney.name}")
                       "Invite Participants" -> navController.navigate("invite_route/${tourney.name}")
                       "Edit Point System" -> navController.navigate("edit_points_route/${tourney.name}")
+                      "Edit Participant Name" -> navController.navigate("edit_participant_name_route/${tourney.name}")
                   }
 
               }) {
@@ -572,6 +603,7 @@ fun DropdownMenu(
                       "Remove Participants" -> navController.navigate("remove_participant_route/${tourney.name}")
                       "Invite Participants" -> navController.navigate("invite_route/${tourney.name}")
                       "Edit Point System" -> navController.navigate("edit_points_route/${tourney.name}")
+                      "Edit Participant Name" -> navController.navigate("edit_participant_name_route/${tourney.name}")
                   }
               }) {
             Text(
@@ -598,4 +630,153 @@ fun listCopy(tournament: Tournament): MutableList<Participant> {
     list[i].points = tournament.participants[i].points
   }
   return list
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun EditParticipantNameScreen(navController: NavController, tournamentName: String?){
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text(text = "Add") }
+    var newParticipantName by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+    val suggestions = participantsWithSameUID(tournamentName!!)
+    var selectedParticipantName by remember { mutableStateOf("") }
+    var textfieldSize by remember { mutableStateOf(Size.Zero) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val maxSize = 20
+    val context = LocalContext.current
+    var boolNameShowMessage = true
+
+
+
+    Scaffold(
+        topBar = {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                TopAppBar(
+                    backgroundColor = Color.White,
+                    elevation = 1.dp,
+                    title = { Text(text = "Edit Participant Name") },
+                )
+            }
+        },
+        content = {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(18.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                content = {
+
+                    // Tournament type
+                    val icon =
+                        if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
+
+                    Column() {
+                        OutlinedTextField(
+                            value = selectedParticipantName,
+                            readOnly = true,
+                            modifier =
+                            Modifier.onGloballyPositioned { coordinates ->
+                                // This value is used to assign to the DropDown the same width
+                                textfieldSize = coordinates.size.toSize()
+                            },
+                            onValueChange = { selectedParticipantName = it },
+                            label = { Text("Old Particpant Name") },
+                            leadingIcon = {
+                                IconButton(onClick = { /*TODO*/}) {
+                                    Icon(
+                                        imageVector = Icons.Filled.FormatListNumbered,
+                                        contentDescription = "TournamentList")
+                                }
+                            },
+                            trailingIcon = {
+                                Icon(icon, "Arrow", Modifier.clickable { expanded = !expanded })
+                            })
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier =
+                            Modifier.width(with(LocalDensity.current) { textfieldSize.width.toDp() }),
+                        ) {
+                            suggestions.forEach { label ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        selectedParticipantName = label
+                                        expanded = false
+                                    }) { Text(text = label) }
+                            }
+                        }
+                    }
+                    OutlinedTextField(
+                        value = newParticipantName,
+                        singleLine = true,
+                        onValueChange = {
+                            if(it.length <= maxSize) {
+                                newParticipantName = it
+                                boolNameShowMessage = true
+                            }
+                            if ((it.length > maxSize) && boolNameShowMessage){
+                                boolNameShowMessage = false
+                                showMessage(context, "Participnat Name is to long")
+                            }
+                        },
+                        label = { Text(text = "New Partipant Name") },
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                        leadingIcon = {
+                            IconButton(onClick = { /*TODO*/}) {
+                                Icon(
+                                    imageVector = Icons.Filled.SportsFootball,
+                                    contentDescription = "FootballIcon")
+                            }
+                        })
+
+
+                    Button(
+                        modifier = Modifier.fillMaxWidth().height(50.dp),
+                        enabled =
+                        newParticipantName.isNotEmpty(),
+
+                        content = { Text(text = "Change") },
+                        onClick = {
+                            changeName(selectedParticipantName, newParticipantName, tournamentName)
+                            navController.navigate("single_tournament_route/$tournamentName")
+                            // Navigiere zum com.example.turnierplaner.tournament.leagueSystem.Tournament
+                            // Tab
+                        })
+                    Button(
+                        modifier = Modifier.fillMaxWidth().height(50.dp),
+                        content = { Text(text = "Cancel") },
+                        onClick = {
+
+                            navController.navigate("single_tournament_route/$tournamentName")
+                            // Navigiere zum com.example.turnierplaner.tournament.leagueSystem.Tournament
+                            // Tab
+                        })
+                })
+        },
+
+        )
+}
+
+
+fun participantsWithSameUID(tourneyName: String): MutableList<String> {
+    val tourney = findTournament(tourneyName)
+    val listParticipantName = mutableListOf<String>()
+    val id = FirebaseAuth.getInstance().currentUser?.uid.toString()
+    for(participant in tourney.participants){
+        if(participant.id == id){
+            listParticipantName.add(participant.name)
+        }
+    }
+    return listParticipantName
+
+}
+
+fun changeName(oldName: String, newName:String, tourneyName: String){
+    val tourney = findTournament(tourneyName)
+    for(participant in tourney.participants){
+        if(participant.name == oldName){
+            participant.name = newName
+        }
+    pushLocalToDb()
+    }
 }
