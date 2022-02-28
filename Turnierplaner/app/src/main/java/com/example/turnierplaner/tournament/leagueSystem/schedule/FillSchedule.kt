@@ -47,6 +47,7 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
+import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 private val showChangeDialog = mutableStateOf(false)
@@ -62,6 +63,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
   var expanded by remember { mutableStateOf(false) }
   val suggestionsGame = fillGameString(getTournament(tournamentName!!)!!)
   val tourney = findTournament(tournamentName)
+  //getParticipantsFromDb()
   val keyboardController = LocalSoftwareKeyboardController.current
   val maxPoints = 3
   val context = LocalContext.current
@@ -328,7 +330,7 @@ fun addResultPointsChange(
                     }
                     "" -> {
                         i.games = i.games - 1
-                        i.points = i.points - tourney.pointsVictory
+                        i.points = i.points - tourney.pointsTie
                     }
                 }
             }
