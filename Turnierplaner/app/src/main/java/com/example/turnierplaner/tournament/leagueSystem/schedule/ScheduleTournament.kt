@@ -49,6 +49,7 @@ import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.Table
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
+import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 var roundNumber = 1
@@ -261,6 +262,7 @@ fun actualizeTournamentSchedule(tourney1: Tournament): MutableList<MutableList<R
   val oldSchedule = tourney1.schedule
       //listCopySchedule(tourney1)
   // listCopy(tourney1)
+  getParticipantsFromDb()
   val participantList = tourney1.participants
   val scheduleNew = mutableListOf<MutableList<Result>>()
   val roundNumber2 = (getRow(getNumberOfActualParticipants(participantList)) * 2) - 1
