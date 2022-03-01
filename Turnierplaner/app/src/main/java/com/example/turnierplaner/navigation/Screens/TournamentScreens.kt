@@ -12,5 +12,7 @@ sealed class TournamentScreens(val title: String, val route: String) {
       TournamentScreens(title = "edit_points", route = "edit_points_route/{tournamentName}")
   object EditParticipantName:
       TournamentScreens(title = "edit_participant_name", route = "edit_participant_name_route/{tournamentName}")
+  object EditTournamentName:
+      TournamentScreens(title = "edit_tournament_name", route = "edit_tournament_name_route/{tournamentName}")
 
 }
