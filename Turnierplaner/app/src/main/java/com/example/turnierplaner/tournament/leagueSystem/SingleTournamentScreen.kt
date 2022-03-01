@@ -6,7 +6,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,11 +25,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
-import androidx.compose.material.BottomAppBar
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.DismissDirection
@@ -42,10 +37,6 @@ import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.MaterialTheme.shapes
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -53,19 +44,12 @@ import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.FormatListNumbered
-import androidx.compose.material.icons.filled.Groups
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SportsFootball
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.CalendarToday
@@ -89,7 +73,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -100,8 +83,6 @@ import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
-import com.example.turnierplaner.homescreen.maxPoints
-import com.example.turnierplaner.homescreen.maxPossibleParticipants
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.schedule.boolBackButton
@@ -302,7 +283,6 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
 @Composable
 fun AddParticipantToTournamentPopUP(tournamentName: String?) {
   var participantName by remember { mutableStateOf("") }
-  val tourney = findTournament(tournamentName)
   val context = LocalContext.current
   var boolParticipNameMessage = true
 
@@ -378,7 +358,7 @@ fun DeleteTournamentPopUp(navController: NavController, tourney: Tournament) {
 fun sortTournamentByPoints(tournamentName: String?): MutableList<Participant> {
 
     val tourney = findTournament(tournamentName)
-    var participants = listCopy(tourney)
+    val participants = listCopy(tourney)
 
     participants.sortByDescending { it.points }
 
@@ -431,7 +411,7 @@ fun <T> Table(
 
 @ExperimentalMaterialApi
 @Composable
-fun deleteParticipantsScreen(navController: NavController, tournamentName: String?) {
+fun DeleteParticipantsScreen(navController: NavController, tournamentName: String?) {
 
   val tourney = findTournament(tournamentName)
   val items = tourney.participants
@@ -458,7 +438,7 @@ fun deleteParticipantsScreen(navController: NavController, tournamentName: Strin
       content = {
         LazyColumn {
           items(items) { item ->
-            var unread by remember { mutableStateOf(false) }
+            val unread by remember { mutableStateOf(false) }
             val dismissState =
                 rememberDismissState(
                     confirmStateChange = {
@@ -550,10 +530,9 @@ fun deleteParticipantsScreen(navController: NavController, tournamentName: Strin
 
 @ExperimentalMaterialApi
 @Composable
-fun editPointsScreen(navController: NavController, tournamentName: String?) {
+fun EditPointsScreen(navController: NavController, tournamentName: String?) {
 
   val tourney = findTournament(tournamentName)
-  val items = tourney.participants
 
   Scaffold(
       topBar = {
@@ -648,9 +627,9 @@ fun DropdownMenu(
 }
 
 fun listCopy(tournament: Tournament): MutableList<Participant> {
-  var list = mutableListOf<Participant>()
-  for (i in 0..tournament.participants.size - 1) {
-    var participant = Participant("", 0, 0, 0, "")
+  val list = mutableListOf<Participant>()
+  for (i in 0 until tournament.participants.size) {
+    val participant = Participant("", 0, 0, 0, "")
     list.add(participant)
     list[i].games = tournament.participants[i].games
     list[i].rank = tournament.participants[i].rank
@@ -710,7 +689,7 @@ fun EditParticipantNameScreen(navController: NavController, tournamentName: Stri
                                 textfieldSize = coordinates.size.toSize()
                             },
                             onValueChange = { selectedParticipantName = it },
-                            label = { Text("Old Particpant Name") },
+                            label = { Text("Old Participant Name") },
                             leadingIcon = {
                                 IconButton(onClick = { /*TODO*/}) {
                                     Icon(
@@ -825,7 +804,7 @@ fun changeTournamentName(oldName: String, newTourneyName: String) {
 
 @Composable
 fun EditTournamentNamePopUP(tournamentName: String?) {
-    var newtournamentName by remember { mutableStateOf("") } 
+    var newTournamentName by remember { mutableStateOf("") }
     val tourney = findTournament(tournamentName)
     val context = LocalContext.current
     var boolParticipNameMessage = true
@@ -846,17 +825,17 @@ fun EditTournamentNamePopUP(tournamentName: String?) {
             OutlinedTextField(
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
                 singleLine = true,
-                value = newtournamentName,
+                value = newTournamentName,
                 onValueChange = {
                     if(it.length <= 20) {
-                        newtournamentName = it
+                        newTournamentName = it
                         boolParticipNameMessage = true
                     }
                     else if(boolParticipNameMessage) {
                         boolParticipNameMessage = false
                         showMessage(context, "Name is to long")
                     }
-                    if(allTournamentContainsTournament(newtournamentName) ){
+                    if(allTournamentContainsTournament(newTournamentName) ){
                         showMessage(context, "Name is assigned")
                     }},
                 label = { Text(text = "New Tournament Name") },
@@ -866,13 +845,13 @@ fun EditTournamentNamePopUP(tournamentName: String?) {
                     .fillMaxWidth()
                     .height(50.dp),
                 enabled =
-                newtournamentName.isNotEmpty() &&
-                        !newtournamentName.contains(" ") &&
-                        !allTournamentContainsTournament(newtournamentName),
+                newTournamentName.isNotEmpty() &&
+                        !newTournamentName.contains(" ") &&
+                        !allTournamentContainsTournament(newTournamentName),
                 content = { Text(text = "Change") },
                 onClick = {
                     showEditTournamentNameDialog.value = false
-                    changeTournamentName(tournamentName!!, newtournamentName)
+                    changeTournamentName(tournamentName!!, newTournamentName)
                     getParticipantsFromDb()
                 })
         },
@@ -885,7 +864,6 @@ fun EditTournamentNameScreen(navController: NavController, tournamentName: Strin
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text(text = "Add") }
     var newTournamentName by remember { mutableStateOf("") }
     var oldTournamentName by remember { mutableStateOf("") }
-    val tourney = findTournament(tournamentName!!)
     val keyboardController = LocalSoftwareKeyboardController.current
     val maxSize = 20
     val context = LocalContext.current
@@ -969,7 +947,7 @@ fun EditTournamentNameScreen(navController: NavController, tournamentName: Strin
 
                             content = { Text(text = "Change") },
                             onClick = {
-                                changeTournamentName(tournamentName, newTournamentName)
+                                changeTournamentName(tournamentName!!, newTournamentName)
                                 getParticipantsFromDb()
                                 navController.navigate("single_tournament_route/$newTournamentName")
                                 // Navigiere zum com.example.turnierplaner.tournament.leagueSystem.Tournament
