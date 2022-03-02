@@ -69,7 +69,7 @@ fun Add(navController: NavHostController) {
   var victoryPoints by remember { mutableStateOf("") }
   var tiePoints by remember { mutableStateOf("") }
   var expanded by remember { mutableStateOf(false) }
-  val suggestions = listOf("League", "KnockOut-System", "Double KnockOut-System")
+  val suggestions = listOf("League")
   var selectedTournamentType by remember { mutableStateOf("") }
   val selectedItem = remember { mutableStateOf("home") }
   var textfieldSize by remember { mutableStateOf(Size.Zero) }
@@ -154,6 +154,7 @@ fun Add(navController: NavHostController) {
               // Tournament type
               val icon =
                   if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
+                selectedTournamentType = "Leaugue"
 
               Column() {
                 OutlinedTextField(
