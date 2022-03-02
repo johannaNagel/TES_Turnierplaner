@@ -777,7 +777,7 @@ fun participantsWithSameUID(tourneyName: String): MutableList<String> {
     val listParticipantName = mutableListOf<String>()
     val id = FirebaseAuth.getInstance().currentUser?.uid.toString()
     for(participant in tourney.participants){
-        if(participant.id == id){
+        if(participant.id == id && participant.name != ""){
             listParticipantName.add(participant.name)
         }
     }
