@@ -123,7 +123,7 @@ fun participantJoinTournament(participantName: String, tournamentName: String?){
     for (idx in 1..tourney.numberOfParticipants) {
 
         if (tourney.participants[idx - 1].name == "") {
-
+            //If number of participants does not exceed
             tourney.participants[idx - 1].name = participantName
             tourney.participants[idx - 1].id = id
             allTournament.add(tourney)
@@ -132,12 +132,20 @@ fun participantJoinTournament(participantName: String, tournamentName: String?){
             return
         }
     }
-    allTournament[findTournamentIndex(tourney.id)].numberOfParticipants = tourney.numberOfParticipants + 1
+    //if number of participants exceeds
+    tourney.numberOfParticipants = tourney.numberOfParticipants + 1
+    tourney.participants.add(participant)
+    allTournament.add(tourney)
+    pushLocalToDb()
+    getParticipantsFromDb()
+
+    /*allTournament[findTournamentIndex(tourney.id)].numberOfParticipants = tourney.numberOfParticipants + 1
     // Every Participant which is added have to have a UID, currently the UID from the Loged-In User
     // is
     // assigned
     allTournament[findTournamentIndex(tourney.id)].participants.add(participant)
     pushLocalToDb()
-    getParticipantsFromDb()
+    getParticipantsFromDb()*/
+
     dummyAllTournament.clear()
 }
