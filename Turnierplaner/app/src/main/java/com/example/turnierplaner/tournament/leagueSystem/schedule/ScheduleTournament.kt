@@ -113,6 +113,7 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
         Column() {
           Column() {
             // DropDownMenu for the tournament rounds
+              selectedTournamentRound = getRememberRoundTournament().toString()
             OutlinedTextField(
                 value = selectedTournamentRound,
                 readOnly = true,
@@ -122,7 +123,7 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
                       textFieldSize = coordinates.size.toSize()
                     },
                 onValueChange = { selectedTournamentRound = it },
-                label = { Text("round Number ${getRememberRoundTournament()}") },
+                label = { Text("round Number") },
                 leadingIcon = {
                   IconButton(onClick = { /*TODO*/}) {
                     Icon(
