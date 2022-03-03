@@ -10,4 +10,9 @@ sealed class TournamentScreens(val title: String, val route: String) {
           title = "remove_participant", route = "remove_participant_route/{tournamentName}")
   object EditPoints :
       TournamentScreens(title = "edit_points", route = "edit_points_route/{tournamentName}")
+  object EditParticipantName:
+      TournamentScreens(title = "edit_participant_name", route = "edit_participant_name_route/{tournamentName}")
+  object EditTournamentName:
+      TournamentScreens(title = "edit_tournament_name", route = "edit_tournament_name_route/{tournamentName}")
+
 }

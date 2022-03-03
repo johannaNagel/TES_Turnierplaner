@@ -17,11 +17,13 @@ import com.example.turnierplaner.navigation.Screens.TournamentScreens
 import com.example.turnierplaner.tournament.invites.inviteScreen
 import com.example.turnierplaner.tournament.invites.qrReaderScreen
 import com.example.turnierplaner.tournament.invites.selectNameScreen
+import com.example.turnierplaner.tournament.leagueSystem.DeleteParticipantsScreen
+import com.example.turnierplaner.tournament.leagueSystem.EditParticipantNameScreen
+import com.example.turnierplaner.tournament.leagueSystem.EditTournamentNameScreen
 import com.example.turnierplaner.tournament.leagueSystem.schedule.ScheduleComposable
 import com.example.turnierplaner.tournament.leagueSystem.SingleTournamentScreen
 import com.example.turnierplaner.tournament.leagueSystem.TournamentScreen
-import com.example.turnierplaner.tournament.leagueSystem.deleteParticipantsScreen
-import com.example.turnierplaner.tournament.leagueSystem.editPointsScreen
+import com.example.turnierplaner.tournament.leagueSystem.EditPointsScreen
 import com.example.turnierplaner.tournament.leagueSystem.schedule.AddResultPoints
 
 @ExperimentalMaterialApi
@@ -51,12 +53,21 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
           navController = navController, backStackEntry.arguments?.getString("tournamentName"))
     }
     composable(route = TournamentScreens.RemoveParticipant.route) { backStackEntry ->
-      deleteParticipantsScreen(
+      DeleteParticipantsScreen(
           navController = navController, backStackEntry.arguments?.getString("tournamentName"))
     }
     composable(route = TournamentScreens.EditPoints.route) { backStackEntry ->
-      editPointsScreen(
+      EditPointsScreen(
           navController = navController, backStackEntry.arguments?.getString("tournamentName"))
+    }
+
+    composable(route = TournamentScreens.EditParticipantName.route) {backStackEntry ->
+      EditParticipantNameScreen(
+      navController = navController, backStackEntry.arguments?.getString("tournamentName"))
+    }
+    composable(route = TournamentScreens.EditTournamentName.route) {backStackEntry ->
+      EditTournamentNameScreen(
+        navController = navController, backStackEntry.arguments?.getString("tournamentName"))
     }
 
     composable(route = InviteScreens.Invite.route) { backStackEntry ->
