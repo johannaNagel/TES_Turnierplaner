@@ -52,7 +52,11 @@ import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 private val showChangeDialog = mutableStateOf(false)
 
-/** composable who gives the opportunity to enter the result of the game */
+/** 
+ * @param tournamentName
+ * @param navController
+ * It is a composable who gives the opportunity to enter the result of the game 
+ * */
 @ExperimentalComposeUiApi
 @Composable
 fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
@@ -63,7 +67,6 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
   var expanded by remember { mutableStateOf(false) }
   val suggestionsGame = fillGameString(getTournament(tournamentName!!)!!)
   val tourney = findTournament(tournamentName)
-  //getParticipantsFromDb()
   val keyboardController = LocalSoftwareKeyboardController.current
   val maxPoints = 3
   val context = LocalContext.current
@@ -217,7 +220,9 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
       })
 }
 
-/** pop up who allows the possibility to change the game result */
+/** 
+ * This composable is a popUp who allows the possibility of changing the game result
+ */
 @Composable
 fun ChangeTournamentPopUp() {
 
@@ -242,7 +247,18 @@ fun ChangeTournamentPopUp() {
       })
 }
 
-/** methods who adds the points and games to the tournamentClass */
+/** 
+ * @param tourney
+ * @param winner
+ * @param participant1name
+ * @param participant2name
+ * Method who adds the points and number of played games to the tournamentClass. There are some possibilitys how you add the game points
+ * if participant  is winner add victory points
+ * if participant is loser add no points
+ * if there is no winner add tie points
+ * every participant increase their games with 1 
+ * @return tourney 
+ */
 fun addResultPoints(
     tourney: Tournament,
     winner: String,
@@ -281,19 +297,24 @@ fun addResultPoints(
   return tourney
 }
 
-/** methods who adds the changed points and games to the tournamentClass */
+/**
+ * @param tourney
+ * @param winner
+ * @param participant1name
+ *  Method who adds the changed points and games to the tournamentClass 
+ */
 fun addResultPointsChange(
     tourney: Tournament,
     winner: String,
-    Participant1name: String,
-    Participant2name: String
+    participant1name: String, 
+    participant2name: String
 ): Tournament {
   for (i in tourney.participants) {
-    if (i.name == Participant1name) {
+    if (i.name == participant1name) {
       for (k in tourney.schedule!!) {
         for (z in k) {
-          if (z.participant1.name == Participant1name &&
-              z.participant2.name == Participant2name
+          if (z.participant1.name == participant1name &&
+              z.participant2.name == participant2name
           ) {
             if (z.resultParticipant1.toInt() > z.resultParticipant2.toInt()) {
               if (winner == "winner1") {} else if (winner == "winner2") {
@@ -337,11 +358,11 @@ fun addResultPointsChange(
           }
         }
       }
-    } else if (i.name == Participant2name) {
+    } else if (i.name == participant2name) {
       for (k in tourney.schedule!!) {
         for (z in k) {
-          if (z.participant1.name == Participant1name &&
-              z.participant2.name == Participant2name
+          if (z.participant1.name == participant1name &&
+              z.participant2.name == participant2name
           ) {
             if (z.resultParticipant1.toInt() > z.resultParticipant2.toInt()) {
 
@@ -379,7 +400,12 @@ fun addResultPointsChange(
   return tourney
 }
 
-/** methods who decide which Participant won the game */
+/**
+ * @param resultGame1
+ * @param resultGame2
+ * Method who returns a string about which participant won the game
+ *
+ */
 fun winOrTie(resultGame1: String, resultGame2: String): String {
 
     return if (resultGame1 == "" || resultGame2 == "") {
@@ -393,27 +419,40 @@ fun winOrTie(resultGame1: String, resultGame2: String): String {
     }
 }
 
-/** method who add the object Result to the ResultList */
+/**
+ * @param participant1
+ * @param participant2
+ * @param resultGame1
+ * @param resultGame2
+ * @param gameRound
+ * @param tourney
+ * Method who adds the game result to the ResultList
+ */
 fun addResultToResultList(
-    Participant1: String,
-    Participant2: String,
+    participant1: String,
+    participant2: String,
     resultGame1: String,
     resultGame2: String,
     gameRound: Int,
     tourney: Tournament
 ) {
   for (i in tourney.schedule!![(gameRound - 1)]) {
-    if (i.participant1.name == Participant1 && i.participant2.name == Participant2) {
+    if (i.participant1.name == participant1 && i.participant2.name == participant2) {
       i.resultParticipant1 = resultGame1
       i.resultParticipant2 = resultGame2
-    } else if(i.participant1.name == Participant2 && i.participant2.name == Participant1){
+    } else if(i.participant1.name == participant2 && i.participant2.name == participant1){
         i.resultParticipant1 = resultGame2
         i.resultParticipant2 = resultGame2
     }
   }
 }
 
-/** checked if the game has started */
+/**
+ * @param participant1
+ * @param participant2
+ * @param tourney
+ * Method who checks if the game has played
+ */
 fun checkIfGamePlayed(participant1: String, participant2: String, tourney: Tournament): Boolean {
   var played = false
   for (i in tourney.schedule!!) {
@@ -429,7 +468,10 @@ fun checkIfGamePlayed(participant1: String, participant2: String, tourney: Tourn
 }
 
 
-/** fill the mutableList with games */
+/**
+ * @param tourney
+ * Method who fills the mutableList with possible games and returns the list
+ */
 fun fillGameString(tourney: Tournament): MutableList<String> {
     val suggestionsGame = mutableListOf<String>()
     for (i in 0 until tourney.schedule!![getNumberOfRound() - 1].size) {
