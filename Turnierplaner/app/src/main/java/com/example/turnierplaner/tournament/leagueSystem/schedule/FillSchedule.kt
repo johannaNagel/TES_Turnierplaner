@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
+import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
@@ -316,45 +317,17 @@ fun addResultPointsChange(
           if (z.participant1.name == participant1name &&
               z.participant2.name == participant2name
           ) {
-            if (z.resultParticipant1.toInt() > z.resultParticipant2.toInt()) {
-              if (winner == "winner1") {} else if (winner == "winner2") {
-                i.points = i.points - tourney.pointsVictory
-              } else if (winner == "") {
-                i.games = i.games - 1
-                i.points = i.points - tourney.pointsVictory
-              } else {
-                i.points = i.points + tourney.pointsTie - tourney.pointsVictory
+              when {
+                  z.resultParticipant1.toInt() > z.resultParticipant2.toInt() -> {
+                      result1biggerResult2(winner, i, tourney)
+                  }
+                  z.resultParticipant1.toInt() < z.resultParticipant2.toInt() -> {
+                      result2biggerResult1(winner, i, tourney)
+                  }
+                  z.resultParticipant1.toInt() == z.resultParticipant2.toInt() -> {
+                      resultTie(winner, i, tourney)
+                  }
               }
-            } else if (z.resultParticipant1.toInt() < z.resultParticipant2.toInt()) {
-
-                when (winner) {
-                    "winner1" -> {
-                        i.points = i.points + tourney.pointsVictory
-                    }
-                    "winner2" -> {}
-                    "" -> {
-                        i.games = i.games - 1
-                        i.points = i.points
-                    }
-                    else -> {
-                        i.points = i.points + tourney.pointsTie
-                    }
-                }
-            } else if (z.resultParticipant1.toInt() == z.resultParticipant2.toInt()) {
-
-                when (winner) {
-                    "winner1" -> {
-                        i.points = i.points + tourney.pointsVictory - tourney.pointsTie
-                    }
-                    "winner2" -> {
-                        i.points = i.points - tourney.pointsTie
-                    }
-                    "" -> {
-                        i.games = i.games - 1
-                        i.points = i.points - tourney.pointsTie
-                    }
-                }
-            }
           }
         }
       }
@@ -364,34 +337,17 @@ fun addResultPointsChange(
           if (z.participant1.name == participant1name &&
               z.participant2.name == participant2name
           ) {
-            if (z.resultParticipant1.toInt() > z.resultParticipant2.toInt()) {
-
-              if (winner == "winner1") {} else if (winner == "winner2") {
-                i.points = i.points + tourney.pointsVictory
-              } else if (winner == "") {
-                i.games = i.games - 1
-              } else {
-                i.points = i.points + tourney.pointsTie
+              when {
+                  z.resultParticipant1.toInt() > z.resultParticipant2.toInt() -> {
+                      participant2LoseChange(winner, i, tourney)
+                  }
+                  z.resultParticipant1.toInt() < z.resultParticipant2.toInt() -> {
+                      participant2ChangePoints(winner, i, tourney)
+                  }
+                  z.resultParticipant1.toInt() == z.resultParticipant2.toInt() -> {
+                      tieChangePoints(winner, i, tourney)
+                  }
               }
-            } else if (z.resultParticipant1.toInt() < z.resultParticipant2.toInt()) {
-
-              if (winner == "winner1") {
-                i.points = i.points - tourney.pointsVictory
-              } else if (winner == "winner2") {} else if (winner == "") {
-                i.points = i.points - tourney.pointsVictory
-                i.games = i.games - 1
-              }
-            } else if (z.resultParticipant1.toInt() == z.resultParticipant2.toInt()) {
-
-              if (winner == "winner1") {
-                i.points = i.points - tourney.pointsTie
-              } else if (winner == "winner2") {
-                i.points = i.points + tourney.pointsVictory - tourney.pointsTie
-              } else if (winner == "") {
-                i.games = i.games - 1
-                i.points = i.points - tourney.pointsTie
-              }
-            }
           }
         }
       }
@@ -399,6 +355,97 @@ fun addResultPointsChange(
   }
   return tourney
 }
+
+fun result1biggerResult2(winner: String, participant: Participant, tourney: Tournament){
+    when (winner) {
+        "tie" -> {
+            participant.points = participant.points + tourney.pointsTie - tourney.pointsVictory
+        }
+        "winner2" -> {
+            participant.points = participant.points - tourney.pointsVictory
+        }
+        "" -> {
+            participant.games = participant.games - 1
+            participant.points = participant.points - tourney.pointsVictory
+        }
+    }
+}
+
+
+fun result2biggerResult1(winner: String, participant: Participant, tourney: Tournament) {
+    when (winner) {
+        "winner1" -> {
+            participant.points = participant.points + tourney.pointsVictory
+        }
+        "tie" -> {
+            participant.points = participant.points + tourney.pointsTie
+        }
+        "" -> {
+            participant.games = participant.games - 1
+            participant.points = participant.points
+        }
+
+    }
+}
+
+fun resultTie(winner: String, participant: Participant, tourney: Tournament) {
+    when (winner) {
+        "winner1" -> {
+            participant.points = participant.points + tourney.pointsVictory - tourney.pointsTie
+        }
+        "winner2" -> {
+            participant.points = participant.points - tourney.pointsTie
+        }
+        "" -> {
+            participant.games = participant.games - 1
+            participant.points = participant.points - tourney.pointsTie
+        }
+    }
+}
+
+fun participant2LoseChange(winner: String, participant: Participant, tourney: Tournament){
+    when (winner) {
+        "tie" -> {
+            participant.points = participant.points + tourney.pointsTie
+        }
+        "winner2" -> {
+            participant.points = participant.points + tourney.pointsVictory
+        }
+        "" -> {
+            participant.games = participant.games - 1
+        }
+    }
+}
+fun participant2ChangePoints(winner: String, participant: Participant, tourney: Tournament){
+    when (winner) {
+        "winner1" -> {
+            participant.points = participant.points - tourney.pointsVictory
+        }
+        "tie" -> {
+            participant.points = participant.points - tourney.pointsVictory + tourney.pointsTie
+        }
+        "" -> {
+            participant.points = participant.points - tourney.pointsVictory
+            participant.games = participant.games - 1
+        }
+    }
+}
+
+fun tieChangePoints(winner: String, participant: Participant, tourney: Tournament){
+    when (winner) {
+        "winner1" -> {
+            participant.points = participant.points - tourney.pointsTie
+        }
+        "winner2" -> {
+            participant.points = participant.points + tourney.pointsVictory - tourney.pointsTie
+        }
+        "" -> {
+            participant.games = participant.games - 1
+            participant.points = participant.points - tourney.pointsTie
+        }
+    }
+}
+
 
 /**
  * @param resultGame1
@@ -483,3 +530,4 @@ fun fillGameString(tourney: Tournament): MutableList<String> {
     }
     return suggestionsGame
 }
+
