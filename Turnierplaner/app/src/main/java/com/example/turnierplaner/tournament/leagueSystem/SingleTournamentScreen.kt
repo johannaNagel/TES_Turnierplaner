@@ -120,9 +120,6 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
   if (showRefreshPopUp.value) {
     RefreshPopUp()
   }
-  if(showEditTournamentNameDialog.value){
-      EditTournamentNamePopUP(tournamentName)
-  }
 
   var expanded by remember { mutableStateOf(false) }
 
@@ -793,61 +790,6 @@ fun changeTournamentName(oldName: String, newTourneyName: String) {
     pushLocalToDb()
 }
 
-@Composable
-fun EditTournamentNamePopUP(tournamentName: String?) {
-    var newTournamentName by remember { mutableStateOf("") }
-    val tourney = findTournament(tournamentName)
-    val context = LocalContext.current
-    var boolParticipNameMessage = true
-
-    AlertDialog(
-        modifier = Modifier.size(250.dp, 225.dp),
-        text = {
-            Column {
-                Text(
-                    modifier = Modifier.padding(horizontal = 10.dp),
-                    text = "Change Name of Tournament")
-
-                // Rest of the dialog content
-            }
-        },
-        onDismissRequest = { showAddParticipantDialog.value = false },
-        buttons = {
-            OutlinedTextField(
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
-                singleLine = true,
-                value = newTournamentName,
-                onValueChange = {
-                    if(it.length <= 20) {
-                        newTournamentName = it
-                        boolParticipNameMessage = true
-                    }
-                    else if(boolParticipNameMessage) {
-                        boolParticipNameMessage = false
-                        showMessage(context, "Name is to long")
-                    }
-                    if(allTournamentContainsTournament(newTournamentName) ){
-                        showMessage(context, "Name is assigned")
-                    }},
-                label = { Text(text = "New Tournament Name") },
-            )
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                enabled =
-                newTournamentName.isNotEmpty() &&
-                        !newTournamentName.contains(" ") &&
-                        !allTournamentContainsTournament(newTournamentName),
-                content = { Text(text = "Change") },
-                onClick = {
-                    showEditTournamentNameDialog.value = false
-                    changeTournamentName(tournamentName!!, newTournamentName)
-                    getParticipantsFromDb()
-                })
-        },
-    )
-}
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
