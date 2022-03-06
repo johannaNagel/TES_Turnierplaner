@@ -99,7 +99,7 @@ Therefore a separate function has to be created
  */
 private val showAddParticipantDialog = mutableStateOf(false)
 private val showDeleteDialog = mutableStateOf(false)
-private var showEditTournamentNameDialog = mutableStateOf(false)
+
 
 @ExperimentalMaterialApi
 @Composable
@@ -823,24 +823,21 @@ fun EditTournamentNameScreen(navController: NavController, tournamentName: Strin
                 content = {
                     Column() {
 
+
+                        Box(modifier = Modifier.padding(12.dp), contentAlignment = Alignment.Center) {
+                            Text(text = "Old Name:  $tournamentName")
+                        }
+                        /*
                         OutlinedTextField(
                             value = oldTournamentName,
                             readOnly = true,
                             onValueChange = {oldTournamentName = it},
 
                             label = { Text("Old Name: $tournamentName") }
-                            /*leadingIcon = {
-                                IconButton(onClick = { /*TODO*/}) {
-                                    Icon(
-                                        imageVector = Icons.Filled.FormatListNumbered,
-                                        contentDescription = "TournamentList")
-                                }
 
-
-                            }
-
-                             */
                         )
+
+                         */
 
 
                         OutlinedTextField(
