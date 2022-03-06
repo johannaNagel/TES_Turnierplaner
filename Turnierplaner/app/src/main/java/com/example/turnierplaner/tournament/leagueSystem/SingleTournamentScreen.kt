@@ -143,16 +143,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
           TopAppBar(
               backgroundColor = Color.White,
               elevation = 1.dp,
-              title = {
-                  Button(
-                      modifier = Modifier
-                          .fillMaxWidth(),
-                      content = {Text(text = tourney.name )},
-                      onClick = { showEditTournamentNameDialog.value = true },
-                      colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-                      border = BorderStroke(1.dp, Color.Gray)  
-                  )
-              },
+              title = { Text(text = tourney.name)},
               actions = {
                 IconButton(
                     onClick = {
