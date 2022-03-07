@@ -41,6 +41,12 @@ fun pushLocalToDb() {
 }
 
 fun removeTournament(tourney: Tournament) {
+    val tournament = allTournament[findTournamentIndex(tourney.id)]
+    for (participant in tourney.participants){
+        participant.id = ""
+    }
+    allTournament[findTournamentIndex(tourney.id)] = tournament
+    pushLocalToDb()
     database.getReference("Tournaments").child(tourney.id).removeValue()
     val tourney = findTournament(tourney.name)
     allTournament.remove(tourney)
@@ -160,6 +166,7 @@ fun getParticipantsFromDb() {
                             countDataChange == 1 &&
                             containsTournament(tourney)) {
                             allTournament.removeAt(findTournamentIndex(tourney.id))
+                            message = "You where removed from Tournament:" + tourney.name + "."
                             if (refreshActivate) {
                                 showRefreshPopUp.value = true
                             }
