@@ -48,7 +48,6 @@ import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
-import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 private val showChangeDialog = mutableStateOf(false)
@@ -253,7 +252,7 @@ fun ChangeTournamentPopUp() {
  * @param winner
  * @param participant1name
  * @param participant2name
- * Method who adds the points and number of played games to the tournamentClass. There are some possibilitys how you add the game points
+ * Method who adds the points and number of played games to the tournamentClass. There are some possibilities how you add the game points
  * if participant  is winner add victory points
  * if participant is loser add no points
  * if there is no winner add tie points
@@ -300,9 +299,10 @@ fun addResultPoints(
 
 /**
  * @param tourney
- * @param winner
+ * @param winner (new winner of the changed game)
  * @param participant1name
- *  Method who adds the changed points and games to the tournamentClass 
+ * @param participant2name
+ * Method who the changes the points and games after changing the game results.
  */
 fun addResultPointsChange(
     tourney: Tournament,
@@ -310,138 +310,172 @@ fun addResultPointsChange(
     participant1name: String, 
     participant2name: String
 ): Tournament {
-  for (i in tourney.participants) {
-    if (i.name == participant1name) {
-      for (k in tourney.schedule!!) {
+    for (k in tourney.schedule!!) {
         for (z in k) {
-          if (z.participant1.name == participant1name &&
-              z.participant2.name == participant2name
-          ) {
-              when {
-                  z.resultParticipant1.toInt() > z.resultParticipant2.toInt() -> {
-                      result1biggerResult2(winner, i, tourney)
-                  }
-                  z.resultParticipant1.toInt() < z.resultParticipant2.toInt() -> {
-                      result2biggerResult1(winner, i, tourney)
-                  }
-                  z.resultParticipant1.toInt() == z.resultParticipant2.toInt() -> {
-                      resultTie(winner, i, tourney)
-                  }
-              }
-          }
+            if (z.participant1.name == participant1name &&
+                    z.participant2.name == participant2name
+            ) {
+                for (i in tourney.participants){
+                    if (i.name == participant1name) {
+                        when {
+                            z.resultParticipant1.toInt() > z.resultParticipant2.toInt() -> {
+                                winnerPart1ChangePointsOfParticipant1(winner, i, tourney)
+                            }
+                            z.resultParticipant1.toInt() < z.resultParticipant2.toInt() -> {
+                                winnerResult2ChangePointsOfparticipant1(winner, i, tourney)
+                            }
+                            z.resultParticipant1.toInt() == z.resultParticipant2.toInt() -> {
+                                resultTieChangePointsOfParticipant1(winner, i, tourney)
+                            }
+                        }
+
+                    } else if (i.name == participant2name) {
+                        when {
+                            z.resultParticipant1.toInt() > z.resultParticipant2.toInt() -> {
+                                participant2LoseChangePoints(winner, i, tourney)
+                            }
+                            z.resultParticipant1.toInt() < z.resultParticipant2.toInt() -> {
+                                participant2ChangePoints(winner, i, tourney)
+                            }
+                            z.resultParticipant1.toInt() == z.resultParticipant2.toInt() -> {
+                                tieChangePointsOfParticipant2(winner, i, tourney)
+                            }
+                        }
+                    }
+                }
+            }
         }
-      }
-    } else if (i.name == participant2name) {
-      for (k in tourney.schedule!!) {
-        for (z in k) {
-          if (z.participant1.name == participant1name &&
-              z.participant2.name == participant2name
-          ) {
-              when {
-                  z.resultParticipant1.toInt() > z.resultParticipant2.toInt() -> {
-                      participant2LoseChange(winner, i, tourney)
-                  }
-                  z.resultParticipant1.toInt() < z.resultParticipant2.toInt() -> {
-                      participant2ChangePoints(winner, i, tourney)
-                  }
-                  z.resultParticipant1.toInt() == z.resultParticipant2.toInt() -> {
-                      tieChangePoints(winner, i, tourney)
-                  }
-              }
-          }
-        }
-      }
     }
-  }
   return tourney
 }
 
-fun result1biggerResult2(winner: String, participant: Participant, tourney: Tournament){
+
+/**
+ * @param winner (new winner of the changed game)
+ * @param participant1 (is the winner of the original game)
+ * @param tourney
+ * Method to add or remove points and number of games of participant 1 after the original game was changed.
+ */
+fun winnerPart1ChangePointsOfParticipant1(winner: String, participant1: Participant, tourney: Tournament){
+    //possible output of the new entered game
     when (winner) {
         "tie" -> {
-            participant.points = participant.points + tourney.pointsTie - tourney.pointsVictory
+            participant1.points = participant1.points + tourney.pointsTie - tourney.pointsVictory
         }
         "winner2" -> {
-            participant.points = participant.points - tourney.pointsVictory
+            participant1.points = participant1.points - tourney.pointsVictory
         }
         "" -> {
-            participant.games = participant.games - 1
-            participant.points = participant.points - tourney.pointsVictory
+            participant1.games = participant1.games - 1
+            participant1.points = participant1.points - tourney.pointsVictory
         }
     }
 }
 
-
-fun result2biggerResult1(winner: String, participant: Participant, tourney: Tournament) {
+/**
+ * @param winner (new winner of the changed game)
+ * @param participant1 (is not the winner of the original game)
+ * @param tourney
+ * Method to add or remove points and number of games of participant 1 after the original game was changed.
+ * The winner of the original game was participant1.
+ */
+fun winnerResult2ChangePointsOfparticipant1(winner: String, participant1: Participant, tourney: Tournament) {
     when (winner) {
         "winner1" -> {
-            participant.points = participant.points + tourney.pointsVictory
+            participant1.points = participant1.points + tourney.pointsVictory
         }
         "tie" -> {
-            participant.points = participant.points + tourney.pointsTie
+            participant1.points = participant1.points + tourney.pointsTie
         }
         "" -> {
-            participant.games = participant.games - 1
-            participant.points = participant.points
+            participant1.games = participant1.games - 1
+            participant1.points = participant1.points
         }
 
     }
 }
-
-fun resultTie(winner: String, participant: Participant, tourney: Tournament) {
+/**
+ * @param winner (new winner of the changed game)
+ * @param participant1
+ * @param tourney
+ * Method to add or remove points and number of games of participant 1 after the original game was changed.
+ * The original game has no winner. It was a tie.
+ */
+fun resultTieChangePointsOfParticipant1(winner: String, participant1: Participant, tourney: Tournament) {
     when (winner) {
         "winner1" -> {
-            participant.points = participant.points + tourney.pointsVictory - tourney.pointsTie
+            participant1.points = participant1.points + tourney.pointsVictory - tourney.pointsTie
         }
         "winner2" -> {
-            participant.points = participant.points - tourney.pointsTie
+            participant1.points = participant1.points - tourney.pointsTie
         }
         "" -> {
-            participant.games = participant.games - 1
-            participant.points = participant.points - tourney.pointsTie
+            participant1.games = participant1.games - 1
+            participant1.points = participant1.points - tourney.pointsTie
         }
     }
 }
 
-fun participant2LoseChange(winner: String, participant: Participant, tourney: Tournament){
+/**
+ * @param winner (new winner of the changed game)
+ * @param participant2
+ * @param tourney
+ * Method to add or remove points and number of games of participant 2 after the original game was changed.
+ * The winner of the original games was participant 1 not participant 2.
+ */
+fun participant2LoseChangePoints(winner: String, participant2: Participant, tourney: Tournament){
     when (winner) {
         "tie" -> {
-            participant.points = participant.points + tourney.pointsTie
+            participant2.points = participant2.points + tourney.pointsTie
         }
         "winner2" -> {
-            participant.points = participant.points + tourney.pointsVictory
+            participant2.points = participant2.points + tourney.pointsVictory
         }
         "" -> {
-            participant.games = participant.games - 1
+            participant2.games = participant2.games - 1
         }
     }
 }
-fun participant2ChangePoints(winner: String, participant: Participant, tourney: Tournament){
+/**
+ * @param winner (new winner of the changed game)
+ * @param participant2 (winner of the original game)
+ * @param tourney
+ * Method to add or remove points and number of games of participant 2 after the original game was changed.
+ * The winner of the original games was participant 2.
+ */
+fun participant2ChangePoints(winner: String, participant2: Participant, tourney: Tournament){
     when (winner) {
         "winner1" -> {
-            participant.points = participant.points - tourney.pointsVictory
+            participant2.points = participant2.points - tourney.pointsVictory
         }
         "tie" -> {
-            participant.points = participant.points - tourney.pointsVictory + tourney.pointsTie
+            participant2.points = participant2.points - tourney.pointsVictory + tourney.pointsTie
         }
         "" -> {
-            participant.points = participant.points - tourney.pointsVictory
-            participant.games = participant.games - 1
+            participant2.points = participant2.points - tourney.pointsVictory
+            participant2.games = participant2.games - 1
         }
     }
 }
 
-fun tieChangePoints(winner: String, participant: Participant, tourney: Tournament){
+/**
+ * @param winner (new winner of the changed game)
+ * @param participant2
+ * @param tourney
+ * Method to add or remove points and number of games of participant 2 after the original game was changed.
+ * The original game has no winner. It was a tie.
+ */
+fun tieChangePointsOfParticipant2(winner: String, participant2: Participant, tourney: Tournament){
     when (winner) {
         "winner1" -> {
-            participant.points = participant.points - tourney.pointsTie
+            participant2.points = participant2.points - tourney.pointsTie
         }
         "winner2" -> {
-            participant.points = participant.points + tourney.pointsVictory - tourney.pointsTie
+            participant2.points = participant2.points + tourney.pointsVictory - tourney.pointsTie
         }
         "" -> {
-            participant.games = participant.games - 1
-            participant.points = participant.points - tourney.pointsTie
+            participant2.games = participant2.games - 1
+            participant2.points = participant2.points - tourney.pointsTie
         }
     }
 }

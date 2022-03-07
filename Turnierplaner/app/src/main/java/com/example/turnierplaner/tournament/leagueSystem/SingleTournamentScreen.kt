@@ -99,7 +99,7 @@ Therefore a separate function has to be created
  */
 private val showAddParticipantDialog = mutableStateOf(false)
 private val showDeleteDialog = mutableStateOf(false)
-private var showEditTournamentNameDialog = mutableStateOf(false)
+
 
 @ExperimentalMaterialApi
 @Composable
@@ -119,9 +119,6 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
   }
   if (showRefreshPopUp.value) {
     RefreshPopUp()
-  }
-  if(showEditTournamentNameDialog.value){
-      EditTournamentNamePopUP(tournamentName)
   }
 
   var expanded by remember { mutableStateOf(false) }
@@ -143,16 +140,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
           TopAppBar(
               backgroundColor = Color.White,
               elevation = 1.dp,
-              title = {
-                  Button(
-                      modifier = Modifier
-                          .fillMaxWidth(),
-                      content = {Text(text = tourney.name )},
-                      onClick = { showEditTournamentNameDialog.value = true },
-                      colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
-                      border = BorderStroke(1.dp, Color.Gray)  
-                  )
-              },
+              title = { Text(text = tourney.name)},
               actions = {
                 IconButton(
                     onClick = {
@@ -425,7 +413,13 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
               title = { Text(text = tourney.name) },
               actions = {
                 IconButton(
-                    onClick = { navController.navigate("single_tournament_route/${tourney.name}") },
+                    onClick = {
+                        if(tourney.participants.isEmpty()) {
+                            navController.navigate(BottomBarScreens.Tournament.route)
+                        } else {
+                            navController.navigate("single_tournament_route/${tourney.name}")
+                        }
+                    },
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.ArrowBack,
@@ -455,9 +449,9 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
                        item.id = ""
                        item.points = 0
                        item.rank = tourney.numberOfParticipants*/
-                          tourney.numberOfParticipants--
+                        tourney.numberOfParticipants--
                         pushLocalToDb()
-                          navController.navigate("remove_participant_route/${tourney.name}")
+                        navController.navigate("remove_participant_route/${tourney.name}")
                       }
                         it != DismissValue.DismissedToEnd
                     })
@@ -543,7 +537,10 @@ fun EditPointsScreen(navController: NavController, tournamentName: String?) {
               title = { Text(text = tourney.name) },
               actions = {
                 IconButton(
-                    onClick = { navController.navigate("single_tournament_route/${tourney.name}") },
+                    onClick = {
+                            navController.navigate("single_tournament_route/${tourney.name}")
+
+                    },
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.ArrowBack,
@@ -802,61 +799,6 @@ fun changeTournamentName(oldName: String, newTourneyName: String) {
     pushLocalToDb()
 }
 
-@Composable
-fun EditTournamentNamePopUP(tournamentName: String?) {
-    var newTournamentName by remember { mutableStateOf("") }
-    val tourney = findTournament(tournamentName)
-    val context = LocalContext.current
-    var boolParticipNameMessage = true
-
-    AlertDialog(
-        modifier = Modifier.size(250.dp, 225.dp),
-        text = {
-            Column {
-                Text(
-                    modifier = Modifier.padding(horizontal = 10.dp),
-                    text = "Change Name of Tournament")
-
-                // Rest of the dialog content
-            }
-        },
-        onDismissRequest = { showAddParticipantDialog.value = false },
-        buttons = {
-            OutlinedTextField(
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
-                singleLine = true,
-                value = newTournamentName,
-                onValueChange = {
-                    if(it.length <= 20) {
-                        newTournamentName = it
-                        boolParticipNameMessage = true
-                    }
-                    else if(boolParticipNameMessage) {
-                        boolParticipNameMessage = false
-                        showMessage(context, "Name is to long")
-                    }
-                    if(allTournamentContainsTournament(newTournamentName) ){
-                        showMessage(context, "Name is assigned")
-                    }},
-                label = { Text(text = "New Tournament Name") },
-            )
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                enabled =
-                newTournamentName.isNotEmpty() &&
-                        !newTournamentName.contains(" ") &&
-                        !allTournamentContainsTournament(newTournamentName),
-                content = { Text(text = "Change") },
-                onClick = {
-                    showEditTournamentNameDialog.value = false
-                    changeTournamentName(tournamentName!!, newTournamentName)
-                    getParticipantsFromDb()
-                })
-        },
-    )
-}
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -890,25 +832,10 @@ fun EditTournamentNameScreen(navController: NavController, tournamentName: Strin
                 content = {
                     Column() {
 
-                        OutlinedTextField(
-                            value = oldTournamentName,
-                            readOnly = true,
-                            onValueChange = {oldTournamentName = it},
 
-                            label = { Text("Old Name: $tournamentName") }
-                            /*leadingIcon = {
-                                IconButton(onClick = { /*TODO*/}) {
-                                    Icon(
-                                        imageVector = Icons.Filled.FormatListNumbered,
-                                        contentDescription = "TournamentList")
-                                }
-
-
-                            }
-
-                             */
-                        )
-
+                        Box(modifier = Modifier.padding(12.dp), contentAlignment = Alignment.Center) {
+                            Text(text = "Old Name:  $tournamentName")
+                        }
 
                         OutlinedTextField(
                             value = newTournamentName,
