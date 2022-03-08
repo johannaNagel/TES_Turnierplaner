@@ -704,7 +704,7 @@ fun DropdownMenu(
                       "Edit Participant Name" -> navController.navigate("edit_participant_name_route/${tourney.name}")
                       "Edit Tournament Name" -> navController.navigate("edit_tournament_name_route/${tourney.name}")
                   }
-                  if(s =="Edit Point System" && !tourney.schedule.isNullOrEmpty()){
+                  if(s =="Edit Point System" && tourney.schedule.isNullOrEmpty()){
                       navController.navigate("edit_points_route/${tourney.name}")
                   }
               }) {
