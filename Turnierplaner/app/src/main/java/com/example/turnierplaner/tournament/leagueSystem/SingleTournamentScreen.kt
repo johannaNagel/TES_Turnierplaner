@@ -330,7 +330,7 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
               showAddParticipantDialog.value = false
               addParticipantToTournament(tournamentName, participantName)
               pushLocalToDb()
-                getParticipantsFromDb()
+              getParticipantsFromDb()
             })
       },
   )
@@ -533,6 +533,11 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
 fun EditPointsScreen(navController: NavController, tournamentName: String?) {
 
   val tourney = findTournament(tournamentName)
+  var newVictoryPoints by remember { mutableStateOf("") }
+  var newTiePoints by remember { mutableStateOf("") }
+  var boolVicPointMessage = true
+  var boolTiePointMessage = true
+  val context = LocalContext.current
 
   Scaffold(
       topBar = {
@@ -540,7 +545,7 @@ fun EditPointsScreen(navController: NavController, tournamentName: String?) {
           TopAppBar(
               backgroundColor = Color.White,
               elevation = 1.dp,
-              title = { Text(text = tourney.name) },
+              title = { Text(text = "Edit Tournament Points") },
               actions = {
                 IconButton(
                     onClick = { navController.navigate("single_tournament_route/${tourney.name}") },
@@ -553,7 +558,90 @@ fun EditPointsScreen(navController: NavController, tournamentName: String?) {
               })
         }
       },
-      content = {})
+      content = {
+          Column(
+              modifier = Modifier
+                  .fillMaxSize()
+                  .padding(24.dp),
+              verticalArrangement = Arrangement.spacedBy(18.dp),
+              horizontalAlignment = Alignment.CenterHorizontally,
+              content = {
+                  Column() {
+                      Box(modifier = Modifier.align(Alignment.CenterHorizontally)){
+                          Text(text = "Old Victory Points: ${tourney.pointsVictory}")
+                      }
+                      OutlinedTextField(
+                          modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
+                          singleLine = true,
+                          value = newVictoryPoints,
+                          onValueChange = { newVicPoints ->
+                              if (newVicPoints.length <= 3) {
+                                  newVictoryPoints = newVicPoints.filter { it.isDigit() }
+                                  boolVicPointMessage = true
+                              } else if (boolVicPointMessage) {
+                                  boolVicPointMessage = false
+                                  showMessage(context, "to many Victory Points, max is 999")
+                              }
+                          },
+                          label = { Text(text = "New Victory Points") },
+                      )
+                      Box(modifier = Modifier.align(Alignment.CenterHorizontally)){
+                          Text(text = "Old Tie Points: ${tourney.pointsTie}")
+                      }
+                      OutlinedTextField(
+                          modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
+                          singleLine = true,
+                          value = newTiePoints,
+                          onValueChange = { newPointsTie ->
+                              if (newPointsTie.length <= 3) {
+                                  newTiePoints = newPointsTie.filter { it.isDigit() }
+                                  boolTiePointMessage = true
+                              } else if (boolTiePointMessage) {
+                                  boolTiePointMessage = false
+                                  showMessage(context, "to many Tie Points, max is 999")
+                              }
+                          },
+                          label = { Text(text = "New Tie Points") },
+                      )
+                  }
+                      Button(
+                          modifier = Modifier
+                              .fillMaxWidth()
+                              .height(50.dp),
+                          enabled =
+                          (newVictoryPoints.isNotEmpty() &&
+                                  !newVictoryPoints.contains(" ")) ||
+                                  ( newTiePoints.isNotEmpty() &&
+                                  !newTiePoints.contains(" ")),
+                          content = { Text(text = "Edit Points Victory and Tie Points") },
+                          onClick = {
+                              editPointsVictoryTie(
+                                  tourney,
+                                  newVictoryPoints.toInt(),
+                                  newTiePoints.toInt()
+                              )
+                              pushLocalToDb()
+                              navController.navigate("single_tournament_route/${tourney.name}")
+                          })
+
+                      Button(
+                          modifier = Modifier
+                              .fillMaxWidth()
+                              .height(50.dp),
+                          content = { Text(text = "Cancel") },
+                          onClick = {
+                              navController.navigate("single_tournament_route/${tourney.name}")
+
+
+                          })
+
+              })
+      })
+}
+
+fun editPointsVictoryTie(tourney: Tournament, pointsVictory: Int, pointsTie: Int){
+    tourney.pointsTie = pointsTie
+    tourney.pointsVictory = pointsVictory
 }
 
 @Composable
@@ -589,10 +677,13 @@ fun DropdownMenu(
                   when(s){
                       "Remove Participants" -> navController.navigate("remove_participant_route/${tourney.name}")
                       "Invite Participants" -> navController.navigate("invite_route/${tourney.name}")
-                      "Edit Point System" -> navController.navigate("edit_points_route/${tourney.name}")
+                      //"Edit Point System"  -> navController.navigate("edit_points_route/${tourney.name}")
                       "Edit Participant Name" -> navController.navigate("edit_participant_name_route/${tourney.name}")
                       "Edit Tournament Name" -> navController.navigate("edit_tournament_name_route/${tourney.name}")
 
+                  }
+                  if(s =="Edit Point System" && tourney.schedule.isNullOrEmpty()){
+                      navController.navigate("edit_points_route/${tourney.name}")
                   }
 
               }) {
@@ -609,9 +700,12 @@ fun DropdownMenu(
                   when(s){
                       "Remove Participants" -> navController.navigate("remove_participant_route/${tourney.name}")
                       "Invite Participants" -> navController.navigate("invite_route/${tourney.name}")
-                      "Edit Point System" -> navController.navigate("edit_points_route/${tourney.name}")
+                      //"Edit Point System" -> navController.navigate("edit_points_route/${tourney.name}")
                       "Edit Participant Name" -> navController.navigate("edit_participant_name_route/${tourney.name}")
                       "Edit Tournament Name" -> navController.navigate("edit_tournament_name_route/${tourney.name}")
+                  }
+                  if(s =="Edit Point System" && !tourney.schedule.isNullOrEmpty()){
+                      navController.navigate("edit_points_route/${tourney.name}")
                   }
               }) {
             Text(
@@ -680,6 +774,7 @@ fun EditParticipantNameScreen(navController: NavController, tournamentName: Stri
                         if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
 
                     Column() {
+
                         OutlinedTextField(
                             value = selectedParticipantName,
                             readOnly = true,
@@ -738,7 +833,6 @@ fun EditParticipantNameScreen(navController: NavController, tournamentName: Stri
                                     contentDescription = "FootballIcon")
                             }
                         })
-
 
                     Button(
                         modifier = Modifier

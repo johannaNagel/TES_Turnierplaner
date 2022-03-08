@@ -47,8 +47,10 @@ import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
+import com.example.turnierplaner.tournament.leagueSystem.RefreshPopUp
 import com.example.turnierplaner.tournament.leagueSystem.Table
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
+import com.example.turnierplaner.tournament.leagueSystem.showRefreshPopUp
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
@@ -63,6 +65,7 @@ var boolRoundNumberInList = true
 /** Composable method who shows the schedule of the tournament */
 @Composable
 fun ScheduleComposable(navController: NavHostController, tournamentName: String?) {
+    getParticipantsFromDb()
   setTourn(findTournament(tournamentName))
   actualizeTournamentSchedule(getTournament(tournamentName!!)!!)
   var expanded by remember { mutableStateOf(false) }
@@ -75,6 +78,10 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
   for (i in 0 until numberOfRounds) {
     suggestions.add(i, "round: ${i + 1}")
   }
+
+    if (showRefreshPopUp.value) {
+        RefreshPopUp()
+    }
 
   Scaffold(
       topBar = {
@@ -263,7 +270,7 @@ fun actualizeTournamentSchedule(tourney1: Tournament): MutableList<MutableList<R
   val oldSchedule = tourney1.schedule
       //listCopySchedule(tourney1)
   // listCopy(tourney1)
-  getParticipantsFromDb()
+
   val participantList = tourney1.participants
   val scheduleNew = mutableListOf<MutableList<Result>>()
   val roundNumber2 = (getRow(getNumberOfActualParticipants(participantList)) * 2) - 1
