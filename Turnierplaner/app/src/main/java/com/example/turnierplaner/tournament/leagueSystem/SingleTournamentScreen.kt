@@ -529,6 +529,11 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
       })
 }
 
+/**
+ * @param navController
+ * @param tournamentName
+ * This Comoposable is a Screen for editing the victory and tie points.
+ */
 @ExperimentalMaterialApi
 @Composable
 fun EditPointsScreen(navController: NavController, tournamentName: String?) {
@@ -640,6 +645,12 @@ fun EditPointsScreen(navController: NavController, tournamentName: String?) {
       })
 }
 
+/**
+ * @param tourney
+ * @param pointsVictory selected victory points of the user
+ * @param pointsTie selected tie points of the user
+ * This method update/change the victory and tie points with the user entry
+ */
 fun editPointsVictoryTie(tourney: Tournament, pointsVictory: String, pointsTie: String){
     if(pointsTie != "") tourney.pointsTie = pointsTie.toInt()
     if(pointsVictory != "") tourney.pointsVictory = pointsVictory.toInt()
@@ -903,6 +914,10 @@ fun changeTournamentName(oldName: String, newTourneyName: String) {
     pushLocalToDb()
 }
 
+/**
+ * @param tournamentName
+ * This composable is for changing the tournament Name
+ */
 @Composable
 fun EditTournamentNamePopUP(tournamentName: String?) {
     var newTournamentName by remember { mutableStateOf("") }
@@ -1073,6 +1088,13 @@ fun EditTournamentNameScreen(navController: NavController, tournamentName: Strin
     )
 }
 
+/**
+ * @param tourney
+ * This method prove if the schedule has any result entrys.
+ * If the schedule has any result entry, the method returns true.
+ * If not, the method returns false.
+ * @return true or false
+ */
 fun entryInSchedule(tourney: Tournament): Boolean{
     for(round in tourney.schedule!!){
         for(game in round){
