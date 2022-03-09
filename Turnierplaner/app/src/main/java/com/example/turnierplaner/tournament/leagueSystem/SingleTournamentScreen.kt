@@ -618,8 +618,8 @@ fun EditPointsScreen(navController: NavController, tournamentName: String?) {
                           onClick = {
                               editPointsVictoryTie(
                                   tourney,
-                                  newVictoryPoints.toInt(),
-                                  newTiePoints.toInt()
+                                  newVictoryPoints,
+                                  newTiePoints
                               )
                               pushLocalToDb()
                               navController.navigate("single_tournament_route/${tourney.name}")
@@ -640,9 +640,10 @@ fun EditPointsScreen(navController: NavController, tournamentName: String?) {
       })
 }
 
-fun editPointsVictoryTie(tourney: Tournament, pointsVictory: Int, pointsTie: Int){
-    tourney.pointsTie = pointsTie
-    tourney.pointsVictory = pointsVictory
+fun editPointsVictoryTie(tourney: Tournament, pointsVictory: String, pointsTie: String){
+    if(pointsTie != "") tourney.pointsTie = pointsTie.toInt()
+    if(pointsVictory != "") tourney.pointsVictory = pointsVictory.toInt()
+
 }
 
 @Composable
