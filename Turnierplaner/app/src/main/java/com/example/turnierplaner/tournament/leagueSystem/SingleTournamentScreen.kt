@@ -83,6 +83,7 @@ import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
+import com.example.turnierplaner.navigation.Screens.ScheduleScreens
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.schedule.boolBackButton
@@ -656,6 +657,7 @@ fun DropdownMenu(
     content: @Composable () -> Unit,
 ) {
   val tourney = findTournament(tournamentName)
+  val context = LocalContext.current
   Box {
     content()
     DropdownMenu(
@@ -682,8 +684,10 @@ fun DropdownMenu(
                       "Edit Tournament Name" -> navController.navigate("edit_tournament_name_route/${tourney.name}")
 
                   }
-                  if(s =="Edit Point System" && tourney.schedule.isNullOrEmpty()){
+                  if(s =="Edit Point System" && !entryInSchedule(tourney)){
                       navController.navigate("edit_points_route/${tourney.name}")
+                  } else if(s =="Edit Point System" && entryInSchedule(tourney)){
+                      showMessage(context, "no point modification possible, schedule contains result")
                   }
 
               }) {
@@ -704,8 +708,10 @@ fun DropdownMenu(
                       "Edit Participant Name" -> navController.navigate("edit_participant_name_route/${tourney.name}")
                       "Edit Tournament Name" -> navController.navigate("edit_tournament_name_route/${tourney.name}")
                   }
-                  if(s =="Edit Point System" && tourney.schedule.isNullOrEmpty()){
+                  if(s =="Edit Point System" && !entryInSchedule(tourney)){
                       navController.navigate("edit_points_route/${tourney.name}")
+                  }else if(s =="Edit Point System" && entryInSchedule(tourney)){
+                      showMessage(context, "no point modification possible, schedule contains result")
                   }
               }) {
             Text(
@@ -1065,3 +1071,15 @@ fun EditTournamentNameScreen(navController: NavController, tournamentName: Strin
         }
     )
 }
+
+fun entryInSchedule(tourney: Tournament): Boolean{
+    for(round in tourney.schedule!!){
+        for(game in round){
+           if(game.resultParticipant2 != "" || game.resultParticipant1 != ""){
+              return true
+           }
+        }
+    }
+    return false
+}
+
