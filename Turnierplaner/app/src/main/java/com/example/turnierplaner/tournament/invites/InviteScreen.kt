@@ -39,7 +39,6 @@ fun inviteScreen(navController: NavController, tournamentName: String?){
         topBar = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 TopAppBar(
-                    backgroundColor = Color.White,
                     elevation = 1.dp,
                     title = { Text(text = tourney.name) },
                     actions = {

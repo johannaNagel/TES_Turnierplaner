@@ -69,7 +69,6 @@ fun TournamentScreen(navController: NavHostController) {
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
-              backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "All Tournaments") },
               actions = {

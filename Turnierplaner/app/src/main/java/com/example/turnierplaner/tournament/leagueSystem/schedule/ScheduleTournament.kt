@@ -2,6 +2,7 @@
 package com.example.turnierplaner.tournament.leagueSystem.schedule
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,14 +56,21 @@ import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 var roundNumber = 1
+//variable to remember the round if the screens are changed
 var rememberTournamentRound = 0
+// boolean. It is for changing the result. If the results are changing than a popUp comes and asks if you want to change it.
 var change = false
 var tournament: Tournament? = null
 var roundNumberInList = -1
+// boolean for the cancel button in the addChangeResultScreen. If it pushed the bool is true
 var boolBackButton = false
 var boolRoundNumberInList = true
 
-/** Composable method who shows the schedule of the tournament */
+/**
+ * @param navController
+ * @param tournamentName
+ * Composable method who shows the schedule of the tournament
+ */
 @Composable
 fun ScheduleComposable(navController: NavHostController, tournamentName: String?) {
     getParticipantsFromDb()
@@ -79,15 +87,11 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
     suggestions.add(i, "round: ${i + 1}")
   }
 
-    if (showRefreshPopUp.value) {
-        RefreshPopUp()
-    }
 
   Scaffold(
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
-              backgroundColor = Color.White,
               elevation = 1.dp,
               title = {
                 Text(text = "Schedule: ${getTournament(tournamentName)?.name}")
@@ -187,6 +191,12 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
             Text(
                 text = value,
                 fontSize = 20.sp,
+                color = if(isSystemInDarkTheme()){
+                    Color.White
+                }
+                else{
+                    Color.Black
+                },
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(5.dp),
                 maxLines = 1,
@@ -210,6 +220,12 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
 
             Text(
                 text = value,
+                color = if(isSystemInDarkTheme()){
+                    Color.White
+                }
+                else{
+                    Color.Black
+                },
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(10.dp),
@@ -268,9 +284,6 @@ fun createSchedule(
 
 fun actualizeTournamentSchedule(tourney1: Tournament): MutableList<MutableList<Result>> {
   val oldSchedule = tourney1.schedule
-      //listCopySchedule(tourney1)
-  // listCopy(tourney1)
-
   val participantList = tourney1.participants
   val scheduleNew = mutableListOf<MutableList<Result>>()
   val roundNumber2 = (getRow(getNumberOfActualParticipants(participantList)) * 2) - 1

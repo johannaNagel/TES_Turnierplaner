@@ -60,6 +60,9 @@ import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.leagueSystem.allTournamentContainsTournament
 import com.example.turnierplaner.tournament.leagueSystem.createAddToAllTournaments
 
+/**
+ * Composable screen for adding /creating a new tournament
+ */
 @ExperimentalComposeUiApi
 @Composable
 fun Add(navController: NavHostController) {
@@ -88,7 +91,6 @@ fun Add(navController: NavHostController) {
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
-              backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "Adding New Tournament") },
           )
@@ -100,6 +102,7 @@ fun Add(navController: NavHostController) {
             verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
+                //textfield for the name of tournament
               OutlinedTextField(
                   value = tournamentName,
                   singleLine = true,
@@ -109,7 +112,7 @@ fun Add(navController: NavHostController) {
                           boolNameShowMessage = true
                       }
                       if(allTournamentContainsTournament(tournamentName) ){
-                          showMessage(context, "same Tournament Name")
+                          showMessage(context, "Same Tournament Name")
                       }
                       if ((it.length > maxSize) && boolNameShowMessage){
                           boolNameShowMessage = false
@@ -126,7 +129,7 @@ fun Add(navController: NavHostController) {
                           contentDescription = "FootballIcon")
                     }
                   })
-
+                // textfield for number of participants
               OutlinedTextField(
                   value = numberOfParticipants,
                   singleLine = true,
@@ -154,7 +157,7 @@ fun Add(navController: NavHostController) {
               // Tournament type
               val icon =
                   if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-                selectedTournamentType = "Leaugue"
+                selectedTournamentType = "League"
 
               Column() {
                 OutlinedTextField(
@@ -192,7 +195,7 @@ fun Add(navController: NavHostController) {
                   }
                 }
               }
-
+                //textfield for victory points
               OutlinedTextField(
                   value = victoryPoints,
                   onValueChange = { newVictoryPoints ->if(newVictoryPoints.length <= maxPoints) {
@@ -200,7 +203,7 @@ fun Add(navController: NavHostController) {
                     boolVicPointMessage = true
                     }else if(boolVicPointMessage){
                         boolVicPointMessage = false
-                      showMessage(context, "to many Vitcory Points, max is 999")
+                      showMessage(context, "To many Vitcory Points, max is 999")
                     }
                   },
                   singleLine = true,
@@ -214,7 +217,7 @@ fun Add(navController: NavHostController) {
                       Icon(imageVector = Icons.Filled.Star, contentDescription = "VictoryStar")
                     }
                   })
-
+                //textfield for tie points
               OutlinedTextField(
                   value = tiePoints,
                   onValueChange = { newTiePoints -> if(newTiePoints.length <= maxPoints){
@@ -222,7 +225,7 @@ fun Add(navController: NavHostController) {
                       boolTiePointMessage = true
                     }else if(boolTiePointMessage){
                       boolTiePointMessage = false
-                      showMessage(context, "to many Tie Points, max is 999")
+                      showMessage(context, "To many Tie Points, max is 999")
                     }
                   },
                   singleLine = true,
@@ -313,10 +316,18 @@ fun Add(navController: NavHostController) {
       })
 }
 
+/**
+ * @param numberOfParticipantsMax
+ * The method checks if the input is smaller than 100
+ */
 fun maxPossibleParticipants(numberOfParticipantsMax: Int): Boolean {
     return numberOfParticipantsMax <= 100
 }
 
+/**
+ * @param points
+ * The method checks if the input is smaller than 1000000
+ */
 fun maxPoints(points: Int): Boolean {
     return points <= 1000000
 }
