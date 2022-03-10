@@ -4,8 +4,12 @@ package com.example.turnierplaner
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.turnierplaner.navigation.SetupNavGraph
@@ -25,7 +29,7 @@ class Turnierplaner : ComponentActivity() {
     FirebaseApp.initializeApp(this)
 
     setContent {
-      TurnierplanerTheme {
+      TurnierplanerTheme{
         navController = rememberNavController()
         SetupNavGraph(navController = navController)
       }
@@ -37,4 +41,8 @@ class Turnierplaner : ComponentActivity() {
     super.onStart()
     getParticipantsFromDb()
   }
+
+
 }
+
+

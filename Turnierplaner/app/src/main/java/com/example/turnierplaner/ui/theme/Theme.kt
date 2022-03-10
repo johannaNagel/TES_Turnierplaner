@@ -11,8 +11,7 @@ private val DarkColorPalette =
     darkColors(primary = Aquamarine, primaryVariant = Lint, secondary = Blue)
 
 private val LightColorPalette =
-    lightColors(primary = NavyBlue, primaryVariant = Lint, secondary = Blue
-
+    lightColors(primary = NavyBlue, primaryVariant = Lint, secondary = Blue,
         /* Other default colors to override
         background = Color.White,
         surface = Color.White,
@@ -22,6 +21,8 @@ private val LightColorPalette =
         onSurface = Color.Black,
         */
         )
+
+
 
 @Composable
 fun TurnierplanerTheme(

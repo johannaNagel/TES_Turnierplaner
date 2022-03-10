@@ -2,6 +2,7 @@
 package com.example.turnierplaner.tournament.leagueSystem.schedule
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -86,11 +87,11 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
     suggestions.add(i, "round: ${i + 1}")
   }
 
+
   Scaffold(
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
-              backgroundColor = Color.White,
               elevation = 1.dp,
               title = {
                 Text(text = "Schedule: ${getTournament(tournamentName)?.name}")
@@ -190,6 +191,12 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
             Text(
                 text = value,
                 fontSize = 20.sp,
+                color = if(isSystemInDarkTheme()){
+                    Color.White
+                }
+                else{
+                    Color.Black
+                },
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(5.dp),
                 maxLines = 1,
@@ -213,6 +220,12 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
 
             Text(
                 text = value,
+                color = if(isSystemInDarkTheme()){
+                    Color.White
+                }
+                else{
+                    Color.Black
+                },
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(10.dp),

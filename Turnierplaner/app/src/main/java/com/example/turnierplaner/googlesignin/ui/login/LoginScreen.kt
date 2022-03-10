@@ -78,7 +78,6 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
-              backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "Login") },
               /*actions = {

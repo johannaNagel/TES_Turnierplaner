@@ -13,6 +13,7 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -53,7 +54,6 @@ fun Setting(navController: NavHostController) {
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
-              backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "Settings") },
               actions = {
@@ -83,7 +83,7 @@ fun Setting(navController: NavHostController) {
               })
         }
       },
-      content = { Text("Settings need to implement") },
+      content = { },
       bottomBar = {
         BottomAppBar(
             content = {

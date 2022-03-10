@@ -52,10 +52,10 @@ import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 private val showChangeDialog = mutableStateOf(false)
 
-/** 
+/**
  * @param tournamentName
  * @param navController
- * It is a composable who gives the opportunity to enter the result of the game 
+ * It is a composable who gives the opportunity to enter the result of the game
  * */
 @ExperimentalComposeUiApi
 @Composable
@@ -81,7 +81,6 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
-              backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "Add or change the result of the game") },
           )
@@ -220,7 +219,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
       })
 }
 
-/** 
+/**
  * This composable is a popUp who allows the possibility of changing the game result
  */
 @Composable
@@ -247,7 +246,7 @@ fun ChangeTournamentPopUp() {
       })
 }
 
-/** 
+/**
  * @param tourney
  * @param winner
  * @param participant1name
@@ -256,8 +255,8 @@ fun ChangeTournamentPopUp() {
  * if participant  is winner add victory points
  * if participant is loser add no points
  * if there is no winner add tie points
- * every participant increase their games with 1 
- * @return tourney 
+ * every participant increase their games with 1
+ * @return tourney
  */
 fun addResultPoints(
     tourney: Tournament,
@@ -307,7 +306,7 @@ fun addResultPoints(
 fun addResultPointsChange(
     tourney: Tournament,
     winner: String,
-    participant1name: String, 
+    participant1name: String,
     participant2name: String
 ): Tournament {
     for (k in tourney.schedule!!) {

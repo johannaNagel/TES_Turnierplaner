@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.Colors
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.DropdownMenu
@@ -37,6 +39,7 @@ import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -142,7 +145,6 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
-              backgroundColor = Color.White,
               elevation = 1.dp,
               title = {
                   Button(
@@ -244,6 +246,12 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
           // define text specs
           Text(
               text = value,
+              color = if(isSystemInDarkTheme()){
+                          Color.White
+                          }
+                      else{
+                          Color.Black
+                          },
               fontSize = 20.sp,
               textAlign = TextAlign.Center,
               modifier = Modifier.padding(10.dp),
@@ -251,6 +259,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
               overflow = TextOverflow.Ellipsis,
               fontWeight = FontWeight.Black,
               textDecoration = TextDecoration.Underline)
+
         }
         val cellText: @Composable (Int, Participant) -> Unit = { index, item ->
           val value =
@@ -263,6 +272,12 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
               }
           Text(
               text = value,
+              color = if(isSystemInDarkTheme()){
+                  Color.White
+              }
+              else{
+                  Color.Black
+              },
               fontSize = 20.sp,
               textAlign = TextAlign.Center,
               modifier = Modifier.padding(10.dp),
@@ -576,7 +591,7 @@ fun DropdownMenu(
         onDismissRequest = onDismissRequest,
         modifier =
         Modifier
-            .height(120.dp)
+
             .width(200.dp)
             .background(color = Color.White, shape = RoundedCornerShape(16.dp))) {
       items.forEachIndexed { index, s ->
