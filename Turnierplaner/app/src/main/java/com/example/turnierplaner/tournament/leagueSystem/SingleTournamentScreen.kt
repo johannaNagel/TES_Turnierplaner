@@ -99,7 +99,7 @@ Therefore a separate function has to be created
  */
 private val showAddParticipantDialog = mutableStateOf(false)
 private val showDeleteDialog = mutableStateOf(false)
-
+private var showEditTournamentNameDialog = mutableStateOf(false)
 
 @ExperimentalMaterialApi
 @Composable
@@ -413,7 +413,13 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
               title = { Text(text = tourney.name) },
               actions = {
                 IconButton(
-                    onClick = { navController.navigate("single_tournament_route/${tourney.name}") },
+                    onClick = {
+                        if(tourney.participants.isEmpty()) {
+                            navController.navigate(BottomBarScreens.Tournament.route)
+                        } else {
+                            navController.navigate("single_tournament_route/${tourney.name}")
+                        }
+                    },
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.ArrowBack,
@@ -443,9 +449,9 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
                        item.id = ""
                        item.points = 0
                        item.rank = tourney.numberOfParticipants*/
-                          tourney.numberOfParticipants--
+                        tourney.numberOfParticipants--
                         pushLocalToDb()
-                          navController.navigate("remove_participant_route/${tourney.name}")
+                        navController.navigate("remove_participant_route/${tourney.name}")
                       }
                         it != DismissValue.DismissedToEnd
                     })
@@ -531,7 +537,10 @@ fun EditPointsScreen(navController: NavController, tournamentName: String?) {
               title = { Text(text = tourney.name) },
               actions = {
                 IconButton(
-                    onClick = { navController.navigate("single_tournament_route/${tourney.name}") },
+                    onClick = {
+                            navController.navigate("single_tournament_route/${tourney.name}")
+
+                    },
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.ArrowBack,
@@ -823,22 +832,9 @@ fun EditTournamentNameScreen(navController: NavController, tournamentName: Strin
                 content = {
                     Column() {
 
-
                         Box(modifier = Modifier.padding(12.dp), contentAlignment = Alignment.Center) {
                             Text(text = "Old Name:  $tournamentName")
                         }
-                        /*
-                        OutlinedTextField(
-                            value = oldTournamentName,
-                            readOnly = true,
-                            onValueChange = {oldTournamentName = it},
-
-                            label = { Text("Old Name: $tournamentName") }
-
-                        )
-
-                         */
-
 
                         OutlinedTextField(
                             value = newTournamentName,
