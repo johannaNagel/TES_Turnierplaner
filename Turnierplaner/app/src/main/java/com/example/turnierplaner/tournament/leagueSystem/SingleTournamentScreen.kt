@@ -104,7 +104,11 @@ Therefore a separate function has to be created
 private val showAddParticipantDialog = mutableStateOf(false)
 private val showDeleteDialog = mutableStateOf(false)
 
-
+/**
+ * @param navController
+ * @param tournamentName
+ * This Composable shows a ranking table of participants with their points and games.
+ */
 @ExperimentalMaterialApi
 @Composable
 fun SingleTournamentScreen(navController: NavController, tournamentName: String?) {
@@ -285,6 +289,11 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
       })
 }
 
+/**
+ * @param tournamentName
+ * This popup offers the possibility to add participants to the tournament.
+ * You can add only participants with differnt names
+ */
 @Composable
 fun AddParticipantToTournamentPopUP(tournamentName: String?) {
   var participantName by remember { mutableStateOf("") }
@@ -341,6 +350,11 @@ fun AddParticipantToTournamentPopUP(tournamentName: String?) {
   )
 }
 
+/**
+ * @param navController
+ * @param tourney
+ * this PopUp asking for permission to delete the tounrament
+ */
 @Composable
 fun DeleteTournamentPopUp(navController: NavController, tourney: Tournament) {
 
@@ -360,6 +374,10 @@ fun DeleteTournamentPopUp(navController: NavController, tourney: Tournament) {
       })
 }
 
+/**
+ * @param tournamentName
+ * This method sorts the tournament participants by points
+ */
 fun sortTournamentByPoints(tournamentName: String?): MutableList<Participant> {
 
     val tourney = findTournament(tournamentName)
@@ -414,6 +432,12 @@ fun <T> Table(
   }
 }
 
+/**
+ * @param navController
+ * @param tournamentName
+ * This screen is a screen for deleting single participants.
+ * The participants are deleted by a swipe to the left
+ */
 @ExperimentalMaterialApi
 @Composable
 fun DeleteParticipantsScreen(navController: NavController, tournamentName: String?) {
@@ -542,7 +566,7 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
 /**
  * @param navController
  * @param tournamentName
- * This Comoposable is a Screen for editing the victory and tie points.
+ * This Composable is a Screen for editing the victory and tie points.
  */
 @ExperimentalMaterialApi
 @Composable
@@ -748,6 +772,10 @@ fun DropdownMenu(
   }
 }
 
+/**
+ * @param tournament
+ * This method copys the mutablelist
+ */
 fun listCopy(tournament: Tournament): MutableList<Participant> {
   val list = mutableListOf<Participant>()
   for (i in 0 until tournament.participants.size) {
@@ -762,6 +790,9 @@ fun listCopy(tournament: Tournament): MutableList<Participant> {
   return list
 }
 
+/**
+ * This screen is for editing/changing the participantNames, with  not assigned names
+ */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun EditParticipantNameScreen(navController: NavController, tournamentName: String?){
@@ -896,7 +927,10 @@ fun EditParticipantNameScreen(navController: NavController, tournamentName: Stri
         )
 }
 
-
+/**
+ * @param tourneyName
+ * This method returns a list with participants who has the same UID
+ */
 fun participantsWithSameUID(tourneyName: String): MutableList<String> {
     val tourney = findTournament(tourneyName)
     val listParticipantName = mutableListOf<String>()
@@ -910,6 +944,12 @@ fun participantsWithSameUID(tourneyName: String): MutableList<String> {
 
 }
 
+/**
+ * @param oldName
+ * @param newName
+ * @param tourneyName
+ * This method changes the participantName to a new name
+ */
 fun changeName(oldName: String, newName:String, tourneyName: String){
     val tourney = findTournament(tourneyName)
     for(participant in tourney.participants){
@@ -921,13 +961,22 @@ fun changeName(oldName: String, newName:String, tourneyName: String){
 }
 
 
+/**
+ * @param oldName
+ * @param newTourneyName
+ * This method changes the  tournament name to a new name
+ */
 fun changeTournamentName(oldName: String, newTourneyName: String) {
     val tourney = findTournament(oldName)
     tourney.name = newTourneyName
     pushLocalToDb()
 }
 
-
+/**
+ * @param navController
+ * @param tournamentName
+ * This screen is for the editing the tournamentName
+ */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun EditTournamentNameScreen(navController: NavController, tournamentName: String?){
