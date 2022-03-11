@@ -48,6 +48,7 @@ import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
+import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
 private val showChangeDialog = mutableStateOf(false)
@@ -56,7 +57,8 @@ private val showChangeDialog = mutableStateOf(false)
  * @param tournamentName
  * @param navController
  * It is a composable who gives the opportunity to enter the result of the game
- * */
+ *
+  */
 @ExperimentalComposeUiApi
 @Composable
 fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
@@ -67,6 +69,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
   var expanded by remember { mutableStateOf(false) }
   val suggestionsGame = fillGameString(getTournament(tournamentName!!)!!)
   val tourney = findTournament(tournamentName)
+  //getParticipantsFromDb()
   val keyboardController = LocalSoftwareKeyboardController.current
   val maxPoints = 3
   val context = LocalContext.current
@@ -81,6 +84,7 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
+              backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "Add or change the result of the game") },
           )

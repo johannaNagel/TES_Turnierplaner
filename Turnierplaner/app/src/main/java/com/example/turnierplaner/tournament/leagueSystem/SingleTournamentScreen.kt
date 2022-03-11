@@ -430,7 +430,13 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
               title = { Text(text = tourney.name) },
               actions = {
                 IconButton(
-                    onClick = { navController.navigate("single_tournament_route/${tourney.name}") },
+                    onClick = {
+                        if(tourney.participants.isEmpty()){
+                            navController.navigate(BottomBarScreens.Tournament.route)
+                        } else{
+                            navController.navigate("single_tournament_route/${tourney.name}")
+                        }
+                    },
                 ) {
                   Icon(
                       imageVector = Icons.Rounded.ArrowBack,
