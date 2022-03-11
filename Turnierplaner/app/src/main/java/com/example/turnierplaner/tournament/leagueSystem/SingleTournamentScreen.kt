@@ -850,6 +850,9 @@ fun EditParticipantNameScreen(navController: NavController, tournamentName: Stri
                                 boolNameShowMessage = false
                                 showMessage(context, "Participnat Name is to long")
                             }
+                            if(tournamentContainsParticipant(tournamentName, newParticipantName) ){
+                                showMessage(context, "Name is assigned")
+                            }
                         },
                         label = { Text(text = "New Partipant Name") },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -985,6 +988,9 @@ fun EditTournamentNameScreen(navController: NavController, tournamentName: Strin
                                 if ((it.length > maxSize) && boolNameShowMessage) {
                                     boolNameShowMessage = false
                                     showMessage(context, "Tournament Name is to long")
+                                }
+                                if(allTournamentContainsTournament(tournamentName) ){
+                                    showMessage(context, "Same Tournament Name")
                                 }
                             },
                             label = { Text(text = "New Tournament Name") },
