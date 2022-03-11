@@ -854,7 +854,7 @@ fun EditParticipantNameScreen(navController: NavController, tournamentName: Stri
                                 showMessage(context, "Name is assigned")
                             }
                         },
-                        label = { Text(text = "New Partipant Name") },
+                        label = { Text(text = "New Participant Name") },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                         leadingIcon = {
