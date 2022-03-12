@@ -118,6 +118,7 @@ fun Add(navController: NavHostController) {
                           boolNameShowMessage = false
                           showMessage(context, "Tournament Name is to long")
                       }
+
                   },
                   label = { Text(text = "Tournament Name") },
                   keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -140,12 +141,19 @@ fun Add(navController: NavHostController) {
                   onValueChange = {
                     newNumberOfParticipants ->
                       if(newNumberOfParticipants.length <= maxParti) {
-                            numberOfParticipants = newNumberOfParticipants.filter { it.isDigit() }
-                          boolNumberPartiMessage = true
+                          if(newNumberOfParticipants != "0" || newNumberOfParticipants!= "00" ) {
+                              numberOfParticipants = newNumberOfParticipants.filter { it.isDigit() }
+                              boolNumberPartiMessage = true
+                          } else {
+                              showMessage(context, "to many participants, max is 99")
+                              boolNumberPartiMessage = false
+                          }
                       } else if(boolNumberPartiMessage ){
                         boolNumberPartiMessage = false
                         showMessage(context, "to many participants, max is 99")
                       }
+
+
                   },
                   label = { Text(text = "Number Of Participants") },
                   leadingIcon = {

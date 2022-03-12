@@ -456,6 +456,7 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
                 IconButton(
                     onClick = {
                         if(tourney.participants.isEmpty()){
+                            removeTournament(tourney)
                             navController.navigate(BottomBarScreens.Tournament.route)
                         } else{
                             navController.navigate("single_tournament_route/${tourney.name}")
@@ -490,7 +491,7 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
                        item.id = ""
                        item.points = 0
                        item.rank = tourney.numberOfParticipants*/
-                          tourney.numberOfParticipants--
+                        tourney.numberOfParticipants--
                         pushLocalToDb()
                           navController.navigate("remove_participant_route/${tourney.name}")
                       }
@@ -711,8 +712,7 @@ fun DropdownMenu(
         onDismissRequest = onDismissRequest,
         modifier =
         Modifier
-            .height(120.dp)
-            .width(200.dp)
+            //.width(200.dp)
             .background(color = Color.White, shape = RoundedCornerShape(16.dp))) {
       items.forEachIndexed { index, s ->
         if (selectedIndex == index) {
