@@ -302,3 +302,15 @@ fun allTournamentContainsTournament(tournamentName: String?): Boolean {
   }
   return false
 }
+
+fun allTournamentContainsTournamentID(tournamentID: String?): Boolean {
+
+    for (tournament in allTournament) {
+
+        if (tournament.id == tournamentID) {
+
+            return true
+        }
+    }
+    return false
+}

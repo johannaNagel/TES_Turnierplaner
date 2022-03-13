@@ -8,6 +8,7 @@ import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.RefreshPopUp
 
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
+import com.example.turnierplaner.tournament.leagueSystem.allTournamentContainsTournamentID
 import com.example.turnierplaner.tournament.leagueSystem.changeState
 import com.example.turnierplaner.tournament.leagueSystem.dummyAllTournament
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
@@ -101,7 +102,7 @@ fun getParticipantsFromDb() {
                                     break
                                 }
                                 // check if this tourney was newly added
-                                if (countDataChange == 1 && findTournament(tourney.name).name == "") {
+                                if (countDataChange == 1 && findTournament(tourney.name).name == "" && !allTournamentContainsTournamentID(tourney.id)) {
                                     allTournament.add(tourney)
                                     if (refreshActivate) {
                                         showRefreshPopUp.value = true
@@ -111,16 +112,16 @@ fun getParticipantsFromDb() {
                                 // In the next if conditions we check if changes where made to a Tournament,
                                 // in which the current user participates
                                 val tourneyFromAll: Tournament = findTournament(tourney.name)
-                                if (tourney.numberOfParticipants != tourneyFromAll.numberOfParticipants) {
-                                    message = "Number of participants has changed in tournament:" + tourney.name + "."
-                                    allTournament[findTournamentIndex(tourney.id)] = tourney
+                                if(tourney.name != allTournament[findTournamentIndex(tourney.id)].name) {
+                                    message = "Name of tournament:" + allTournament[findTournamentIndex(tourney.id)].name + " has changed to " + tourney.name + "."
+                                    allTournament[findTournamentIndex(tourney.id)].name = tourney.name
                                     if (refreshActivate) {
                                         showRefreshPopUp.value = true
                                     }
                                     break
                                 }
-                                if(tourney.name != tourneyFromAll.name) {
-                                    message = "Name of tournament:" + tourney.name + "has changed."
+                                if (tourney.numberOfParticipants != tourneyFromAll.numberOfParticipants) {
+                                    message = "Number of participants has changed in tournament:" + tourney.name + "."
                                     allTournament[findTournamentIndex(tourney.id)] = tourney
                                     if (refreshActivate) {
                                         showRefreshPopUp.value = true

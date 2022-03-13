@@ -92,6 +92,7 @@ import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.schedule.boolBackButton
 import com.example.turnierplaner.tournament.leagueSystem.schedule.rememberTournamentRound
 import com.example.turnierplaner.tournament.leagueSystem.schedule.removePointsGames
+import com.example.turnierplaner.tournament.tournamentDB.findTournamentIndex
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 import com.example.turnierplaner.tournament.tournamentDB.removeTournament
@@ -967,8 +968,9 @@ fun changeName(oldName: String, newName:String, tourneyName: String){
  * This method changes the  tournament name to a new name
  */
 fun changeTournamentName(oldName: String, newTourneyName: String) {
-    val tourney = findTournament(oldName)
-    tourney.name = newTourneyName
+    //val tourney = findTournament(oldName)
+    //tourney.name = newTourneyName
+    allTournament[findTournamentIndex(findTournament(oldName).id)].name = newTourneyName
     pushLocalToDb()
 }
 
