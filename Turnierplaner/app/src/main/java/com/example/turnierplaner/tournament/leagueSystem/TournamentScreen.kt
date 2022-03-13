@@ -152,7 +152,7 @@ fun TournamentScreen(navController: NavHostController) {
 fun RefreshPopUp() {
 
   if (message == ""){
-      message = "Changes in a Tournament were made or u was added to a new Tournament"
+      message = "Changes in a Tournament were made or you was added to a new Tournament"
   }
   AlertDialog(
       onDismissRequest = { showRefreshPopUp.value = false },

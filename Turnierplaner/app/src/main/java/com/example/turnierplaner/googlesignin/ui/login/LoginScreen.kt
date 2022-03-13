@@ -54,9 +54,6 @@ import com.google.android.gms.common.api.ApiException
 
 @Composable
 fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: NavHostController) {
-  // var userEmail by remember { mutableStateOf("") }
-  // var userPassword by remember { mutableStateOf("") }
-
   val snackbarHostState = remember { SnackbarHostState() }
   val state by viewModel.loadingState.collectAsState()
 
@@ -80,28 +77,6 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
           TopAppBar(
               elevation = 1.dp,
               title = { Text(text = "Login") },
-              /*actions = {
-                val context = LocalContext.current
-                IconButton(
-                    onClick = {
-                      if (FirebaseAuth.getInstance().currentUser != null) {
-                        Firebase.auth.signOut()
-                        val gso =
-                            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
-                        val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                        googleSignInClient.signOut()
-                        showMessage(context, message = "User Loged out succesfully")
-                      } else {
-                        showMessage(context, message = "No User to Log out")
-                      }
-                    },
-                ) {
-                  Icon(
-                      imageVector = Icons.Rounded.ExitToApp,
-                      contentDescription = "Button for Logout",
-                  )
-                }
-              }*/
               )
           if (state.status == LoadingState.Status.RUNNING) {
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -114,26 +89,6 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
             verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
-              /*OutlinedTextField(
-                  modifier = Modifier.fillMaxWidth(),
-                  value = userEmail,
-                  label = { Text(text = "Enter Email") },
-                  onValueChange = { userEmail = it })
-
-              OutlinedTextField(
-                  modifier = Modifier.fillMaxWidth(),
-                  visualTransformation = PasswordVisualTransformation(),
-                  value = userPassword,
-                  label = { Text(text = "Enter Password") },
-                  onValueChange = { userPassword = it })
-
-              Button(
-                  modifier = Modifier.fillMaxWidth().height(50.dp),
-                  enabled = userEmail.isNotEmpty() && userPassword.isNotEmpty(),
-                  content = { Text(text = "Login") },
-                  onClick = {
-                    viewModel.signInWithEmailAndPassword(userEmail.trim(), userPassword.trim())
-                  })*/
 
               Spacer(modifier = Modifier.height(18.dp))
 
@@ -154,9 +109,6 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
                       val googleSignInClient = GoogleSignIn.getClient(context, gso)
                       launcher.launch(googleSignInClient.signInIntent)
                     } else {
-                      // TODO: if user did not loged out previously, he should move to homescreen
-                      // automatically
-                      // showMessage(context, message = "Loged in already")
                       navController.navigate(BottomBarScreens.Home.route)
                     }
                   },
@@ -185,7 +137,6 @@ fun LoginScreen(viewModel: LoginScreenViewModel = viewModel(), navController: Na
               when (state.status) {
                 LoadingState.Status.SUCCESS -> {
                   val user = FirebaseAuth.getInstance().currentUser
-                  // showMessage(context, message = "Loged in as " + user?.displayName)
                   val handler = Handler(Looper.getMainLooper())
                   handler.postDelayed({ navController.navigate(HOME_GRAPH_ROUTE) }, 1000)
                 }
@@ -206,6 +157,5 @@ fun showMessage(context: Context, message: String) {
 @Composable
 fun LoginScreenPreview() {
   FirebaseAuthComposeTheme(false) {
-    // LoginScreen()
   }
 }

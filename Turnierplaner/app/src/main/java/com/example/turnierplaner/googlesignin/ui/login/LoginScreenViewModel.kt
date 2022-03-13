@@ -15,6 +15,7 @@ class LoginScreenViewModel : ViewModel() {
 
   val loadingState = MutableStateFlow(LoadingState.IDLE)
 
+  //Is not used in current state
   fun signInWithEmailAndPassword(email: String, password: String) =
       viewModelScope.launch {
         try {
