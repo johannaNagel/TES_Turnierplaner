@@ -84,7 +84,6 @@ fun AddResultPoints(navController: NavHostController, tournamentName: String?) {
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
-              backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "Add or change the result of the game") },
           )
