@@ -147,7 +147,6 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
-              backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = tourney.name)},
               actions = {
@@ -450,7 +449,6 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
-              backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = tourney.name) },
               actions = {
@@ -585,7 +583,6 @@ fun EditPointsScreen(navController: NavController, tournamentName: String?) {
       topBar = {
         Column(modifier = Modifier.fillMaxWidth()) {
           TopAppBar(
-              backgroundColor = Color.White,
               elevation = 1.dp,
               title = { Text(text = "Edit Tournament Points") },
               actions = {
@@ -814,7 +811,6 @@ fun EditParticipantNameScreen(navController: NavController, tournamentName: Stri
         topBar = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 TopAppBar(
-                    backgroundColor = Color.White,
                     elevation = 1.dp,
                     title = { Text(text = "Edit Participant Name") },
                 )
@@ -995,7 +991,6 @@ fun EditTournamentNameScreen(navController: NavController, tournamentName: Strin
         topBar = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 TopAppBar(
-                    backgroundColor = Color.White,
                     elevation = 1.dp,
                     title = { Text(text = "Edit Tournament Name") },
                 )
