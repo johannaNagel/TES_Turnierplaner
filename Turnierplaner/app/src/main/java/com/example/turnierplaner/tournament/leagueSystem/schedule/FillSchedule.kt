@@ -47,7 +47,9 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
+import com.example.turnierplaner.tournament.leagueSystem.allTournament
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
+import com.example.turnierplaner.tournament.tournamentDB.findTournamentIndex
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
@@ -297,6 +299,7 @@ fun addResultPoints(
       }
     }
   }
+    allTournament[findTournamentIndex(tourney.id)] = tourney
   return tourney
 }
 
@@ -349,6 +352,7 @@ fun addResultPointsChange(
             }
         }
     }
+    allTournament[findTournamentIndex(tourney.id)] = tourney
   return tourney
 }
 
@@ -529,6 +533,7 @@ fun addResultToResultList(
         i.resultParticipant2 = resultGame2
     }
   }
+    allTournament[findTournamentIndex(tourney.id)] = tourney
 }
 
 /**
