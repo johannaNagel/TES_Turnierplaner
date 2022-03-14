@@ -283,6 +283,7 @@ fun createSchedule(
 }
 
 fun actualizeTournamentSchedule(tourney1: Tournament): MutableList<MutableList<Result>> {
+    getParticipantsFromDb()
   val oldSchedule = tourney1.schedule
   val participantList = tourney1.participants
   val scheduleNew = mutableListOf<MutableList<Result>>()
@@ -298,10 +299,10 @@ fun actualizeTournamentSchedule(tourney1: Tournament): MutableList<MutableList<R
       for (j in i) {
         for (k in scheduleNew) {
           for (z in k) {
-            if ((j.participant1 == z.participant1) && (j.participant2 == z.participant2)) {
+            if ((j.participant1.name == z.participant1.name) && (j.participant2.name == z.participant2.name)) {
               z.resultParticipant1 = j.resultParticipant1
               z.resultParticipant2 = j.resultParticipant2
-            } else if((j.participant1 == z.participant2) && (j.participant2 == z.participant1 )){
+            } else if((j.participant1.name == z.participant2.name) && (j.participant2.name == z.participant1.name )){
                 z.resultParticipant1 = j.resultParticipant2
                 z.resultParticipant2 = j.resultParticipant1
             }
