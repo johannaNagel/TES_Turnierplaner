@@ -114,7 +114,7 @@ private val showDeleteDialog = mutableStateOf(false)
 @Composable
 fun SingleTournamentScreen(navController: NavController, tournamentName: String?) {
     var participantList = mutableListOf<Participant>()
-  // for
+
   if (findTournament(tournamentName).name != "") {
       participantList =  sortTournamentByPoints(tournamentName)
   }

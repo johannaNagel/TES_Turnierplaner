@@ -226,16 +226,14 @@ fun addParticipantToTournament(tournamentName: String?, participantName: String)
   for (idx in 1..tourney.numberOfParticipants) {
 
     if (tourney.participants[idx - 1].name == "") {
-
       tourney.participants[idx - 1].name = participantName
+      tourney.participants[idx - 1].id = FirebaseAuth.getInstance().currentUser?.uid.toString()
       return
     }
   }
   tourney.numberOfParticipants = tourney.numberOfParticipants + 1
-  // Every Participant which is added have to have a UID, currently the UID from the Loged-In User
-  // is
-  // assigned
-  tourney.participants.add(
+
+    tourney.participants.add(
       Participant(
           participantName,
           0,
