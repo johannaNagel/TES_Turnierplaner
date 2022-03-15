@@ -1096,11 +1096,13 @@ fun EditTournamentNameScreen(navController: NavController, tournamentName: Strin
  * @return true or false
  */
 fun entryInSchedule(tourney: Tournament): Boolean{
-    for(round in tourney.schedule!!){
-        for(game in round){
-           if(game.resultParticipant2 != "" || game.resultParticipant1 != ""){
-              return true
-           }
+    if(tourney.schedule != null) {
+        for (round in tourney.schedule!!) {
+            for (game in round) {
+                if (game.resultParticipant2 != "" || game.resultParticipant1 != "") {
+                    return true
+                }
+            }
         }
     }
     return false
