@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,6 +57,9 @@ fun Home(navController: NavHostController) {
     var inviteTournamentName by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
+    if (LogoutRefreshPopUp.value)  {
+        LogoutPopUp(navController)
+    }
 
     Scaffold(
         topBar = {
@@ -162,13 +166,10 @@ fun Home(navController: NavHostController) {
                             alwaysShowLabel = false)
 
                         BottomNavigationItem(
-                            icon = { Icon(Icons.Filled.Settings, "") },
-                            label = { Text(text = "Settings") },
-                            selected = selectedItem.value == "Settings",
-                            onClick = {
-                                selectedItem.value = "Settings"
-                                navController.navigate(BottomBarScreens.Setting.route)
-                            },
+                            icon = { Icon(Icons.Rounded.ExitToApp, "Button for Logout") },
+                            label = { Text(text = "Logout") },
+                            selected = selectedItem.value == "Logout",
+                            onClick = { LogoutRefreshPopUp.value = true },
                             alwaysShowLabel = false)
                     }
                 })

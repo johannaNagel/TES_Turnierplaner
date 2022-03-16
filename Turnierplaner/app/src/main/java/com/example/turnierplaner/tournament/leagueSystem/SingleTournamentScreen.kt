@@ -27,9 +27,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
-import androidx.compose.material.Colors
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.DismissValue
 import androidx.compose.material.DropdownMenu
@@ -39,7 +37,6 @@ import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -86,7 +83,6 @@ import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.turnierplaner.BottomBarScreens
 import com.example.turnierplaner.googlesignin.ui.login.showMessage
-import com.example.turnierplaner.navigation.Screens.ScheduleScreens
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.schedule.boolBackButton

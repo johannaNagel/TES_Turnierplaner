@@ -5,15 +5,11 @@ import androidx.navigation.NavHostController
 import com.example.turnierplaner.homescreen.joinTournament
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
-import com.example.turnierplaner.tournament.leagueSystem.RefreshPopUp
 
 import com.example.turnierplaner.tournament.leagueSystem.allTournament
-import com.example.turnierplaner.tournament.leagueSystem.allTournamentContainsTournamentID
 import com.example.turnierplaner.tournament.leagueSystem.changeState
 import com.example.turnierplaner.tournament.leagueSystem.dummyAllTournament
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
-import com.example.turnierplaner.tournament.leagueSystem.message
-import com.example.turnierplaner.tournament.leagueSystem.showRefreshPopUp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

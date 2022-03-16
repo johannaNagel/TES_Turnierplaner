@@ -24,7 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,10 +33,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.BottomBarScreens
+import com.example.turnierplaner.homescreen.LogoutPopUp
+import com.example.turnierplaner.homescreen.LogoutRefreshPopUp
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.schedule.createScheduleTournament
@@ -63,6 +64,9 @@ fun TournamentScreen(navController: NavHostController) {
 
   if (showRefreshPopUp.value) {
       RefreshPopUp()
+  }
+  if (LogoutRefreshPopUp.value)  {
+      LogoutPopUp(navController)
   }
 
   Scaffold(
@@ -135,13 +139,10 @@ fun TournamentScreen(navController: NavHostController) {
                     alwaysShowLabel = false)
 
                 BottomNavigationItem(
-                    icon = { Icon(Icons.Filled.Settings, "") },
-                    label = { Text(text = "") },
-                    selected = selectedItem.value == "Settings",
-                    onClick = {
-                      navController.navigate(BottomBarScreens.Setting.route)
-                      selectedItem.value = "Settings"
-                    },
+                    icon = { Icon(Icons.Rounded.ExitToApp, "Button for Logout") },
+                    label = { Text(text = "Logout") },
+                    selected = selectedItem.value == "Logout",
+                    onClick = { LogoutRefreshPopUp.value = true },
                     alwaysShowLabel = false)
               }
             })

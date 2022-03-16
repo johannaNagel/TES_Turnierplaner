@@ -47,10 +47,8 @@ import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavHostController
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
-import com.example.turnierplaner.tournament.leagueSystem.RefreshPopUp
 import com.example.turnierplaner.tournament.leagueSystem.Table
 import com.example.turnierplaner.tournament.leagueSystem.findTournament
-import com.example.turnierplaner.tournament.leagueSystem.showRefreshPopUp
 import com.example.turnierplaner.tournament.tournamentDB.getParticipantsFromDb
 import com.example.turnierplaner.tournament.tournamentDB.pushLocalToDb
 
