@@ -171,7 +171,7 @@ fun ScheduleComposable(navController: NavHostController, tournamentName: String?
                     when (index) {
                         0 -> 60.dp
                         2 -> 80.dp
-                        else -> 125.dp
+                        else -> 118.dp
                     }
                 }
                 // set title of the columns
