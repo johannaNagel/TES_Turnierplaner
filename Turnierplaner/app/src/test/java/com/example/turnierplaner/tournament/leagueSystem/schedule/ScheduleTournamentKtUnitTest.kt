@@ -24,7 +24,7 @@ class ScheduleTournamentKtUnitTest {
       Participant("7", 0, 0, 7, "7"),
       Participant("8", 0, 0, 8, "8"),
     )
-    competition = Tournament("hello", "1", 10, 3, 1, listParticipant!!,  null)
+    competition = Tournament("hello", "1", 10, 3, 1, listParticipant!!,  null,0 )
   }
 
   @After fun tearDown() {
@@ -194,7 +194,6 @@ class ScheduleTournamentKtUnitTest {
     TestCase.assertTrue(getRow(numberPlayers2) == 4)
   }
 
-  @Test fun splitString() {}
 
   @Test fun getNumberOfActualParticipants() {
     TestCase.assertTrue(
@@ -204,9 +203,7 @@ class ScheduleTournamentKtUnitTest {
     )
   }
 
-  @Test fun createScheduleTournament() {}
 
-  @Test fun fillGameString() {}
 
   @Test fun methodWhichRound() {
     val scheduleRound1 =
@@ -281,11 +278,6 @@ class ScheduleTournamentKtUnitTest {
 
   }
 
-  @Test fun getGameResult() {}
-
-  @Test fun getTournament() {}
-
-  @Test fun setTourn() {}
 
   @Test
   fun correctWin() {

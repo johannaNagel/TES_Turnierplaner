@@ -1,4 +1,3 @@
-/* (C)2022 */
 package com.example.turnierplaner.tournament.leagueSystem.schedule
 
 import androidx.compose.foundation.clickable
@@ -74,362 +73,384 @@ var boolRoundNumberInList = true
 @Composable
 fun ScheduleComposable(navController: NavHostController, tournamentName: String?) {
     getParticipantsFromDb()
-  setTourn(findTournament(tournamentName))
-  actualizeTournamentSchedule(getTournament(tournamentName!!)!!)
-  var expanded by remember { mutableStateOf(false) }
-  var textFieldSize by remember { mutableStateOf(Size.Zero) }
-  val suggestions = mutableListOf<String>()
-  var selectedTournamentRound by remember { mutableStateOf("") }
-  val numberOfRounds =
-      (getRow(getNumberOfActualParticipants(getTournament(tournamentName)!!.participants)) * 2) - 1
+    setTourn(findTournament(tournamentName))
+    actualizeTournamentSchedule(getTournament(tournamentName!!)!!)
+    var expanded by remember { mutableStateOf(false) }
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+    val suggestions = mutableListOf<String>()
+    var selectedTournamentRound by remember { mutableStateOf("") }
+    val numberOfRounds =
+        (getRow(getNumberOfActualParticipants(getTournament(tournamentName)!!.participants)) * 2) - 1
 
-  for (i in 0 until numberOfRounds) {
-    suggestions.add(i, "round: ${i + 1}")
-  }
+    for (i in 0 until numberOfRounds) {
+        suggestions.add(i, "round: ${i + 1}")
+    }
 
 
-  Scaffold(
-      topBar = {
-        Column(modifier = Modifier.fillMaxWidth()) {
-          TopAppBar(
-              elevation = 1.dp,
-              title = {
-                Text(text = "Schedule: ${getTournament(tournamentName)?.name}")
-              },
-              actions = {
-                IconButton(
-                    onClick = {
-
-                      setNumberOfRound(1)
-                      rememberTournamentRound = 0
-                      boolBackButton = true
-                      roundNumberInList = -1
-                      boolRoundNumberInList = true
-                      navController.navigate(
-                          "single_tournament_route/${getTournament(tournamentName)?.name}")
+    Scaffold(
+        topBar = {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                TopAppBar(
+                    elevation = 1.dp,
+                    title = {
+                        Text(text = "Schedule: ${getTournament(tournamentName)?.name}")
                     },
-                ) {
-                  Icon(
-                      imageVector = Icons.Rounded.ArrowBack,
-                      contentDescription = "Button to go back to SingleTournamentScreen",
-                  )
+                    actions = {
+                        IconButton(
+                            onClick = {
+
+                                setNumberOfRound(1)
+                                rememberTournamentRound = 0
+                                boolBackButton = true
+                                roundNumberInList = -1
+                                boolRoundNumberInList = true
+                                navController.navigate(
+                                    "single_tournament_route/${getTournament(tournamentName)?.name}")
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.ArrowBack,
+                                contentDescription = "Button to go back to SingleTournamentScreen",
+                            )
+                        }
+                    })
+            }
+        },
+        content = {
+            // Tournament type
+            val icon = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
+            actualizeRoundNumber(tournamentName)
+            Column() {
+                Column() {
+                    // DropDownMenu for the tournament rounds
+                    selectedTournamentRound = getRememberRoundTournament().toString()
+                    OutlinedTextField(
+                        value = selectedTournamentRound,
+                        readOnly = true,
+                        modifier =
+                        Modifier.fillMaxWidth().padding(5.dp).onGloballyPositioned { coordinates ->
+                            // This value is used to assign to the DropDown the same width
+                            textFieldSize = coordinates.size.toSize()
+                        },
+                        onValueChange = { selectedTournamentRound = it },
+                        label = { Text("round Number") },
+                        leadingIcon = {
+                            IconButton(onClick = { /*TODO*/}) {
+                                Icon(
+                                    imageVector = Icons.Filled.FormatListNumbered,
+                                    contentDescription = "TournamentList")
+                            }
+                        },
+                        trailingIcon = { Icon(icon, "Arrow", Modifier.clickable { expanded = !expanded }) })
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        modifier =
+                        Modifier.width(with(LocalDensity.current) { textFieldSize.width.toDp() }),
+                    ) {
+                        suggestions.forEach { label ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    selectedTournamentRound = label
+                                    expanded = false
+                                    val splitList = selectedTournamentRound.split(" ")
+                                    setNumberOfRound(splitList[1].toInt())
+                                    setRememberRoundTournament(getNumberOfRound())
+                                    roundNumberInList =
+                                        if (getNumberOfRound() > 0) {
+                                            getNumberOfRound() - 1
+                                        } else {
+                                            0
+                                        }
+                                    // gameListRound = listResult!!.allGames.get(roundNumber)
+                                }) { Text(text = label) }
+                        }
+                    }
                 }
-              })
+
+                // set cell Width of the table
+                val cellWidth: (Int) -> Dp = { index ->
+                    when (index) {
+                        0 -> 60.dp
+                        2 -> 80.dp
+                        else -> 125.dp
+                    }
+                }
+                // set title of the columns
+                val headerCellTitle: @Composable (Int) -> Unit = { index ->
+                    val value =
+                        when (index) {
+                            0 -> "Nr."
+                            1 -> "Part. 1"
+                            2 -> "Result"
+                            3 -> "Part. 2"
+                            else -> ""
+                        }
+                    // define text specs
+                    Text(
+                        text = value,
+                        fontSize = 20.sp,
+                        color = if(isSystemInDarkTheme()){
+                            Color.White
+                        }
+                        else{
+                            Color.Black
+                        },
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(5.dp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontWeight = FontWeight.Black,
+                        textDecoration = TextDecoration.Underline)
+                }
+
+                val cellText: @Composable (Int, Result) -> Unit = { index, match ->
+                    val value =
+                        when (index) {
+                            0 ->
+                                (getTournament(tournamentName)!!.schedule!![roundNumberInList].indexOf(
+                                    match) + 1)
+                                    .toString()
+                            1 -> match.participant1.name
+                            2 -> "${match.resultParticipant1} : ${match.resultParticipant2}"
+                            3 -> match.participant2.name
+                            else -> ""
+                        }
+
+                    Text(
+                        text = value,
+                        color = if(isSystemInDarkTheme()){
+                            Color.White
+                        }
+                        else{
+                            Color.Black
+                        },
+                        fontSize = 20.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(10.dp),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+
+                Table(
+                    columnCount = 4,
+                    cellWidth = cellWidth,
+                    data = getTournament(tournamentName)!!.schedule!![getNumberOfRound() - 1],
+                    modifier = Modifier.verticalScroll(rememberScrollState()),
+                    headerCellContent = headerCellTitle,
+                    cellContent = cellText)
+
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(18.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    Button(
+                        onClick = {
+                            navController.navigate(
+                                "pointsResult_route/${getTournament(tournamentName)?.name}")
+                        },
+                        enabled = true,
+                        // border = BorderStroke( width = 1.dp, brush = SolidColor(Color.Blue)),
+                        shape = MaterialTheme.shapes.medium) {
+                        Text(text = "Add or Change the game result", color = Color.White)
+                    }
+
+                }
+            }
         }
-      },
-      content = {
-        // Tournament type
-        val icon = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
-          actualizeRoundNumber(tournamentName)
-        Column() {
-          Column() {
-            // DropDownMenu for the tournament rounds
-              selectedTournamentRound = getRememberRoundTournament().toString()
-            OutlinedTextField(
-                value = selectedTournamentRound,
-                readOnly = true,
-                modifier =
-                    Modifier.fillMaxWidth().padding(5.dp).onGloballyPositioned { coordinates ->
-                      // This value is used to assign to the DropDown the same width
-                      textFieldSize = coordinates.size.toSize()
-                    },
-                onValueChange = { selectedTournamentRound = it },
-                label = { Text("round Number") },
-                leadingIcon = {
-                  IconButton(onClick = { /*TODO*/}) {
-                    Icon(
-                        imageVector = Icons.Filled.FormatListNumbered,
-                        contentDescription = "TournamentList")
-                  }
-                },
-                trailingIcon = { Icon(icon, "Arrow", Modifier.clickable { expanded = !expanded }) })
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier =
-                    Modifier.width(with(LocalDensity.current) { textFieldSize.width.toDp() }),
-            ) {
-              suggestions.forEach { label ->
-                DropdownMenuItem(
-                    onClick = {
-                      selectedTournamentRound = label
-                      expanded = false
-                      val splitList = selectedTournamentRound.split(" ")
-                        setNumberOfRound(splitList[1].toInt())
-                         setRememberRoundTournament(getNumberOfRound())
-                        roundNumberInList =
-                          if (getNumberOfRound() > 0) {
-                              getNumberOfRound() - 1
-                          } else {
-                            0
-                          }
-                      // gameListRound = listResult!!.allGames.get(roundNumber)
-                    }) { Text(text = label) }
-              }
-            }
-          }
-
-          // set cell Width of the table
-          val cellWidth: (Int) -> Dp = { index ->
-            when (index) {
-              0 -> 60.dp
-              2 -> 80.dp
-              else -> 125.dp
-            }
-          }
-          // set title of the columns
-          val headerCellTitle: @Composable (Int) -> Unit = { index ->
-            val value =
-                when (index) {
-                  0 -> "Nr."
-                  1 -> "Part. 1"
-                  2 -> "Result"
-                  3 -> "Part. 2"
-                  else -> ""
-                }
-            // define text specs
-            Text(
-                text = value,
-                fontSize = 20.sp,
-                color = if(isSystemInDarkTheme()){
-                    Color.White
-                }
-                else{
-                    Color.Black
-                },
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(5.dp),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                fontWeight = FontWeight.Black,
-                textDecoration = TextDecoration.Underline)
-          }
-
-          val cellText: @Composable (Int, Result) -> Unit = { index, match ->
-            val value =
-                when (index) {
-                  0 ->
-                      (getTournament(tournamentName)!!.schedule!![roundNumberInList].indexOf(
-                              match) + 1)
-                          .toString()
-                  1 -> match.participant1.name
-                  2 -> "${match.resultParticipant1} : ${match.resultParticipant2}"
-                  3 -> match.participant2.name
-                  else -> ""
-                }
-
-            Text(
-                text = value,
-                color = if(isSystemInDarkTheme()){
-                    Color.White
-                }
-                else{
-                    Color.Black
-                },
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(10.dp),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-          }
-
-          Table(
-              columnCount = 4,
-              cellWidth = cellWidth,
-              data = getTournament(tournamentName)!!.schedule!![getNumberOfRound() - 1],
-              modifier = Modifier.verticalScroll(rememberScrollState()),
-              headerCellContent = headerCellTitle,
-              cellContent = cellText)
-
-          Column(
-              modifier = Modifier.fillMaxSize().padding(24.dp),
-              verticalArrangement = Arrangement.spacedBy(18.dp),
-              horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(
-                onClick = {
-                  navController.navigate(
-                      "pointsResult_route/${getTournament(tournamentName)?.name}")
-                },
-                enabled = true,
-                // border = BorderStroke( width = 1.dp, brush = SolidColor(Color.Blue)),
-                shape = MaterialTheme.shapes.medium) {
-              Text(text = "Add or Change the game result", color = Color.White)
-            }
-
-          }
-        }
-      }
-  )
+    )
 }
 
-/** creates a game schedule for the first round */
+/**
+ * @param participants
+ * @param numberOfActualParticipant
+ * creates a game schedule for the first round
+ */
 fun createSchedule(
     participants: MutableList<Participant>,
     numberOfActualParticipant: Int
 ): MutableList<Result> {
-  val list = participants
-  val row = getRow(numberOfActualParticipant)
-  val matrix = MutableList(row) { Result() }
-  var count = 0
-  for (i in 0 until row) {
-    matrix[i].participant1 = list[count]
-    if (count + 2 != numberOfActualParticipant + 1) {
-      matrix[i].participant2 = list[count + 1]
+    val list = participants
+    val row = getRow(numberOfActualParticipant)
+    val matrix = MutableList(row) { Result() }
+    var count = 0
+    for (i in 0 until row) {
+        matrix[i].participant1 = list[count]
+        if (count + 2 != numberOfActualParticipant + 1) {
+            matrix[i].participant2 = list[count + 1]
+        }
+        count += 2
     }
-    count += 2
-  }
-  return matrix
+    return matrix
 }
 
+/**
+ * @param tourney1
+ * This method actualizes /initialises the schedule every time you open the schedule
+ */
 fun actualizeTournamentSchedule(tourney1: Tournament): MutableList<MutableList<Result>> {
     getParticipantsFromDb()
-  val oldSchedule = tourney1.schedule
-  val participantList = tourney1.participants
-  val scheduleNew = mutableListOf<MutableList<Result>>()
-  val roundNumber2 = (getRow(getNumberOfActualParticipants(participantList)) * 2) - 1
-  scheduleNew.add(createSchedule(participantList, getNumberOfActualParticipants(participantList)))
-  for (i in 2..roundNumber2) {
-    scheduleNew.add(
-        changeOpponent1(scheduleNew[0], getRow(getNumberOfActualParticipants(participantList)), i)
-    )
-  }
-  if (oldSchedule != null) {
-    for (i in oldSchedule) {
-      for (j in i) {
-        for (k in scheduleNew) {
-          for (z in k) {
-            if ((j.participant1.name == z.participant1.name) && (j.participant2.name == z.participant2.name)) {
-              z.resultParticipant1 = j.resultParticipant1
-              z.resultParticipant2 = j.resultParticipant2
-            } else if((j.participant1.name == z.participant2.name) && (j.participant2.name == z.participant1.name )){
-                z.resultParticipant1 = j.resultParticipant2
-                z.resultParticipant2 = j.resultParticipant1
-            }
-          }
-        }
-      }
+    val oldSchedule = tourney1.schedule
+    val participantList = tourney1.participants
+    val scheduleNew = mutableListOf<MutableList<Result>>()
+    val roundNumber2 = (getRow(getNumberOfActualParticipants(participantList)) * 2) - 1
+    scheduleNew.add(createSchedule(participantList, getNumberOfActualParticipants(participantList)))
+    for (i in 2..roundNumber2) {
+        scheduleNew.add(
+            changeOpponent1(scheduleNew[0], getRow(getNumberOfActualParticipants(participantList)), i)
+        )
     }
-  }
-  tourney1.schedule = scheduleNew
-  pushLocalToDb()
-  return tourney1.schedule!!
+    if (oldSchedule != null) {
+        for (i in oldSchedule) {
+            for (j in i) {
+                for (k in scheduleNew) {
+                    for (z in k) {
+                        if ((j.participant1.name == z.participant1.name) && (j.participant2.name == z.participant2.name)) {
+                            z.resultParticipant1 = j.resultParticipant1
+                            z.resultParticipant2 = j.resultParticipant2
+                        } else if((j.participant1.name == z.participant2.name) && (j.participant2.name == z.participant1.name )){
+                            z.resultParticipant1 = j.resultParticipant2
+                            z.resultParticipant2 = j.resultParticipant1
+                        }
+                    }
+                }
+            }
+        }
+    }
+    tourney1.schedule = scheduleNew
+    pushLocalToDb()
+    return tourney1.schedule!!
 }
 
-/** change the game opponents for roundNumber - 2 rounds rotate the list */
+/**
+ * @param list
+ * @param row
+ * @param roundNumber
+ *  This method changes the game opponents for roundNumber - 2 rounds rotate the list
+ */
 fun changeOpponent1(list: MutableList<Result>, row: Int, roundNumber: Int): MutableList<Result> {
-  var list1 = list
-  for (k in 2..roundNumber) {
-    val listNewRound = MutableList(row) { Result() }
-    for (i in 0 until row) {
-        when (i) {
-            0 -> {
-                listNewRound[i].participant1 = list1[i].participant1
-                listNewRound[i + 1].participant1 = list1[i].participant2
-            }
-            row - 1 -> {
-                listNewRound[i].participant2 = list1[i].participant1
-                listNewRound[i - 1].participant2 = list1[i].participant2
-            }
-            else -> {
-                listNewRound[i + 1].participant1 = list1[i].participant1
-                listNewRound[i - 1].participant2 = list1[i].participant2
+    var list1 = list
+    for (k in 2..roundNumber) {
+        val listNewRound = MutableList(row) { Result() }
+        for (i in 0 until row) {
+            when (i) {
+                0 -> {
+                    listNewRound[i].participant1 = list1[i].participant1
+                    listNewRound[i + 1].participant1 = list1[i].participant2
+                }
+                row - 1 -> {
+                    listNewRound[i].participant2 = list1[i].participant1
+                    listNewRound[i - 1].participant2 = list1[i].participant2
+                }
+                else -> {
+                    listNewRound[i + 1].participant1 = list1[i].participant1
+                    listNewRound[i - 1].participant2 = list1[i].participant2
+                }
             }
         }
+        list1 = listNewRound
     }
-    list1 = listNewRound
-  }
-  return list1
+    return list1
 }
 
-/** return the NumberOFGames pro round / rowNumber */
+/**
+ * @param numberOfActualParticipants
+ * This method returns the NumberOFGames pro round/rowNumber
+ */
 fun getRow(numberOfActualParticipants: Int): Int {
-  val row =
-      if ((numberOfActualParticipants % 2) == 1) {
-        (numberOfActualParticipants / 2) + 1
-      } else {
-        (numberOfActualParticipants / 2)
-      }
-  return row
+    val row =
+        if ((numberOfActualParticipants % 2) == 1) {
+            (numberOfActualParticipants / 2) + 1
+        } else {
+            (numberOfActualParticipants / 2)
+        }
+    return row
 }
 
-/** method who splits a string */
+/**
+ * @param splitStrring
+ * This method splits a string after " vs. "
+ */
 fun splitString(games: String, index: Int): String {
-  val split = games.split(" vs. ")
-  return split[index]
+    val split = games.split(" vs. ")
+    return split[index]
 }
 
-/** return the Number of actual Participants */
+/**
+ * @param participants
+ * This method returns the Number of actual Participants
+ */
 fun getNumberOfActualParticipants(participants: MutableList<Participant>): Int {
-  var count = 0
-  for (i in participants) {
-    if (i.name != "") {
-      count++
+    var count = 0
+    for (i in participants) {
+        if (i.name != "") {
+            count++
+        }
     }
-  }
-  return count
+    return count
 }
 
+/**
+ * @param participants
+ * This method creates tournamnent schedule with only 1 round
+ */
 fun createScheduleTournament(
     participants: MutableList<Participant>
 ): MutableList<MutableList<Result>> {
-  val allGames = mutableListOf<MutableList<Result>>()
-  val roundNumber = 0
-  allGames.add(createSchedule(participants, 0))
-  if (roundNumber >= 2) {
-    for (i in 2..roundNumber) {
-      allGames.add(changeOpponent1(allGames[0], getRow(roundNumber + 1), i))
+    val allGames = mutableListOf<MutableList<Result>>()
+    val roundNumber = 0
+    allGames.add(createSchedule(participants, 0))
+    if (roundNumber >= 2) {
+        for (i in 2..roundNumber) {
+            allGames.add(changeOpponent1(allGames[0], getRow(roundNumber + 1), i))
+        }
     }
-  }
-  return allGames
+    return allGames
 }
 
-
-
-/** return the actual round */
+/**
+ * @param tourney
+ * This method returns the actual round
+ */
 fun methodWhichRound(tourney: Tournament): Int {
-  var round = 0
-  for (i in tourney.schedule!!) {
-    for (j in i) {
-      if (((j.resultParticipant1 == "") && (j.resultParticipant2 == ""))
-          && (j.participant1.name != "" && j.participant2.name != "" )) {
-        round = tourney.schedule!!.indexOf(i)
-        return round + 1
-      }
+    var round = 0
+    for (i in tourney.schedule!!) {
+        for (j in i) {
+            if (((j.resultParticipant1 == "") && (j.resultParticipant2 == ""))
+                && (j.participant1.name != "" && j.participant2.name != "" )) {
+                round = tourney.schedule!!.indexOf(i)
+                return round + 1
+            }
+        }
     }
-  }
-  return round + 1
+    return round + 1
 }
 
-/** return the game result */
-fun getGameResult(game: String, tourney: Tournament): Result {
-  val splitString = game.split(" vs. ")
-  val participant1 = splitString[0]
-  val participant2 = splitString[1]
-  var result = Result()
-  for (i in tourney.schedule!!) {
-    for (j in i) {
-      if (j.participant1.name == participant1 && j.participant2.name == participant2) {
-        result = j
-        break
-      }
-    }
-  }
-  return result
-}
-
+/**
+ * @param tourneyName
+ * This method returns the tourneyName
+ */
 fun getTournament(tourneyName: String): Tournament? {
-  if (tournament == null) {
-    tournament = findTournament(tourneyName)
-  }
-  return tournament
+    if (tournament == null) {
+        tournament = findTournament(tourneyName)
+    }
+    return tournament
 }
 
+/**
+ * @param tourney
+ * This method set the variable tournament
+ */
 fun setTourn(tourney: Tournament) {
-  tournament = tourney
+    tournament = tourney
 }
 
-
+/**
+ * @param tourney
+ * @param deleteParticipantName
+ * This method checks if the game was played
+ */
 fun checkIfGamePlayed(tourney: Tournament, deleteParticipantName: String): MutableList<Result> {
     val listResult = mutableListOf<Result>()
     for (idx in tourney.schedule!!) {
@@ -444,6 +465,11 @@ fun checkIfGamePlayed(tourney: Tournament, deleteParticipantName: String): Mutab
     return listResult
 }
 
+/**
+ * @param tourney
+ * @param deleteParticipantName
+ * This method remove the points and games
+ */
 fun removePointsGames(tourney: Tournament, deleteParticipantName: String) {
     val resultWinnerTie = returnStringWinnerTie(tourney, deleteParticipantName)
     for(idx in 0 until resultWinnerTie.size) {
@@ -474,8 +500,13 @@ fun removePointsGames(tourney: Tournament, deleteParticipantName: String) {
 
 }
 
+/**
+ * @param tourney
+ * @param deleteParticipantName
+ * This method return a String with "winner/loser/tie"
+ */
 fun returnStringWinnerTie(tourney: Tournament, deleteParticipantName: String ):MutableList<String> {
-     val listResultGame = checkIfGamePlayed(tourney, deleteParticipantName)
+    val listResultGame = checkIfGamePlayed(tourney, deleteParticipantName)
     val stringResultWinnerTie= mutableListOf<String>()
     var booleanTie = false
     for( result in listResultGame){
@@ -522,21 +553,37 @@ fun listCopySchedule(tourn: Tournament): MutableList<MutableList<Result>> {
     return newSchedule
 }
 
+/**
+ * return roundNumber
+ */
 fun getNumberOfRound(): Int {
     return roundNumber
 }
 
+/**
+ * set the roundNumber
+ */
 fun setNumberOfRound(round : Int){
     roundNumber = round
 }
 
+/**
+ * set rememberROundTournament
+ */
 fun setRememberRoundTournament(round: Int){
     rememberTournamentRound = round
 }
+
+/**
+ * this method retund the rememberRoundTournament
+ */
 fun getRememberRoundTournament(): Int {
     return rememberTournamentRound
 }
 
+/**
+ * This method actualize roundNumber
+ */
 fun actualizeRoundNumber(tournamentName: String){
 
     val actualRound = methodWhichRound(getTournament(tournamentName)!!)
@@ -553,19 +600,6 @@ fun actualizeRoundNumber(tournamentName: String){
         roundNumberInList = rememberTournamentRound -1
     }
 
-
-    /*
-     val actualRound = methodWhichRound(getTournament(tournamentName)!!)
-    if(rememberTournamentRound == 0){
-        rememberTournamentRound = actualRound
-        setNumberOfRound(actualRound)
-        if(roundNumberInList == -1){
-            roundNumberInList =  rememberTournamentRound -1
-        }
-    } else{
-        setNumberOfRound(rememberTournamentRound)
-    }
-     */
 
 
 }
