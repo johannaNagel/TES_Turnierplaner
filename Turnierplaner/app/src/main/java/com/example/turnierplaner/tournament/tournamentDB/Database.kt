@@ -30,8 +30,8 @@ var loggedInUser: String = FirebaseAuth.getInstance().currentUser?.uid.toString(
 
 
 fun pushLocalToDb() {
-    for (s in allTournament) {
-        database.getReference(reference).child(s.id).setValue(s)
+    for (tournament in allTournament) {
+        database.getReference(reference).child(tournament.id).setValue(tournament)
     }
     changeState++
 }
