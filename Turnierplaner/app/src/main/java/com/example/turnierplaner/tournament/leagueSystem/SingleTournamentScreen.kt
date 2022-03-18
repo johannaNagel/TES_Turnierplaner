@@ -484,7 +484,6 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
                           it == DismissValue.DismissedToStart) {
 
                         //Remove player
-                          if(tourney.participants.size == 1)
                           removePointsGames(tourney, item.name)
                           items.remove(item)
 
@@ -496,7 +495,7 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
                             removeTournament(tourney)
                             pushLocalToDb()
                             showMessage(context,"Tournament is deleted" )
-                              navController.navigate(BottomBarScreens.Tournament.route)
+                            navController.navigate(BottomBarScreens.Tournament.route)
                         } else{
                              navController.navigate("remove_participant_route/${tourney.name}")
                           }
