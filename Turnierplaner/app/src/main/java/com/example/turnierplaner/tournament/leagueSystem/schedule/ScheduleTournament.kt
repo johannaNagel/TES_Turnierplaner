@@ -451,12 +451,14 @@ fun setTourn(tourney: Tournament) {
  */
 fun checkIfGamePlayed(tourney: Tournament, deleteParticipantName: String): MutableList<Result> {
     val listResult = mutableListOf<Result>()
-    for (idx in tourney.schedule!!) {
-        for (idx2 in idx) {
-            if (idx2.participant1.name == deleteParticipantName && idx2.resultParticipant1 != "") {
-                listResult.add(idx2)
-            }else if(idx2.participant2.name == deleteParticipantName && idx2.resultParticipant2 != "")  {
-                listResult.add(idx2)
+    if(tourney.schedule != null) {
+        for (idx in tourney.schedule!!) {
+            for (idx2 in idx) {
+                if (idx2.participant1.name == deleteParticipantName && idx2.resultParticipant1 != "") {
+                    listResult.add(idx2)
+                } else if (idx2.participant2.name == deleteParticipantName && idx2.resultParticipant2 != "") {
+                    listResult.add(idx2)
+                }
             }
         }
     }

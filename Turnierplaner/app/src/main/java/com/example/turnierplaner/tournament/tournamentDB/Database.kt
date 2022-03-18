@@ -34,7 +34,7 @@ fun pushLocalToDb() {
 
 fun removeTournament(tourney: Tournament) {
     val tournament = allTournament[findTournamentIndex(tourney.id)]
-    for (participant in tourney.participants){
+    for (participant in tourney.participants) {
         participant.id = ""
     }
     allTournament[findTournamentIndex(tourney.id)] = tournament

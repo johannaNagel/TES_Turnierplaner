@@ -86,6 +86,7 @@ import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.schedule.boolBackButton
+import com.example.turnierplaner.tournament.leagueSystem.schedule.getNumberOfActualParticipants
 import com.example.turnierplaner.tournament.leagueSystem.schedule.rememberTournamentRound
 import com.example.turnierplaner.tournament.leagueSystem.schedule.removePointsGames
 import com.example.turnierplaner.tournament.tournamentDB.findTournamentIndex
@@ -437,9 +438,14 @@ fun <T> Table(
 @ExperimentalMaterialApi
 @Composable
 fun DeleteParticipantsScreen(navController: NavController, tournamentName: String?) {
-
+    allTournament
   val tourney = findTournament(tournamentName)
+  //if(tourney.participants.size == 1)   tourney.participants.add(getNumberOfActualParticipants(tourney.participants), Participant("", 0, 0, 0, ""))
+  //tourney.participants.add(getNumberOfActualParticipants(tourney.participants), Participant("", 0, 0, 0, ""))
+  //pushLocalToDb()
   val items = tourney.participants
+
+  val context = LocalContext.current
 
   Scaffold(
       topBar = {
@@ -450,8 +456,9 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
               actions = {
                 IconButton(
                     onClick = {
-                        if(tourney.participants.isEmpty()){
+                        if(tourney.participants.isNullOrEmpty()){
                             removeTournament(tourney)
+                            showMessage(context,"Tournament is deleted" )
                             navController.navigate(BottomBarScreens.Tournament.route)
                         } else{
                             navController.navigate("single_tournament_route/${tourney.name}")
@@ -477,18 +484,23 @@ fun DeleteParticipantsScreen(navController: NavController, tournamentName: Strin
                           it == DismissValue.DismissedToStart) {
 
                         //Remove player
+                          if(tourney.participants.size == 1)
                           removePointsGames(tourney, item.name)
                           items.remove(item)
 
-                          /*
-                       item.name = ""
-                       item.games = 0
-                       item.id = ""
-                       item.points = 0
-                       item.rank = tourney.numberOfParticipants*/
-                        tourney.numberOfParticipants--
+                          tourney.numberOfParticipants--
+                          allTournament
+
                         pushLocalToDb()
-                          navController.navigate("remove_participant_route/${tourney.name}")
+                        if(tourney.participants.size == 0){
+                            removeTournament(tourney)
+                            pushLocalToDb()
+                            showMessage(context,"Tournament is deleted" )
+                              navController.navigate(BottomBarScreens.Tournament.route)
+                        } else{
+                             navController.navigate("remove_participant_route/${tourney.name}")
+                          }
+
                       }
                         it != DismissValue.DismissedToEnd
                     })
