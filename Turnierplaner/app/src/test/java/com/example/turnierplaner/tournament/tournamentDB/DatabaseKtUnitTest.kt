@@ -20,7 +20,7 @@ class DatabaseKtUnitTest {
   private val id = UUID.randomUUID().toString()
   private val numberOfTeams = 1
   private val players = mutableListOf<Participant>()
-  private val tourney = Tournament(name, id, numberOfTeams, 0, 0, players, null)
+  private val tourney = Tournament(name, id, numberOfTeams, 0, 0, players,null,  0)
   private val database =
       Firebase.database(
           "https://turnierplaner-86dfe-default-rtdb.europe-west1.firebasedatabase.app/")

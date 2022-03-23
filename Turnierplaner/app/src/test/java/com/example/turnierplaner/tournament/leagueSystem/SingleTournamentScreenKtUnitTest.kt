@@ -156,4 +156,38 @@ class SingleTournamentScreenKtUnitTest {
     assertTrue(tourney.pointsVictory == 5)
     assertTrue(tourney.pointsTie == 6)
   }
+
+  @Test
+  fun changeTournamentName(){
+    createAddToAllTournaments("Test", 6, 0, 0)
+    val tourney = findTournament("Test")
+    changeTournamentName(tourney.name, "hello")
+    assertTrue(tourney.name == "hello")
+  }
+
+  @Test
+  fun changeFalseTournamentName(){
+    createAddToAllTournaments("Test", 6, 0, 0)
+    val tourney = findTournament("Test")
+    changeTournamentName(tourney.name, "hello")
+    assertTrue(tourney.name == "hello44")
+  }
+
+  @Test
+  fun changeNameTrue(){
+    createAddToAllTournaments("Test", 6, 0, 0)
+    val tourney = findTournament("Test")
+    tourney.participants.add(Participant("TestPart1", 0, 1, 1, "testID1"))
+    changeName("TestPart1", "TestPart", tourney.name)
+    assertTrue(tourney.name == "TestPart")
+  }
+
+  @Test
+  fun changeNameFalse(){
+    createAddToAllTournaments("Test", 6, 0, 0)
+    val tourney = findTournament("Test")
+    tourney.participants.add(Participant("TestPart1", 0, 1, 1, "testID1"))
+    changeName("TestPart1", "TestPart", tourney.name)
+    assertTrue(tourney.name == "TestPart3")
+  }
 }
