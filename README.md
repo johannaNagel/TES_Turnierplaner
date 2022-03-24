@@ -15,6 +15,8 @@ Nachdem alle Felder augefüllt worden sind, kann man auf den Add-Button drücken
 ### Eintragung von Punkten
 Wenn man im Turnier Ergebnisse eintragen möchte, drückt man auf das "Schedule" Icon. Hier wählt man die Runde, für die man die Ergebnisse eintragen möchte. Danach drückt man auf "Add or Change the game Result". Nun wählt man das Spiel, für das man ein Ergebniss eintragen möchte und trägt die Ergebnisse der jeweiligen Teilnehmer ein. 
 Über den Schedule-Screen kann man auch die bisherigen eingetragenen Ergebnisse einsehen. 
+### AllTournament Screen
+Im AllTournament-Screen kann man alle Turniere einsehen, an denen man Teilnimmt
 
 ## Authors and acknowledgment
 Autoren: Fatih Ünal, Johanna Nagel und Vito Völker.
