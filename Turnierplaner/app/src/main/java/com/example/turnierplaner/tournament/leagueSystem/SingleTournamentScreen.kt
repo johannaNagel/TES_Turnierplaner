@@ -86,7 +86,6 @@ import com.example.turnierplaner.googlesignin.ui.login.showMessage
 import com.example.turnierplaner.tournament.Participant
 import com.example.turnierplaner.tournament.Tournament
 import com.example.turnierplaner.tournament.leagueSystem.schedule.boolBackButton
-import com.example.turnierplaner.tournament.leagueSystem.schedule.getNumberOfActualParticipants
 import com.example.turnierplaner.tournament.leagueSystem.schedule.rememberTournamentRound
 import com.example.turnierplaner.tournament.leagueSystem.schedule.removePointsGames
 import com.example.turnierplaner.tournament.tournamentDB.findTournamentIndex
@@ -289,7 +288,7 @@ fun SingleTournamentScreen(navController: NavController, tournamentName: String?
 /**
  * @param tournamentName
  * This popup offers the possibility to add participants to the tournament.
- * You can add only participants with differnt names
+ * You can add only participants with different names
  */
 @Composable
 fun AddParticipantToTournamentPopUP(tournamentName: String?) {
