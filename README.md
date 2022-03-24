@@ -5,6 +5,7 @@ TES Turnierplaner ist eine Android App zur Erstellung von Turnieren. Die App wur
 Teamprojekts der Software Entwicklung im WS21/22 am Karlsruher Institut für Technologie entwickelt.
 
 ## Installation
+Durch runterladen der Version 1.0.4 kann man die App auf einem Android Smartphone benutzen.
 
 ## Usage
 ### Einloggen
